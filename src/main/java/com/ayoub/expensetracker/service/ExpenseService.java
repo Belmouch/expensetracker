@@ -1,29 +1,37 @@
 package com.ayoub.expensetracker.service;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.ayoub.expensetracker.dto.CreateExpenseRequest;
-import com.ayoub.expensetracker.dto.ExpenseResponse;
-import com.ayoub.expensetracker.entity.Expense;
-import com.ayoub.expensetracker.exception.ExpenseNotFoundException;
-import com.ayoub.expensetracker.repository.ExpenseRepository;
-import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import com.ayoub.expensetracker.specification.ExpenseSpecification;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.ayoub.expensetracker.dto.CreateExpenseRequest;
+import com.ayoub.expensetracker.dto.ExpenseResponse;
+import com.ayoub.expensetracker.entity.Expense;
+import com.ayoub.expensetracker.entity.User;
+import com.ayoub.expensetracker.exception.ExpenseNotFoundException;
+import com.ayoub.expensetracker.repository.ExpenseRepository;
+import com.ayoub.expensetracker.repository.UserRepository;
+import com.ayoub.expensetracker.specification.ExpenseSpecification;
 
 @Service
 public class ExpenseService {
 
-    private final ExpenseRepository expenseRepository;
+     private final ExpenseRepository expenseRepository;
+     private final UserRepository userRepository;
 
-    public ExpenseService(ExpenseRepository expenseRepository) {
-        this.expenseRepository = expenseRepository;
-    }
+     public ExpenseService(ExpenseRepository expenseRepository,
+                      UserRepository userRepository) {
+    this.expenseRepository = expenseRepository;
+    this.userRepository = userRepository;
+}
+    
 
     // GET ALL
    public Page<ExpenseResponse> getAllExpenses(
@@ -38,16 +46,27 @@ public class ExpenseService {
 
     Pageable pageable = PageRequest.of(page, size, sort);
 
-    Page<Expense> expensePage = expenseRepository.findAll(pageable);
+    User currentUser = getCurrentUser();
+
+Page<Expense> expensePage =
+        expenseRepository.findByUser(currentUser, pageable);
 
     return expensePage.map(this::mapToResponse);
 }
 
+   
     // POST
-    public ExpenseResponse saveExpense(CreateExpenseRequest request) {
+public ExpenseResponse saveExpense(CreateExpenseRequest request) {
 
     Expense expense = mapToEntity(request);
 
+    // Get the authenticated user
+    User currentUser = getCurrentUser();
+
+    // Associate the expense with the current user
+    expense.setUser(currentUser);
+
+    // Save the expense
     Expense savedExpense = expenseRepository.save(expense);
 
     return mapToResponse(savedExpense);
@@ -60,14 +79,22 @@ public class ExpenseService {
     Expense expense = expenseRepository.findById(id)
             .orElseThrow(ExpenseNotFoundException::new);
 
+    if (!expense.getUser().getId().equals(getCurrentUser().getId())) {
+        throw new RuntimeException("Access denied");
+    }
+
     return mapToResponse(expense);
-}
+} 
 
     // UPDATE
     public ExpenseResponse updateExpense(Long id, CreateExpenseRequest request) {
 
     Expense expense = expenseRepository.findById(id)
             .orElseThrow(ExpenseNotFoundException::new);
+
+    if (!expense.getUser().getId().equals(getCurrentUser().getId())) {
+        throw new RuntimeException("Access denied");
+    }
 
     expense.setTitle(request.getTitle());
     expense.setAmount(request.getAmount());
@@ -82,11 +109,15 @@ public class ExpenseService {
     // DELETE
     public void deleteExpense(Long id) {
 
-        Expense expense = expenseRepository.findById(id)
-                .orElseThrow(ExpenseNotFoundException::new);
+    Expense expense = expenseRepository.findById(id)
+            .orElseThrow(ExpenseNotFoundException::new);
 
-        expenseRepository.delete(expense);
+    if (!expense.getUser().getId().equals(getCurrentUser().getId())) {
+        throw new RuntimeException("Access denied");
     }
+
+    expenseRepository.delete(expense);
+}
  private ExpenseResponse mapToResponse(Expense expense) {
 
     ExpenseResponse response = new ExpenseResponse();
@@ -96,21 +127,11 @@ public class ExpenseService {
     response.setAmount(expense.getAmount());
     response.setCategory(expense.getCategory());
     response.setDate(expense.getDate());
+    
 
     return response;
 }
 
-private Expense mapToEntity(CreateExpenseRequest request) {
-
-    Expense expense = new Expense();
-
-    expense.setTitle(request.getTitle());
-    expense.setAmount(request.getAmount());
-    expense.setCategory(request.getCategory());
-    expense.setDate(request.getDate());
-
-    return expense;
-}
 public List<ExpenseResponse> searchExpenses(
         String category,
         String title,
@@ -156,5 +177,24 @@ public List<ExpenseResponse> searchExpenses(
     }
 
     return responses;
+}
+private User getCurrentUser() {
+
+    Authentication authentication =
+            SecurityContextHolder.getContext().getAuthentication();
+
+    return userRepository.findByUsername(authentication.getName())
+            .orElseThrow(() -> new RuntimeException("User not found"));
+}
+private Expense mapToEntity(CreateExpenseRequest request) {
+
+    Expense expense = new Expense();
+
+    expense.setTitle(request.getTitle());
+    expense.setAmount(request.getAmount());
+    expense.setCategory(request.getCategory());
+    expense.setDate(request.getDate());
+
+    return expense;
 }
 }
