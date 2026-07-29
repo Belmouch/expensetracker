@@ -1,13 +1,24 @@
 package com.ayoub.expensetracker.controller;
 
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.ayoub.expensetracker.dto.CreateExpenseRequest;
 import com.ayoub.expensetracker.dto.ExpenseResponse;
 import com.ayoub.expensetracker.service.ExpenseService;
-import jakarta.validation.Valid;
-import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/expenses")
@@ -48,6 +59,7 @@ public class ExpenseController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteExpense(@PathVariable Long id) {
         expenseService.deleteExpense(id);
     }
