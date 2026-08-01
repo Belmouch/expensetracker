@@ -178,6 +178,7 @@ public List<ExpenseResponse> searchExpenses(
 
     return responses;
 }
+
 private User getCurrentUser() {
 
     Authentication authentication =
