@@ -15,17 +15,20 @@ export class ExpenseService {
 
   constructor(private http: HttpClient) {}
 
-  getExpenses(): Observable<PageResponse<Expense>> {
+  getExpenses(page: number, size: number): Observable<PageResponse<Expense>> {
 
-    return this.http.get<PageResponse<Expense>>(this.api);
+    return this.http.get<PageResponse<Expense>>(
+      `${this.api}?page=${page}&size=${size}`
+    );
 
   }
+
   saveExpense(request: CreateExpenseRequest): Observable<Expense> {
 
-  console.log("SERVICE CALLED");
+    console.log("SERVICE CALLED");
 
-  return this.http.post<Expense>(this.api, request);
+    return this.http.post<Expense>(this.api, request);
 
-}
-   
+  }
+
 }

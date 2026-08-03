@@ -26,3 +26,14 @@ tbody tr{
 tbody tr:hover{
     background:#f8f9fa;
 }
+.card{
+
+    border-radius:16px;
+
+}
+
+.card-body{
+
+    padding:25px;
+
+}
