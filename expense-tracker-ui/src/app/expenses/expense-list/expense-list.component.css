@@ -1,0 +1,28 @@
+.card{
+    border-radius:18px;
+}
+
+.table th{
+    font-weight:600;
+}
+
+.table td{
+    vertical-align:middle;
+}
+
+.badge{
+    font-size:.9rem;
+    padding:8px 12px;
+}
+
+.btn{
+    border-radius:8px;
+}
+
+tbody tr{
+    transition:.2s;
+}
+
+tbody tr:hover{
+    background:#f8f9fa;
+}

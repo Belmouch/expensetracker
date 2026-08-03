@@ -3,7 +3,12 @@ import { CommonModule } from '@angular/common';
 
 import { ExpenseService } from '../expense.service';
 import { Expense } from '../../models/expense';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterModule } from '@angular/router';
+
+imports: [
+  CommonModule,
+  RouterModule
+]
 
 @Component({
   selector: 'app-expense-list',

@@ -1,0 +1,28 @@
+body{
+    background:#f5f7fb;
+}
+
+.card{
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-3px);
+}
+
+.form-control{
+    border-radius:12px;
+}
+
+.form-control:focus{
+    box-shadow:0 0 0 .2rem rgba(25,135,84,.2);
+    border-color:#198754;
+}
+
+.btn{
+    border-radius:10px;
+}
+
+h2{
+    color:#198754;
+}
