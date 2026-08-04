@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 
 import { ExpenseService } from '../expense.service';
 import { Expense } from '../../models/expense';
+import Swal from 'sweetalert2'; 
 
 @Component({
   selector: 'app-expense-list',
@@ -107,5 +108,58 @@ export class ExpenseListComponent implements OnInit {
     }
 
   }
+  deleteExpense(id: number): void {
+
+  Swal.fire({
+
+    title: 'Delete Expense?',
+    text: 'You will not be able to recover this expense!',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#198754',
+    cancelButtonColor: '#dc3545',
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel'
+
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      this.expenseService.deleteExpense(id).subscribe({
+
+        next: () => {
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Deleted!',
+            text: 'Expense deleted successfully.',
+            timer: 1500,
+            showConfirmButton: false
+          });
+
+          this.loadExpenses();
+
+        },
+
+        error: (error) => {
+
+          console.error(error);
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Unable to delete expense.'
+          });
+
+        }
+
+      });
+
+    }
+
+  });
+
+}
+  
 
 }

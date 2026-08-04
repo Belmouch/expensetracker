@@ -23,12 +23,29 @@ export class ExpenseService {
 
   }
 
-  saveExpense(request: CreateExpenseRequest): Observable<Expense> {
+  getExpenseById(id: number): Observable<Expense> {
 
-    console.log("SERVICE CALLED");
+    return this.http.get<Expense>(`${this.api}/${id}`);
+
+  }
+
+  saveExpense(request: CreateExpenseRequest): Observable<Expense> {
 
     return this.http.post<Expense>(this.api, request);
 
   }
+
+  updateExpense(id: number, request: CreateExpenseRequest): Observable<Expense> {
+
+    return this.http.put<Expense>(`${this.api}/${id}`, request);
+
+  }
+
+  deleteExpense(id: number): Observable<void> {
+
+    return this.http.delete<void>(`${this.api}/${id}`);
+
+  }
+  
 
 }

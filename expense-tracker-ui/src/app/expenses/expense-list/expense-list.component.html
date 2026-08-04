@@ -14,9 +14,7 @@
 
         </div>
 
-        <button
-            class="btn btn-success"
-            routerLink="/expenses/add">
+        <button class="btn btn-success" routerLink="/expenses/add">
 
             <i class="bi bi-plus-circle me-2"></i>
 
@@ -27,69 +25,65 @@
     </div>
     <div class="row mb-4">
 
-    <div class="col-md-4">
+        <div class="col-md-4">
 
-        <input
-            type="text"
-            class="form-control"
-            placeholder="🔍 Search expense..."
-            [(ngModel)]="searchText"
-            (input)="searchExpenses()">
+            <input type="text" class="form-control" placeholder="🔍 Search expense..." [(ngModel)]="searchText"
+                (input)="searchExpenses()">
 
-    </div>
-    <div class="row mb-4">
+        </div>
+        <div class="row mb-4">
 
-    <div class="col-md-6">
+            <div class="col-md-6">
 
-        <div class="card border-0 shadow-sm">
+                <div class="card border-0 shadow-sm">
 
-            <div class="card-body">
+                    <div class="card-body">
 
-                <h6 class="text-muted">
+                        <h6 class="text-muted">
 
-                    Total Expenses
+                            Total Expenses
 
-                </h6>
+                        </h6>
 
-                <h3 class="fw-bold text-primary">
+                        <h3 class="fw-bold text-primary">
 
-                    {{ totalExpenses }}
+                            {{ totalExpenses }}
 
-                </h3>
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="card border-0 shadow-sm">
+
+                    <div class="card-body">
+
+                        <h6 class="text-muted">
+
+                            Total Amount
+
+                        </h6>
+
+                        <h3 class="fw-bold text-success">
+
+                            {{ totalAmount }} $
+
+                        </h3>
+
+                    </div>
+
+                </div>
 
             </div>
 
         </div>
 
     </div>
-
-    <div class="col-md-6">
-
-        <div class="card border-0 shadow-sm">
-
-            <div class="card-body">
-
-                <h6 class="text-muted">
-
-                    Total Amount
-
-                </h6>
-
-                <h3 class="fw-bold text-success">
-
-                    {{ totalAmount }} $
-
-                </h3>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-</div>
 
     <div class="card shadow border-0 rounded-4">
 
@@ -99,77 +93,79 @@
 
                 <thead class="table-success">
 
-                <tr>
+                    <tr>
 
-                    <th>Title</th>
-                    <th>Amount</th>
-                    <th>Category</th>
-                    <th>Date</th>
-                    <th class="text-center">Actions</th>
+                        <th>Title</th>
+                        <th>Amount</th>
+                        <th>Category</th>
+                        <th>Date</th>
+                        <th class="text-center">Actions</th>
 
-                </tr>
+                    </tr>
 
                 </thead>
 
                 <tbody>
 
-                <tr *ngFor="let expense of filteredExpenses">
+                    <tr *ngFor="let expense of filteredExpenses">
 
-                    <td>
+                        <td>
 
-                        <strong>{{expense.title}}</strong>
+                            <strong>{{expense.title}}</strong>
 
-                    </td>
+                        </td>
 
-                    <td>
+                        <td>
 
-                        {{expense.amount}} $
+                            {{expense.amount}} $
 
-                    </td>
+                        </td>
 
-                    <td>
+                        <td>
 
-                        <span class="badge bg-primary">
+                            <span class="badge bg-primary">
 
-                            {{expense.category}}
+                                {{expense.category}}
 
-                        </span>
+                            </span>
 
-                    </td>
+                        </td>
 
-                    <td>
+                        <td>
 
-                        {{expense.date}}
+                            {{expense.date}}
 
-                    </td>
+                        </td>
 
-                    <td class="text-center">
+                        <td class="text-center">
+                            <button class="btn btn-warning btn-sm me-2" [routerLink]="['/expenses/edit', expense.id]">
 
-                        <button class="btn btn-warning btn-sm me-2">
+                                <i class="bi bi-pencil"></i>
 
-                            <i class="bi bi-pencil"></i>
 
-                        </button>
+                            </button>
 
-                        <button class="btn btn-danger btn-sm">
 
-                            <i class="bi bi-trash"></i>
 
-                        </button>
+                            <button class="btn btn-danger btn-sm" (click)="deleteExpense(expense.id)">
 
-                    </td>
+                                <i class="bi bi-trash"></i>
 
-                </tr>
+                            </button>
 
-                <tr *ngIf="expenses.length==0">
+                        </td>
 
-                    <td colspan="5" class="text-center text-muted p-5">
+                    </tr>
 
-                        No expenses found
+                    <tr *ngIf="expenses.length==0">
 
-                    </td>
+                        <td colspan="5" class="text-center text-muted p-5">
 
-                </tr>
+                            No expenses found
+
+                        </td>
+
+                    </tr>
 
                 </tbody>
 
@@ -180,39 +176,33 @@
     </div>
     <div class="d-flex justify-content-between align-items-center mt-4">
 
-    <small class="text-muted">
+        <small class="text-muted">
 
-        Showing page {{ page + 1 }} of {{ totalPages }}
-        ({{ totalElements }} expenses)
+            Showing page {{ page + 1 }} of {{ totalPages }}
+            ({{ totalElements }} expenses)
 
-    </small>
+        </small>
 
-    <div>
+        <div>
 
-        <button
-            class="btn btn-outline-secondary me-2"
-            (click)="previousPage()"
-            [disabled]="page == 0">
+            <button class="btn btn-outline-secondary me-2" (click)="previousPage()" [disabled]="page == 0">
 
-            <i class="bi bi-arrow-left"></i>
+                <i class="bi bi-arrow-left"></i>
 
-            Previous
+                Previous
 
-        </button>
+            </button>
 
-        <button
-            class="btn btn-success"
-            (click)="nextPage()"
-            [disabled]="page >= totalPages - 1">
+            <button class="btn btn-success" (click)="nextPage()" [disabled]="page >= totalPages - 1">
 
-            Next
+                Next
 
-            <i class="bi bi-arrow-right"></i>
+                <i class="bi bi-arrow-right"></i>
 
-        </button>
+            </button>
+
+        </div>
 
     </div>
-
-</div>
 
 </div>
