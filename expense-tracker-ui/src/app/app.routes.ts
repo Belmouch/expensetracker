@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-
+import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './auth/login/login.component';
 import { ExpenseListComponent } from './expenses/expense-list/expense-list.component';
 import { AddExpenseComponent } from './expenses/add-expense/add-expense.component';
@@ -30,7 +30,13 @@ export const routes: Routes = [
   path: 'expenses/edit/:id',
   component: AddExpenseComponent,
   canActivate: [authGuard]
+},
+{
+  path: 'dashboard',
+  component: DashboardComponent,
+  canActivate: [authGuard]
 }
+
   
 
 

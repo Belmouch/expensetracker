@@ -5,11 +5,13 @@ import Swal from 'sweetalert2';
 
 import { ExpenseService } from '../expense.service';
 import { CreateExpenseRequest } from '../../models/create-expense-request';
+import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-add-expense',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule , CommonModule],
   templateUrl: './add-expense.component.html',
   styleUrl: './add-expense.component.css'
 })

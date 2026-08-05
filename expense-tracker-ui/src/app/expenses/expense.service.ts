@@ -46,6 +46,11 @@ export class ExpenseService {
     return this.http.delete<void>(`${this.api}/${id}`);
 
   }
+  logout(): void {
+
+  localStorage.removeItem('token');
+
+}
   
 
 }

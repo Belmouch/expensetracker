@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-
+import { Router } from '@angular/router';
 import { ExpenseService } from '../expense.service';
 import { Expense } from '../../models/expense';
 import Swal from 'sweetalert2'; 
@@ -18,7 +18,7 @@ export class ExpenseListComponent implements OnInit {
 
   expenses: Expense[] = [];
   filteredExpenses: Expense[] = [];
-
+  loading = false;
   page = 0;
   size = 10;
 
@@ -27,7 +27,7 @@ export class ExpenseListComponent implements OnInit {
 
   searchText = '';
 
-  constructor(private expenseService: ExpenseService) {}
+  constructor(private expenseService: ExpenseService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadExpenses();
@@ -35,25 +35,31 @@ export class ExpenseListComponent implements OnInit {
 
   loadExpenses(): void {
 
-    this.expenseService.getExpenses(this.page, this.size).subscribe({
+      this.loading = true;
 
-      next: (response) => {
+  this.expenseService.getExpenses(this.page, this.size).subscribe({
 
-        this.expenses = response.content;
-        this.filteredExpenses = response.content;
+    next: (response) => {
 
-        this.totalPages = response.totalPages;
-        this.totalElements = response.totalElements;
+      this.expenses = response.content;
+      this.filteredExpenses = response.content;
 
-      },
+      this.totalPages = response.totalPages;
+      this.totalElements = response.totalElements;
 
-      error: (error) => {
+      this.loading = false;
 
-        console.error(error);
+    },
 
-      }
+    error: (error) => {
 
-    });
+      console.error(error);
+
+      this.loading = false;
+
+    }
+
+  });
 
   }
 
@@ -154,6 +160,30 @@ export class ExpenseListComponent implements OnInit {
         }
 
       });
+
+    }
+
+  });
+
+}
+logout(): void {
+
+  Swal.fire({
+
+    title: 'Logout?',
+    text: 'Do you want to logout?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Logout',
+    cancelButtonText: 'Cancel'
+
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      this.expenseService.logout();
+
+      this.router.navigate(['/login']);
 
     }
 

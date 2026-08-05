@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ayoub.expensetracker.dto.CreateExpenseRequest;
 import com.ayoub.expensetracker.dto.ExpenseResponse;
+import com.ayoub.expensetracker.dto.ExpenseStatisticsResponse;
 import com.ayoub.expensetracker.service.ExpenseService;
 
 import jakarta.validation.Valid;
@@ -39,6 +40,13 @@ public class ExpenseController {
         return expenseService.getAllExpenses(page, size, sortBy, direction);
     }
 
+    @GetMapping("/statistics")
+    public ExpenseStatisticsResponse getStatistics() {
+
+        return expenseService.getStatistics();
+
+    }
+
     @GetMapping("/{id}")
     public ExpenseResponse getExpenseById(@PathVariable Long id) {
         return expenseService.getExpenseById(id);
@@ -58,28 +66,23 @@ public class ExpenseController {
     }
 
     @DeleteMapping("/{id}")
-    
+
     public void deleteExpense(@PathVariable Long id) {
         expenseService.deleteExpense(id);
     }
 
     @GetMapping("/search")
     public List<ExpenseResponse> searchExpenses(
+            @RequestParam(required = false
+            ) String category,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) Double minAmount,
+            @RequestParam(required = false) Double maxAmount) {
 
-        @RequestParam(required = false
-            
-        ) String category,
-
-        @RequestParam(required = false) String title,
-
-        @RequestParam(required = false) Double minAmount,
-
-        @RequestParam(required = false) Double maxAmount) {
-
-    return expenseService.searchExpenses(
-            category,
-            title,
-            minAmount,
-            maxAmount);
-}
+        return expenseService.searchExpenses(
+                category,
+                title,
+                minAmount,
+                maxAmount);
+    }
 }

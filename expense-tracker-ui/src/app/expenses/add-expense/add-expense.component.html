@@ -9,104 +9,151 @@
                 <div class="card-body p-5">
 
                     <h2 class="fw-bold text-center mb-2">
-
                         {{ id ? '✏️ Update Expense' : '💳 Add New Expense' }}
-
                     </h2>
 
                     <p class="text-center text-muted mb-4">
-
                         {{ id
-                            ? 'Update your expense information'
-                            : 'Keep track of your daily expenses'
+                        ? 'Update your expense information'
+                        : 'Keep track of your daily expenses'
                         }}
-
                     </p>
 
-                    <!-- Title -->
+                    <form #expenseForm="ngForm" (ngSubmit)="saveExpense()">
 
-                    <div class="mb-3">
+                        <!-- Title -->
 
-                        <label class="form-label fw-semibold">
-                            📝 Title
-                        </label>
+                        <div class="mb-3">
 
-                        <input
-                            type="text"
-                            class="form-control form-control-lg"
-                            placeholder="Enter expense title"
-                            [(ngModel)]="title">
+                            <label class="form-label fw-semibold">
+                                📝 Title
+                            </label>
 
-                    </div>
+                            <input
+                                type="text"
+                                class="form-control form-control-lg"
+                                placeholder="Enter expense title"
+                                name="title"
+                                [(ngModel)]="title"
+                                #titleField="ngModel"
+                                required>
 
-                    <!-- Amount -->
+                            <div
+                                class="text-danger mt-1"
+                                *ngIf="titleField.invalid && titleField.touched">
 
-                    <div class="mb-3">
+                                Title is required.
 
-                        <label class="form-label fw-semibold">
-                            💰 Amount
-                        </label>
+                            </div>
 
-                        <input
-                            type="number"
-                            class="form-control form-control-lg"
-                            placeholder="0"
-                            [(ngModel)]="amount">
+                        </div>
 
-                    </div>
+                        <!-- Amount -->
 
-                    <!-- Category -->
+                        <div class="mb-3">
 
-                    <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                💰 Amount
+                            </label>
 
-                        <label class="form-label fw-semibold">
-                            📂 Category
-                        </label>
+                            <input
+                                type="number"
+                                class="form-control form-control-lg"
+                                placeholder="0"
+                                name="amount"
+                                [(ngModel)]="amount"
+                                #amountField="ngModel"
+                                required
+                                min="1">
 
-                        <input
-                            type="text"
-                            class="form-control form-control-lg"
-                            placeholder="Food, Transport..."
-                            [(ngModel)]="category">
+                            <div
+                                class="text-danger mt-1"
+                                *ngIf="amountField.invalid && amountField.touched">
 
-                    </div>
+                                Amount must be greater than 0.
 
-                    <!-- Date -->
+                            </div>
 
-                    <div class="mb-4">
+                        </div>
 
-                        <label class="form-label fw-semibold">
-                            📅 Date
-                        </label>
+                        <!-- Category -->
 
-                        <input
-                            type="date"
-                            class="form-control form-control-lg"
-                            [(ngModel)]="date">
+                        <div class="mb-3">
 
-                    </div>
+                            <label class="form-label fw-semibold">
+                                📂 Category
+                            </label>
 
-                    <div class="d-flex justify-content-between">
+                            <input
+                                type="text"
+                                class="form-control form-control-lg"
+                                placeholder="Food, Transport..."
+                                name="category"
+                                [(ngModel)]="category"
+                                #categoryField="ngModel"
+                                required>
 
-                        <button
-                            class="btn btn-outline-secondary px-4"
-                            routerLink="/expenses">
+                            <div
+                                class="text-danger mt-1"
+                                *ngIf="categoryField.invalid && categoryField.touched">
 
-                            Cancel
+                                Category is required.
 
-                        </button>
+                            </div>
 
-                        <button
-                            class="btn btn-success px-5"
-                            (click)="saveExpense()">
+                        </div>
 
-                            <i class="bi bi-check-circle me-2"></i>
+                        <!-- Date -->
 
-                            {{ id ? 'Update Expense' : 'Save Expense' }}
+                        <div class="mb-4">
 
-                        </button>
+                            <label class="form-label fw-semibold">
+                                📅 Date
+                            </label>
 
-                    </div>
+                            <input
+                                type="date"
+                                class="form-control form-control-lg"
+                                name="date"
+                                [(ngModel)]="date"
+                                #dateField="ngModel"
+                                required>
+
+                            <div
+                                class="text-danger mt-1"
+                                *ngIf="dateField.invalid && dateField.touched">
+
+                                Date is required.
+
+                            </div>
+
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+
+                            <button
+                                type="button"
+                                class="btn btn-outline-secondary px-4"
+                                routerLink="/expenses">
+
+                                Cancel
+
+                            </button>
+
+                            <button
+                                type="submit"
+                                class="btn btn-success px-5"
+                                [disabled]="expenseForm.invalid">
+
+                                <i class="bi bi-check-circle me-2"></i>
+
+                                {{ id ? 'Update Expense' : 'Save Expense' }}
+
+                            </button>
+
+                        </div>
+
+                    </form>
 
                 </div>
 
