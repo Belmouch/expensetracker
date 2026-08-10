@@ -1,1 +1,109 @@
-<p>dashboard works!</p>
+<!-- Loading -->
+<div class="loading-container" *ngIf="loading">
+
+  <div class="spinner"></div>
+
+  <p>Loading dashboard...</p>
+
+</div>
+
+
+<!-- Error -->
+<div
+  class="error-container"
+  *ngIf="!loading && errorMessage">
+
+  <p>{{ errorMessage }}</p>
+
+  <button (click)="loadStatistics()">
+    Try Again
+  </button>
+
+</div>
+
+
+<!-- Dashboard -->
+<div
+  class="dashboard"
+  *ngIf="!loading && !errorMessage">
+
+  <!-- Header -->
+  <div class="dashboard-header">
+
+    <div>
+      <h1>Dashboard</h1>
+      <p>Overview of your expenses</p>
+    </div>
+
+  </div>
+
+
+  <!-- Statistics Cards -->
+  <div class="stats-grid">
+
+    <!-- Total Expenses -->
+    <div class="stat-card">
+
+      <div class="stat-icon">
+        💰
+      </div>
+
+      <div>
+        <p>Total Expenses</p>
+
+        <h2>
+          {{ statistics?.totalExpenses ?? 0 }}
+        </h2>
+      </div>
+
+    </div>
+
+
+    <!-- Total Amount -->
+    <div class="stat-card">
+
+      <div class="stat-icon">
+        💵
+      </div>
+
+      <div>
+        <p>Total Amount</p>
+
+        <h2>
+          {{ statistics?.totalAmount ?? 0 }} $
+        </h2>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- Chart Card -->
+  <div class="chart-card">
+
+    <div class="chart-header">
+
+      <h2>Expenses by Category</h2>
+
+      <span>
+        Distribution
+      </span>
+
+    </div>
+
+
+    <div class="chart-container">
+
+      <canvas
+        baseChart
+        [data]="pieChartData"
+        [type]="pieChartType"
+        [options]="pieChartOptions">
+      </canvas>
+
+    </div>
+
+  </div>
+
+</div>

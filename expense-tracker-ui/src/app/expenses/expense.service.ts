@@ -25,32 +25,53 @@ export class ExpenseService {
 
   getExpenseById(id: number): Observable<Expense> {
 
-    return this.http.get<Expense>(`${this.api}/${id}`);
+    return this.http.get<Expense>(
+      `${this.api}/${id}`
+    );
 
   }
 
   saveExpense(request: CreateExpenseRequest): Observable<Expense> {
 
-    return this.http.post<Expense>(this.api, request);
+    return this.http.post<Expense>(
+      this.api,
+      request
+    );
 
   }
 
-  updateExpense(id: number, request: CreateExpenseRequest): Observable<Expense> {
+  updateExpense(
+    id: number,
+    request: CreateExpenseRequest
+  ): Observable<Expense> {
 
-    return this.http.put<Expense>(`${this.api}/${id}`, request);
+    return this.http.put<Expense>(
+      `${this.api}/${id}`,
+      request
+    );
 
   }
 
   deleteExpense(id: number): Observable<void> {
 
-    return this.http.delete<void>(`${this.api}/${id}`);
+    return this.http.delete<void>(
+      `${this.api}/${id}`
+    );
 
   }
+
   logout(): void {
 
-  localStorage.removeItem('token');
+    localStorage.removeItem('token');
 
-}
-  
+  }
+
+  getStatistics(): Observable<any> {
+
+    return this.http.get<any>(
+      `${this.api}/statistics`
+    );
+
+  }
 
 }

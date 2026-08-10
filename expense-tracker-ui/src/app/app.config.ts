@@ -14,6 +14,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideClientHydration(),
+
     provideHttpClient(
       withInterceptors([jwtInterceptor])
     )
