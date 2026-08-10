@@ -1,8 +1,9 @@
 <div class="container mt-5" style="max-width: 400px">
 
-  <h2 class="mb-4 text-center">Login</h2>
+  <h2 class="mb-4 text-center">Create Account</h2>
 
   <div class="mb-3">
+
     <label class="form-label">Username</label>
 
     <input
@@ -10,9 +11,11 @@
       class="form-control"
       [(ngModel)]="username"
       placeholder="Username">
+
   </div>
 
   <div class="mb-3">
+
     <label class="form-label">Password</label>
 
     <input
@@ -20,20 +23,23 @@
       class="form-control"
       [(ngModel)]="password"
       placeholder="Password">
+
   </div>
 
   <button
     class="btn btn-primary w-100"
-    (click)="login()">
-    Login
+    (click)="register()">
+
+    Create Account
+
   </button>
 
-  <div class="register-link text-center mt-3">
+  <div class="text-center mt-3">
 
-    <span>Don't have an account? </span>
+    <span>Already have an account? </span>
 
-    <a routerLink="/register">
-      Create an account
+    <a routerLink="/login">
+      Login
     </a>
 
   </div>

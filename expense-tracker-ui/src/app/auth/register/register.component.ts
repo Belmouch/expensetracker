@@ -4,16 +4,16 @@ import { Router, RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
 
 import { AuthService } from '../auth.service';
-import { LoginRequest } from '../../models/login-request';
+import { RegisterRequest } from '../../models/register-request';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-register',
   standalone: true,
   imports: [FormsModule, RouterLink],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  templateUrl: './register.component.html',
+  styleUrl: './register.component.css'
 })
-export class LoginComponent {
+export class RegisterComponent {
 
   username = '';
   password = '';
@@ -23,47 +23,49 @@ export class LoginComponent {
     private router: Router
   ) {}
 
-  login(): void {
+  register(): void {
 
     if (!this.username || !this.password) {
       Swal.fire({
         icon: 'warning',
         title: 'Missing information',
-        text: 'Please enter your username and password.',
+        text: 'Please enter a username and password.',
         confirmButtonText: 'OK'
       });
 
       return;
     }
 
-    const request: LoginRequest = {
+    const request: RegisterRequest = {
       username: this.username,
       password: this.password
     };
 
-    this.authService.login(request).subscribe({
+    this.authService.register(request).subscribe({
 
-      next: (token) => {
-
-        localStorage.setItem('token', token);
+      next: () => {
 
         Swal.fire({
           icon: 'success',
-          title: 'Welcome!',
-          text: 'Login successful.',
-          timer: 1200,
-          showConfirmButton: false
+          title: 'Account created!',
+          text: 'Your account has been created successfully.',
+          confirmButtonText: 'Go to Login'
+        }).then(() => {
+
+          this.router.navigate(['/login']);
+
         });
 
-        this.router.navigate(['/expenses']);
       },
 
-      error: () => {
+      error: (err) => {
+
+        console.error(err);
 
         Swal.fire({
           icon: 'error',
-          title: 'Login failed',
-          text: 'Username or password is incorrect.',
+          title: 'Registration failed',
+          text: 'Unable to create your account.',
           confirmButtonText: 'Try again'
         });
 

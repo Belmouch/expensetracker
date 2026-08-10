@@ -35,6 +35,12 @@ export const routes: Routes = [
   path: 'dashboard',
   component: DashboardComponent,
   canActivate: [authGuard]
+},
+{
+  path: 'register',
+  loadComponent: () =>
+    import('./auth/register/register.component')
+      .then(m => m.RegisterComponent)
 }
 
   
