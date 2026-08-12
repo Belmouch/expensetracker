@@ -1,79 +1,218 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+
 import { ExpenseService } from '../expense.service';
 import { Expense } from '../../models/expense';
-import Swal from 'sweetalert2'; 
+
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-expense-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [
+    CommonModule,
+    RouterLink,
+    FormsModule
+  ],
   templateUrl: './expense-list.component.html',
   styleUrl: './expense-list.component.css'
 })
 export class ExpenseListComponent implements OnInit {
 
+  // =========================
+  // EXPENSES
+  // =========================
+
   expenses: Expense[] = [];
+
   filteredExpenses: Expense[] = [];
+
   loading = false;
+
+
+  // =========================
+  // PAGINATION
+  // =========================
+
   page = 0;
+
   size = 10;
 
   totalPages = 0;
+
   totalElements = 0;
+
+
+  // =========================
+  // SEARCH
+  // =========================
 
   searchText = '';
 
-  constructor(private expenseService: ExpenseService, private router: Router) {}
+
+  // =========================
+  // DATE FILTER
+  // =========================
+
+  fromDate = '';
+
+  toDate = '';
+
+
+  // =========================
+  // CONSTRUCTOR
+  // =========================
+
+  constructor(
+    private expenseService: ExpenseService,
+    private router: Router
+  ) {}
+
+
+  // =========================
+  // INIT
+  // =========================
 
   ngOnInit(): void {
+
     this.loadExpenses();
+
   }
+
+
+  // =========================
+  // LOAD EXPENSES
+  // =========================
 
   loadExpenses(): void {
 
-      this.loading = true;
+    this.loading = true;
 
-  this.expenseService.getExpenses(this.page, this.size).subscribe({
+    this.expenseService
+      .getExpenses(
+        this.page,
+        this.size,
+        this.fromDate || undefined,
+        this.toDate || undefined
+      )
+      .subscribe({
 
-    next: (response) => {
+        next: (response) => {
 
-      this.expenses = response.content;
-      this.filteredExpenses = response.content;
+          this.expenses = response.content;
 
-      this.totalPages = response.totalPages;
-      this.totalElements = response.totalElements;
+          this.filteredExpenses = response.content;
 
-      this.loading = false;
+          this.totalPages = response.totalPages;
 
-    },
+          this.totalElements = response.totalElements;
 
-    error: (error) => {
+          // Apply title search if necessary
+          this.searchExpenses();
 
-      console.error(error);
+          this.loading = false;
 
-      this.loading = false;
+        },
 
-    }
+        error: (error) => {
 
-  });
+          console.error('Error loading expenses:', error);
+
+          this.loading = false;
+
+        }
+
+      });
 
   }
+
+
+  // =========================
+  // SEARCH BY TITLE
+  // =========================
 
   searchExpenses(): void {
 
-    this.filteredExpenses = this.expenses.filter(expense =>
+    if (!this.searchText.trim()) {
 
-      expense.title
-        .toLowerCase()
-        .includes(this.searchText.toLowerCase())
+      this.filteredExpenses = this.expenses;
 
+      return;
+
+    }
+
+    const search = this.searchText
+      .toLowerCase()
+      .trim();
+
+    this.filteredExpenses = this.expenses.filter(
+      expense =>
+        expense.title
+          .toLowerCase()
+          .includes(search)
     );
 
   }
+
+
+  // =========================
+  // APPLY DATE FILTER
+  // =========================
+
+  applyDateFilter(): void {
+
+    // Vérification
+    if (
+      this.fromDate &&
+      this.toDate &&
+      this.fromDate > this.toDate
+    ) {
+
+      Swal.fire({
+        icon: 'warning',
+        title: 'Invalid dates',
+        text: 'The start date cannot be after the end date.'
+      });
+
+      return;
+
+    }
+
+
+    // Retour à la première page
+    this.page = 0;
+
+
+    // Charger depuis le backend
+    this.loadExpenses();
+
+  }
+
+
+  // =========================
+  // CLEAR FILTERS
+  // =========================
+
+  clearFilters(): void {
+
+    this.searchText = '';
+
+    this.fromDate = '';
+
+    this.toDate = '';
+
+    this.page = 0;
+
+    this.loadExpenses();
+
+  }
+
+
+  // =========================
+  // TOTAL EXPENSES
+  // =========================
 
   get totalExpenses(): number {
 
@@ -81,115 +220,167 @@ export class ExpenseListComponent implements OnInit {
 
   }
 
+
+  // =========================
+  // TOTAL AMOUNT
+  // =========================
+
   get totalAmount(): number {
 
     return this.filteredExpenses.reduce(
-
       (sum, expense) => sum + expense.amount,
-
       0
-
     );
 
   }
+
+
+  // =========================
+  // NEXT PAGE
+  // =========================
 
   nextPage(): void {
 
     if (this.page < this.totalPages - 1) {
 
       this.page++;
+
       this.loadExpenses();
 
     }
 
   }
+
+
+  // =========================
+  // PREVIOUS PAGE
+  // =========================
 
   previousPage(): void {
 
     if (this.page > 0) {
 
       this.page--;
+
       this.loadExpenses();
 
     }
 
   }
+
+
+  // =========================
+  // DELETE
+  // =========================
+
   deleteExpense(id: number): void {
 
-  Swal.fire({
+    Swal.fire({
 
-    title: 'Delete Expense?',
-    text: 'You will not be able to recover this expense!',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#198754',
-    cancelButtonColor: '#dc3545',
-    confirmButtonText: 'Yes, delete it!',
-    cancelButtonText: 'Cancel'
+      title: 'Delete Expense?',
 
-  }).then((result) => {
+      text: 'You will not be able to recover this expense!',
 
-    if (result.isConfirmed) {
+      icon: 'warning',
 
-      this.expenseService.deleteExpense(id).subscribe({
+      showCancelButton: true,
 
-        next: () => {
+      confirmButtonColor: '#198754',
 
-          Swal.fire({
-            icon: 'success',
-            title: 'Deleted!',
-            text: 'Expense deleted successfully.',
-            timer: 1500,
-            showConfirmButton: false
+      cancelButtonColor: '#dc3545',
+
+      confirmButtonText: 'Yes, delete it!',
+
+      cancelButtonText: 'Cancel'
+
+    }).then((result) => {
+
+      if (result.isConfirmed) {
+
+        this.expenseService
+          .deleteExpense(id)
+          .subscribe({
+
+            next: () => {
+
+              Swal.fire({
+
+                icon: 'success',
+
+                title: 'Deleted!',
+
+                text: 'Expense deleted successfully.',
+
+                timer: 1500,
+
+                showConfirmButton: false
+
+              });
+
+              this.loadExpenses();
+
+            },
+
+            error: (error) => {
+
+              console.error(
+                'Error deleting expense:',
+                error
+              );
+
+              Swal.fire({
+
+                icon: 'error',
+
+                title: 'Error',
+
+                text: 'Unable to delete expense.'
+
+              });
+
+            }
+
           });
 
-          this.loadExpenses();
+      }
 
-        },
+    });
 
-        error: (error) => {
+  }
 
-          console.error(error);
 
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Unable to delete expense.'
-          });
+  // =========================
+  // LOGOUT
+  // =========================
 
-        }
+  logout(): void {
 
-      });
+    Swal.fire({
 
-    }
+      title: 'Logout?',
 
-  });
+      text: 'Do you want to logout?',
 
-}
-logout(): void {
+      icon: 'question',
 
-  Swal.fire({
+      showCancelButton: true,
 
-    title: 'Logout?',
-    text: 'Do you want to logout?',
-    icon: 'question',
-    showCancelButton: true,
-    confirmButtonText: 'Logout',
-    cancelButtonText: 'Cancel'
+      confirmButtonText: 'Logout',
 
-  }).then((result) => {
+      cancelButtonText: 'Cancel'
 
-    if (result.isConfirmed) {
+    }).then((result) => {
 
-      this.expenseService.logout();
+      if (result.isConfirmed) {
 
-      this.router.navigate(['/login']);
+        this.expenseService.logout();
 
-    }
+        this.router.navigate(['/login']);
 
-  });
+      }
 
-}
-  
+    });
+
+  }
 
 }

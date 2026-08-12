@@ -1,5 +1,6 @@
 package com.ayoub.expensetracker.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,31 +43,57 @@ public class ExpenseService {
     // =========================
     // GET ALL
     // =========================
+  public Page<ExpenseResponse> getAllExpenses(
+        int page,
+        int size,
+        String sortBy,
+        String direction,
+        LocalDate fromDate,
+        LocalDate toDate) {
 
-    public Page<ExpenseResponse> getAllExpenses(
-            int page,
-            int size,
-            String sortBy,
-            String direction) {
+    Sort sort = direction.equalsIgnoreCase("desc")
+            ? Sort.by(sortBy).descending()
+            : Sort.by(sortBy).ascending();
 
-        Sort sort = direction.equalsIgnoreCase("desc")
-                ? Sort.by(sortBy).descending()
-                : Sort.by(sortBy).ascending();
+    Pageable pageable = PageRequest.of(
+            page,
+            size,
+            sort
+    );
 
-        Pageable pageable = PageRequest.of(page, size, sort);
+    User currentUser = getCurrentUser();
 
-        User currentUser = getCurrentUser();
+    Specification<Expense> specification =
+            ExpenseSpecification.hasUser(currentUser);
 
-        Page<Expense> expensePage =
-                expenseRepository.findByUser(currentUser, pageable);
+    // FROM DATE
+    if (fromDate != null) {
 
-        return expensePage.map(this::mapToResponse);
+        specification = specification.and(
+                ExpenseSpecification.hasDateFrom(fromDate)
+        );
     }
+
+    // TO DATE
+    if (toDate != null) {
+
+        specification = specification.and(
+                ExpenseSpecification.hasDateTo(toDate)
+        );
+    }
+
+    Page<Expense> expensePage =
+            expenseRepository.findAll(
+                    specification,
+                    pageable
+            );
+
+    return expensePage.map(this::mapToResponse);
+}
 
     // =========================
     // SAVE
     // =========================
-
     public ExpenseResponse saveExpense(CreateExpenseRequest request) {
 
         Expense expense = mapToEntity(request);
@@ -83,7 +110,6 @@ public class ExpenseService {
     // =========================
     // GET BY ID
     // =========================
-
     public ExpenseResponse getExpenseById(Long id) {
 
         Expense expense = expenseRepository.findById(id)
@@ -99,7 +125,6 @@ public class ExpenseService {
     // =========================
     // UPDATE
     // =========================
-
     public ExpenseResponse updateExpense(
             Long id,
             CreateExpenseRequest request) {
@@ -124,7 +149,6 @@ public class ExpenseService {
     // =========================
     // DELETE
     // =========================
-
     public void deleteExpense(Long id) {
 
         Expense expense = expenseRepository.findById(id)
@@ -140,7 +164,6 @@ public class ExpenseService {
     // =========================
     // SEARCH
     // =========================
-
     public List<ExpenseResponse> searchExpenses(
             String category,
             String title,
@@ -191,25 +214,24 @@ public class ExpenseService {
     // =========================
     // STATISTICS
     // =========================
-
     public ExpenseStatisticsResponse getStatistics() {
 
         User currentUser = getCurrentUser();
 
-        Long totalExpenses =
-                (long) expenseRepository.findByUser(currentUser).size();
+        Long totalExpenses
+                = (long) expenseRepository.findByUser(currentUser).size();
 
-        Double totalAmount =
-                expenseRepository.getTotalAmountByUser(currentUser);
+        Double totalAmount
+                = expenseRepository.getTotalAmountByUser(currentUser);
 
-        List<CategoryStatisticsResponse> categories =
-                expenseRepository.getCategoryStatistics(currentUser)
+        List<CategoryStatisticsResponse> categories
+                = expenseRepository.getCategoryStatistics(currentUser)
                         .stream()
                         .map(this::mapCategoryResponse)
                         .collect(Collectors.toList());
 
-        ExpenseStatisticsResponse response =
-                new ExpenseStatisticsResponse();
+        ExpenseStatisticsResponse response
+                = new ExpenseStatisticsResponse();
 
         response.setTotalExpenses(totalExpenses);
         response.setTotalAmount(totalAmount);
@@ -221,7 +243,6 @@ public class ExpenseService {
     // =========================
     // MAPPERS
     // =========================
-
     private ExpenseResponse mapToResponse(Expense expense) {
 
         ExpenseResponse response = new ExpenseResponse();
@@ -259,11 +280,10 @@ public class ExpenseService {
     // =========================
     // CURRENT USER
     // =========================
-
     private User getCurrentUser() {
 
-        Authentication authentication =
-                SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication
+                = SecurityContextHolder.getContext().getAuthentication();
 
         return userRepository.findByUsername(authentication.getName())
                 .orElseThrow(() -> new RuntimeException("User not found"));

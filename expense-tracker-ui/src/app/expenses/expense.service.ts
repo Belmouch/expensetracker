@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { Expense } from '../models/expense';
@@ -15,30 +15,63 @@ export class ExpenseService {
 
   constructor(private http: HttpClient) {}
 
-  getExpenses(page: number, size: number): Observable<PageResponse<Expense>> {
+  // =========================
+  // GET EXPENSES
+  // =========================
+
+  getExpenses(
+    page: number,
+    size: number,
+    fromDate?: string,
+    toDate?: string
+  ): Observable<PageResponse<Expense>> {
+
+    let params = new HttpParams()
+      .set('page', page)
+      .set('size', size);
+
+    if (fromDate) {
+      params = params.set('fromDate', fromDate);
+    }
+
+    if (toDate) {
+      params = params.set('toDate', toDate);
+    }
 
     return this.http.get<PageResponse<Expense>>(
-      `${this.api}?page=${page}&size=${size}`
+      this.api,
+      { params }
     );
-
   }
+
+  // =========================
+  // GET BY ID
+  // =========================
 
   getExpenseById(id: number): Observable<Expense> {
 
     return this.http.get<Expense>(
       `${this.api}/${id}`
     );
-
   }
 
-  saveExpense(request: CreateExpenseRequest): Observable<Expense> {
+  // =========================
+  // SAVE
+  // =========================
+
+  saveExpense(
+    request: CreateExpenseRequest
+  ): Observable<Expense> {
 
     return this.http.post<Expense>(
       this.api,
       request
     );
-
   }
+
+  // =========================
+  // UPDATE
+  // =========================
 
   updateExpense(
     id: number,
@@ -49,29 +82,36 @@ export class ExpenseService {
       `${this.api}/${id}`,
       request
     );
-
   }
+
+  // =========================
+  // DELETE
+  // =========================
 
   deleteExpense(id: number): Observable<void> {
 
     return this.http.delete<void>(
       `${this.api}/${id}`
     );
-
   }
+
+  // =========================
+  // LOGOUT
+  // =========================
 
   logout(): void {
 
     localStorage.removeItem('token');
-
   }
+
+  // =========================
+  // STATISTICS
+  // =========================
 
   getStatistics(): Observable<any> {
 
     return this.http.get<any>(
       `${this.api}/statistics`
     );
-
   }
-
 }
