@@ -1,0 +1,138 @@
+<div class="container mt-5">
+
+  <!-- HEADER -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+      <h1 class="fw-bold text-success">
+        Monthly Expenses
+      </h1>
+
+      <p class="text-muted mb-0">
+        View your expenses by month
+      </p>
+    </div>
+
+    <button
+      class="btn btn-outline-success"
+      (click)="goBack()">
+
+      <i class="bi bi-arrow-left me-2"></i>
+      Back to Expenses
+
+    </button>
+
+  </div>
+
+
+  <!-- LOADING -->
+  <div
+    *ngIf="loading"
+    class="text-center py-5">
+
+    <div
+      class="spinner-border text-success"
+      role="status">
+    </div>
+
+    <p class="mt-3 text-muted">
+      Loading monthly expenses...
+    </p>
+
+  </div>
+
+
+  <!-- NO DATA -->
+  <div
+    *ngIf="!loading && monthlyStatistics.length === 0"
+    class="alert alert-info">
+
+    No monthly expenses found.
+
+  </div>
+
+
+  <!-- MONTHS -->
+  <div
+    *ngIf="!loading && monthlyStatistics.length > 0"
+    class="row g-4">
+
+    <div
+      class="col-md-6 col-lg-4"
+      *ngFor="let stat of monthlyStatistics">
+
+      <div
+        class="month-card"
+        (click)="openMonth(stat)">
+
+        <!-- MONTH -->
+        <div class="month-header">
+
+          <div>
+            <h3>
+              {{ getMonthName(stat.month) }}
+            </h3>
+
+            <span>
+              {{ stat.year }}
+            </span>
+          </div>
+
+          <div class="calendar-icon">
+            <i class="bi bi-calendar3"></i>
+          </div>
+
+        </div>
+
+
+        <!-- STATISTICS -->
+        <div class="month-body">
+
+          <div class="stat-item">
+
+            <span>
+              <i class="bi bi-receipt me-2"></i>
+              Expenses
+            </span>
+
+            <strong>
+              {{ stat.count }}
+            </strong>
+
+          </div>
+
+
+          <div class="stat-item total">
+
+            <span>
+              <i class="bi bi-wallet2 me-2"></i>
+              Total
+            </span>
+
+            <strong>
+              {{ stat.total | number:'1.2-2' }} DH
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <!-- FOOTER -->
+        <div class="month-footer">
+
+          <span>
+            View expenses
+          </span>
+
+          <i class="bi bi-arrow-right"></i>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

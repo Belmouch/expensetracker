@@ -7,6 +7,19 @@ import { ExpenseService } from '../expense.service';
 import { Expense } from '../../models/expense';
 
 import Swal from 'sweetalert2';
+import { ExpenseStatisticsResponse } from '../../models/expense-statistics-response';
+
+
+// =========================
+// DAILY EXPENSES INTERFACE
+// =========================
+
+interface DailyExpenses {
+  date: string;
+  expenses: Expense[];
+  total: number;
+}
+
 
 @Component({
   selector: 'app-expense-list',
@@ -30,6 +43,20 @@ export class ExpenseListComponent implements OnInit {
   filteredExpenses: Expense[] = [];
 
   loading = false;
+
+
+  // =========================
+  // STATISTICS
+  // =========================
+
+  statistics: ExpenseStatisticsResponse | null = null;
+
+
+  // =========================
+  // DAILY GROUPING
+  // =========================
+
+  dailyExpenses: DailyExpenses[] = [];
 
 
   // =========================
@@ -79,6 +106,8 @@ export class ExpenseListComponent implements OnInit {
 
     this.loadExpenses();
 
+    this.loadStatistics();
+
   }
 
 
@@ -103,13 +132,11 @@ export class ExpenseListComponent implements OnInit {
 
           this.expenses = response.content;
 
-          this.filteredExpenses = response.content;
-
           this.totalPages = response.totalPages;
 
           this.totalElements = response.totalElements;
 
-          // Apply title search if necessary
+          // Apply search
           this.searchExpenses();
 
           this.loading = false;
@@ -118,9 +145,42 @@ export class ExpenseListComponent implements OnInit {
 
         error: (error) => {
 
-          console.error('Error loading expenses:', error);
+          console.error(
+            'Error loading expenses:',
+            error
+          );
 
           this.loading = false;
+
+        }
+
+      });
+
+  }
+
+
+  // =========================
+  // LOAD STATISTICS
+  // =========================
+
+  loadStatistics(): void {
+
+    this.expenseService
+      .getStatistics()
+      .subscribe({
+
+        next: (response) => {
+
+          this.statistics = response;
+
+        },
+
+        error: (error) => {
+
+          console.error(
+            'Error loading statistics:',
+            error
+          );
 
         }
 
@@ -135,24 +195,90 @@ export class ExpenseListComponent implements OnInit {
 
   searchExpenses(): void {
 
-    if (!this.searchText.trim()) {
+    const search = this.searchText
+      .trim()
+      .toLowerCase();
 
-      this.filteredExpenses = this.expenses;
 
-      return;
+    if (!search) {
+
+      this.filteredExpenses = [...this.expenses];
+
+    } else {
+
+      this.filteredExpenses =
+        this.expenses.filter(
+          expense =>
+            expense.title
+              .toLowerCase()
+              .includes(search)
+        );
 
     }
 
-    const search = this.searchText
-      .toLowerCase()
-      .trim();
 
-    this.filteredExpenses = this.expenses.filter(
-      expense =>
-        expense.title
-          .toLowerCase()
-          .includes(search)
+    // Rebuild daily groups
+    this.buildDailyExpenses();
+
+  }
+
+
+  // =========================
+  // GROUP EXPENSES BY DATE
+  // =========================
+
+  buildDailyExpenses(): void {
+
+    const groups: {
+      [date: string]: Expense[]
+    } = {};
+
+
+    // Group expenses
+    this.filteredExpenses.forEach(
+      (expense) => {
+
+        const date = expense.date;
+
+        if (!groups[date]) {
+
+          groups[date] = [];
+
+        }
+
+        groups[date].push(expense);
+
+      }
     );
+
+
+    // Convert groups to array
+    this.dailyExpenses =
+      Object.keys(groups)
+
+        // Newest date first
+        .sort((a, b) =>
+          b.localeCompare(a)
+        )
+
+        .map((date) => {
+
+          const expenses = groups[date];
+
+          const total =
+            expenses.reduce(
+              (sum, expense) =>
+                sum + Number(expense.amount),
+              0
+            );
+
+          return {
+            date: date,
+            expenses: expenses,
+            total: total
+          };
+
+        });
 
   }
 
@@ -163,7 +289,6 @@ export class ExpenseListComponent implements OnInit {
 
   applyDateFilter(): void {
 
-    // Vérification
     if (
       this.fromDate &&
       this.toDate &&
@@ -181,11 +306,11 @@ export class ExpenseListComponent implements OnInit {
     }
 
 
-    // Retour à la première page
+    // Start from first page
     this.page = 0;
 
 
-    // Charger depuis le backend
+    // Reload from backend
     this.loadExpenses();
 
   }
@@ -227,10 +352,7 @@ export class ExpenseListComponent implements OnInit {
 
   get totalAmount(): number {
 
-    return this.filteredExpenses.reduce(
-      (sum, expense) => sum + expense.amount,
-      0
-    );
+    return this.statistics?.totalAmount ?? 0;
 
   }
 
@@ -303,6 +425,10 @@ export class ExpenseListComponent implements OnInit {
 
             next: () => {
 
+              this.loadExpenses();
+
+              this.loadStatistics();
+
               Swal.fire({
 
                 icon: 'success',
@@ -316,8 +442,6 @@ export class ExpenseListComponent implements OnInit {
                 showConfirmButton: false
 
               });
-
-              this.loadExpenses();
 
             },
 

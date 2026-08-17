@@ -37,3 +37,67 @@ tbody tr:hover{
     padding:25px;
 
 }
+.monthly-link-card {
+  margin: 20px 0;
+}
+
+.monthly-link {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  padding: 18px 22px;
+
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+
+  text-decoration: none;
+  color: #212529;
+
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+
+  transition: all 0.2s ease;
+}
+
+.monthly-link:hover {
+  border-color: #198754;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.monthly-icon {
+  width: 48px;
+  height: 48px;
+
+  border-radius: 10px;
+
+  background: #e8f5ee;
+  color: #198754;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 21px;
+}
+
+.monthly-info {
+  flex: 1;
+}
+
+.monthly-info h5 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.monthly-info p {
+  margin: 4px 0 0;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.monthly-arrow {
+  color: #198754;
+  font-size: 20px;
+}

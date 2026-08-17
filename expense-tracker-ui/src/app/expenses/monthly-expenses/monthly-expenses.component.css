@@ -1,0 +1,173 @@
+.container {
+  max-width: 1400px;
+}
+
+
+/* =========================
+   MONTH CARD
+========================= */
+
+.month-card {
+
+  background: white;
+
+  border-radius: 16px;
+
+  border: 1px solid #e9ecef;
+
+  overflow: hidden;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+
+}
+
+.month-card:hover {
+
+  transform: translateY(-5px);
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+
+  border-color: #198754;
+
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.month-header {
+
+  background: #198754;
+
+  color: white;
+
+  padding: 20px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+}
+
+.month-header h3 {
+
+  margin: 0;
+
+  font-size: 22px;
+
+  font-weight: 700;
+
+}
+
+.month-header span {
+
+  font-size: 14px;
+
+  opacity: 0.85;
+
+}
+
+
+.calendar-icon {
+
+  width: 45px;
+
+  height: 45px;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.2);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 20px;
+
+}
+
+
+/* =========================
+   BODY
+========================= */
+
+.month-body {
+
+  padding: 20px;
+
+}
+
+
+.stat-item {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding: 10px 0;
+
+  color: #6c757d;
+
+  border-bottom: 1px solid #f1f1f1;
+
+}
+
+.stat-item strong {
+
+  color: #212529;
+
+  font-size: 17px;
+
+}
+
+
+.stat-item.total {
+
+  border-bottom: none;
+
+  padding-bottom: 0;
+
+}
+
+
+.stat-item.total strong {
+
+  color: #198754;
+
+  font-size: 21px;
+
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.month-footer {
+
+  padding: 14px 20px;
+
+  background: #f8f9fa;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  color: #198754;
+
+  font-weight: 600;
+
+}

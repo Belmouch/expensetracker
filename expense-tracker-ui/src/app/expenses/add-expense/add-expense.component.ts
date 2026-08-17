@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-add-expense',
   standalone: true,
-  imports: [FormsModule , CommonModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './add-expense.component.html',
   styleUrl: './add-expense.component.css'
 })
@@ -28,7 +28,10 @@ export class AddExpenseComponent implements OnInit {
     private expenseService: ExpenseService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) { }
+  cancel(): void {
+    this.router.navigate(['/expenses']);
+  }
 
   ngOnInit(): void {
 

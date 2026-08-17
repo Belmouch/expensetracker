@@ -29,18 +29,10 @@
                                 📝 Title
                             </label>
 
-                            <input
-                                type="text"
-                                class="form-control form-control-lg"
-                                placeholder="Enter expense title"
-                                name="title"
-                                [(ngModel)]="title"
-                                #titleField="ngModel"
-                                required>
+                            <input type="text" class="form-control form-control-lg" placeholder="Enter expense title"
+                                name="title" [(ngModel)]="title" #titleField="ngModel" required>
 
-                            <div
-                                class="text-danger mt-1"
-                                *ngIf="titleField.invalid && titleField.touched">
+                            <div class="text-danger mt-1" *ngIf="titleField.invalid && titleField.touched">
 
                                 Title is required.
 
@@ -56,19 +48,10 @@
                                 💰 Amount
                             </label>
 
-                            <input
-                                type="number"
-                                class="form-control form-control-lg"
-                                placeholder="0"
-                                name="amount"
-                                [(ngModel)]="amount"
-                                #amountField="ngModel"
-                                required
-                                min="1">
+                            <input type="number" class="form-control form-control-lg" placeholder="0" name="amount"
+                                [(ngModel)]="amount" #amountField="ngModel" required min="1">
 
-                            <div
-                                class="text-danger mt-1"
-                                *ngIf="amountField.invalid && amountField.touched">
+                            <div class="text-danger mt-1" *ngIf="amountField.invalid && amountField.touched">
 
                                 Amount must be greater than 0.
 
@@ -84,18 +67,10 @@
                                 📂 Category
                             </label>
 
-                            <input
-                                type="text"
-                                class="form-control form-control-lg"
-                                placeholder="Food, Transport..."
-                                name="category"
-                                [(ngModel)]="category"
-                                #categoryField="ngModel"
-                                required>
+                            <input type="text" class="form-control form-control-lg" placeholder="Food, Transport..."
+                                name="category" [(ngModel)]="category" #categoryField="ngModel" required>
 
-                            <div
-                                class="text-danger mt-1"
-                                *ngIf="categoryField.invalid && categoryField.touched">
+                            <div class="text-danger mt-1" *ngIf="categoryField.invalid && categoryField.touched">
 
                                 Category is required.
 
@@ -111,17 +86,10 @@
                                 📅 Date
                             </label>
 
-                            <input
-                                type="date"
-                                class="form-control form-control-lg"
-                                name="date"
-                                [(ngModel)]="date"
-                                #dateField="ngModel"
-                                required>
+                            <input type="date" class="form-control form-control-lg" name="date" [(ngModel)]="date"
+                                #dateField="ngModel" required>
 
-                            <div
-                                class="text-danger mt-1"
-                                *ngIf="dateField.invalid && dateField.touched">
+                            <div class="text-danger mt-1" *ngIf="dateField.invalid && dateField.touched">
 
                                 Date is required.
 
@@ -131,19 +99,11 @@
 
                         <div class="d-flex justify-content-between">
 
-                            <button
-                                type="button"
-                                class="btn btn-outline-secondary px-4"
-                                routerLink="/expenses">
-
+                            <button type="button" class="cancel-button" (click)="cancel()">
                                 Cancel
-
                             </button>
 
-                            <button
-                                type="submit"
-                                class="btn btn-success px-5"
-                                [disabled]="expenseForm.invalid">
+                            <button type="submit" class="btn btn-success px-5" [disabled]="expenseForm.invalid">
 
                                 <i class="bi bi-check-circle me-2"></i>
 

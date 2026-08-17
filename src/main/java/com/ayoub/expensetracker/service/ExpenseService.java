@@ -22,6 +22,7 @@ import com.ayoub.expensetracker.entity.Expense;
 import com.ayoub.expensetracker.entity.User;
 import com.ayoub.expensetracker.exception.ExpenseNotFoundException;
 import com.ayoub.expensetracker.projection.CategoryStatistics;
+import com.ayoub.expensetracker.projection.MonthlyStatistics;
 import com.ayoub.expensetracker.repository.ExpenseRepository;
 import com.ayoub.expensetracker.repository.UserRepository;
 import com.ayoub.expensetracker.specification.ExpenseSpecification;
@@ -43,53 +44,53 @@ public class ExpenseService {
     // =========================
     // GET ALL
     // =========================
-  public Page<ExpenseResponse> getAllExpenses(
-        int page,
-        int size,
-        String sortBy,
-        String direction,
-        LocalDate fromDate,
-        LocalDate toDate) {
+    public Page<ExpenseResponse> getAllExpenses(
+            int page,
+            int size,
+            String sortBy,
+            String direction,
+            LocalDate fromDate,
+            LocalDate toDate) {
 
-    Sort sort = direction.equalsIgnoreCase("desc")
-            ? Sort.by(sortBy).descending()
-            : Sort.by(sortBy).ascending();
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
 
-    Pageable pageable = PageRequest.of(
-            page,
-            size,
-            sort
-    );
-
-    User currentUser = getCurrentUser();
-
-    Specification<Expense> specification =
-            ExpenseSpecification.hasUser(currentUser);
-
-    // FROM DATE
-    if (fromDate != null) {
-
-        specification = specification.and(
-                ExpenseSpecification.hasDateFrom(fromDate)
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                sort
         );
-    }
 
-    // TO DATE
-    if (toDate != null) {
+        User currentUser = getCurrentUser();
 
-        specification = specification.and(
-                ExpenseSpecification.hasDateTo(toDate)
-        );
-    }
+        Specification<Expense> specification
+                = ExpenseSpecification.hasUser(currentUser);
 
-    Page<Expense> expensePage =
-            expenseRepository.findAll(
-                    specification,
-                    pageable
+        // FROM DATE
+        if (fromDate != null) {
+
+            specification = specification.and(
+                    ExpenseSpecification.hasDateFrom(fromDate)
             );
+        }
 
-    return expensePage.map(this::mapToResponse);
-}
+        // TO DATE
+        if (toDate != null) {
+
+            specification = specification.and(
+                    ExpenseSpecification.hasDateTo(toDate)
+            );
+        }
+
+        Page<Expense> expensePage
+                = expenseRepository.findAll(
+                        specification,
+                        pageable
+                );
+
+        return expensePage.map(this::mapToResponse);
+    }
 
     // =========================
     // SAVE
@@ -239,6 +240,18 @@ public class ExpenseService {
 
         return response;
     }
+    // =========================
+// MONTHLY STATISTICS
+// =========================
+
+    public List<MonthlyStatistics> getMonthlyStatistics() {
+
+        User currentUser = getCurrentUser();
+
+        return expenseRepository.getMonthlyStatistics(
+                currentUser.getId()
+        );
+    }
 
     // =========================
     // MAPPERS
@@ -288,4 +301,29 @@ public class ExpenseService {
         return userRepository.findByUsername(authentication.getName())
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
+    // =========================
+// EXPENSES BY MONTH
+// =========================
+
+public List<ExpenseResponse> getExpensesByMonth(
+        int year,
+        int month
+) {
+
+    User currentUser = getCurrentUser();
+
+    LocalDate startDate = LocalDate.of(year, month, 1);
+
+    LocalDate endDate = startDate.plusMonths(1);
+
+    return expenseRepository
+            .findByUserAndDateGreaterThanEqualAndDateLessThanOrderByDateDesc(
+                    currentUser,
+                    startDate,
+                    endDate
+            )
+            .stream()
+            .map(this::mapToResponse)
+            .collect(Collectors.toList());
+}
 }

@@ -1,0 +1,166 @@
+<div class="monthly-details-page">
+
+  <!-- HEADER -->
+  <div class="page-header">
+
+    <div>
+      <h1>
+        {{ monthName }} {{ year }}
+      </h1>
+
+      <p>
+        View all your expenses for this month
+      </p>
+    </div>
+
+    <a
+      routerLink="/expenses/monthly"
+      class="back-button"
+    >
+      ← Back to Monthly Expenses
+    </a>
+
+  </div>
+
+
+  <!-- SUMMARY -->
+  <div class="summary-container">
+
+    <div class="summary-card">
+
+      <span class="summary-label">
+        Total Expenses
+      </span>
+
+      <span class="summary-count">
+        {{ totalExpenses }}
+      </span>
+
+    </div>
+
+
+    <div class="summary-card">
+
+      <span class="summary-label">
+        Total Amount
+      </span>
+
+      <span class="summary-amount">
+        {{ totalAmount | number:'1.2-2' }} DH
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <!-- LOADING -->
+  <div
+    *ngIf="loading"
+    class="loading"
+  >
+    Loading expenses...
+  </div>
+
+
+  <!-- NO EXPENSES -->
+  <div
+    *ngIf="!loading && expenses.length === 0"
+    class="empty-state"
+  >
+
+    <div class="empty-icon">
+      📅
+    </div>
+
+    <h3>
+      No expenses
+    </h3>
+
+    <p>
+      There are no expenses for {{ monthName }} {{ year }}.
+    </p>
+
+  </div>
+
+
+  <!-- EXPENSES TABLE -->
+  <div
+    *ngIf="!loading && expenses.length > 0"
+    class="expenses-container"
+  >
+
+    <div class="table-header">
+
+      <div>
+        <span class="calendar-icon">📅</span>
+
+        {{ monthName }} {{ year }}
+      </div>
+
+      <div class="monthly-total">
+        Monthly Total:
+        {{ totalAmount | number:'1.2-2' }} DH
+      </div>
+
+    </div>
+
+
+    <table>
+
+      <thead>
+
+        <tr>
+
+          <th>Title</th>
+
+          <th>Amount</th>
+
+          <th>Category</th>
+
+          <th>Date</th>
+
+        </tr>
+
+      </thead>
+
+
+      <tbody>
+
+        <tr
+          *ngFor="let expense of expenses"
+        >
+
+          <td>
+            <strong>
+              {{ expense.title }}
+            </strong>
+          </td>
+
+          <td>
+            <strong>
+              {{ expense.amount | number:'1.2-2' }} DH
+            </strong>
+          </td>
+
+          <td>
+
+            <span class="category">
+              {{ expense.category }}
+            </span>
+
+          </td>
+
+          <td>
+            {{ expense.date }}
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

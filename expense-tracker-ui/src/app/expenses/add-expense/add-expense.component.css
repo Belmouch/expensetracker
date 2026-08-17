@@ -26,3 +26,24 @@ body{
 h2{
     color:#198754;
 }
+.cancel-button {
+  background: white;
+  color: #6b7280;
+  border: 1.5px solid #9ca3af;
+  border-radius: 10px;
+  padding: 12px 28px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancel-button:hover {
+  background: #f3f4f6;
+  color: #374151;
+  border-color: #6b7280;
+}
+
+.cancel-button:active {
+  transform: scale(0.98);
+}

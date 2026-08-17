@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ayoub.expensetracker.dto.CreateExpenseRequest;
 import com.ayoub.expensetracker.dto.ExpenseResponse;
 import com.ayoub.expensetracker.dto.ExpenseStatisticsResponse;
+import com.ayoub.expensetracker.projection.MonthlyStatistics;
 import com.ayoub.expensetracker.service.ExpenseService;
 
 import jakarta.validation.Valid;
@@ -34,27 +35,14 @@ public class ExpenseController {
     // =========================
     // GET ALL / FILTER BY DATE
     // =========================
-
     @GetMapping
     public Page<ExpenseResponse> getAllExpenses(
-
-            @RequestParam(defaultValue = "0")
-            int page,
-
-            @RequestParam(defaultValue = "10")
-            int size,
-
-            @RequestParam(defaultValue = "id")
-            String sortBy,
-
-            @RequestParam(defaultValue = "asc")
-            String direction,
-
-            @RequestParam(required = false)
-            LocalDate fromDate,
-
-            @RequestParam(required = false)
-            LocalDate toDate) {
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction,
+            @RequestParam(required = false) LocalDate fromDate,
+            @RequestParam(required = false) LocalDate toDate) {
 
         return expenseService.getAllExpenses(
                 page,
@@ -69,17 +57,36 @@ public class ExpenseController {
     // =========================
     // STATISTICS
     // =========================
-
     @GetMapping("/statistics")
     public ExpenseStatisticsResponse getStatistics() {
 
         return expenseService.getStatistics();
     }
+    // =========================
+// MONTHLY STATISTICS
+// =========================
+
+    @GetMapping("/monthly-statistics")
+    public List<MonthlyStatistics> getMonthlyStatistics() {
+
+        return expenseService.getMonthlyStatistics();
+    }
+    // =========================
+// EXPENSES BY MONTH
+// =========================
+
+    @GetMapping("/monthly/{year}/{month}")
+    public List<ExpenseResponse> getExpensesByMonth(
+            @PathVariable int year,
+            @PathVariable int month
+    ) {
+
+        return expenseService.getExpensesByMonth(year, month);
+    }
 
     // =========================
     // GET BY ID
     // =========================
-
     @GetMapping("/{id}")
     public ExpenseResponse getExpenseById(
             @PathVariable Long id) {
@@ -90,7 +97,6 @@ public class ExpenseController {
     // =========================
     // SAVE
     // =========================
-
     @PostMapping
     public ExpenseResponse saveExpense(
             @Valid @RequestBody CreateExpenseRequest request) {
@@ -101,7 +107,6 @@ public class ExpenseController {
     // =========================
     // UPDATE
     // =========================
-
     @PutMapping("/{id}")
     public ExpenseResponse updateExpense(
             @PathVariable Long id,
@@ -116,7 +121,6 @@ public class ExpenseController {
     // =========================
     // DELETE
     // =========================
-
     @DeleteMapping("/{id}")
     public void deleteExpense(
             @PathVariable Long id) {
@@ -127,21 +131,12 @@ public class ExpenseController {
     // =========================
     // SEARCH
     // =========================
-
     @GetMapping("/search")
     public List<ExpenseResponse> searchExpenses(
-
-            @RequestParam(required = false)
-            String category,
-
-            @RequestParam(required = false)
-            String title,
-
-            @RequestParam(required = false)
-            Double minAmount,
-
-            @RequestParam(required = false)
-            Double maxAmount) {
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) Double minAmount,
+            @RequestParam(required = false) Double maxAmount) {
 
         return expenseService.searchExpenses(
                 category,
