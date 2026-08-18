@@ -1,123 +1,597 @@
-<div class="container mt-5">
+<div class="expense-page">
 
-    <div class="row justify-content-center">
+    <!-- ================================================= -->
+    <!-- PAGE HEADER -->
+    <!-- ================================================= -->
 
-        <div class="col-lg-6 col-md-8">
+    <div class="page-header">
 
-            <div class="card shadow-lg border-0 rounded-4">
+        <div class="header-left">
 
-                <div class="card-body p-5">
+            <div class="header-icon">
+                <i class="bi bi-receipt"></i>
+            </div>
 
-                    <h2 class="fw-bold text-center mb-2">
-                        {{ id ? '✏️ Update Expense' : '💳 Add New Expense' }}
-                    </h2>
+            <div>
+                <h1>
+                    {{ id ? 'Edit Expense' : 'Add Expense' }}
+                </h1>
 
-                    <p class="text-center text-muted mb-4">
-                        {{ id
-                        ? 'Update your expense information'
-                        : 'Keep track of your daily expenses'
-                        }}
-                    </p>
+                <p>
+                    {{
+                        id
+                            ? 'Update the details of your transaction'
+                            : 'Add a new transaction to your expenses'
+                    }}
+                </p>
+            </div>
 
-                    <form #expenseForm="ngForm" (ngSubmit)="saveExpense()">
+        </div>
 
-                        <!-- Title -->
+        <button
+            type="button"
+            class="back-button"
+            (click)="cancel()"
+        >
+            <i class="bi bi-arrow-left"></i>
+            Back to Expenses
+        </button>
 
-                        <div class="mb-3">
+    </div>
 
-                            <label class="form-label fw-semibold">
-                                📝 Title
-                            </label>
 
-                            <input type="text" class="form-control form-control-lg" placeholder="Enter expense title"
-                                name="title" [(ngModel)]="title" #titleField="ngModel" required>
+    <!-- ================================================= -->
+    <!-- MAIN EXPENSE CARD -->
+    <!-- ================================================= -->
 
-                            <div class="text-danger mt-1" *ngIf="titleField.invalid && titleField.touched">
+    <div class="expense-card">
 
-                                Title is required.
+        <!-- CARD HEADER -->
 
-                            </div>
+        <div class="card-title">
 
-                        </div>
+            <div class="card-title-icon">
+                <i class="bi bi-journal-text"></i>
+            </div>
 
-                        <!-- Amount -->
+            <div>
+                <h2>
+                    Expense Information
+                </h2>
 
-                        <div class="mb-3">
+                <p>
+                    Enter the details of your transaction
+                </p>
+            </div>
 
-                            <label class="form-label fw-semibold">
-                                💰 Amount
-                            </label>
+        </div>
 
-                            <input type="number" class="form-control form-control-lg" placeholder="0" name="amount"
-                                [(ngModel)]="amount" #amountField="ngModel" required min="1">
 
-                            <div class="text-danger mt-1" *ngIf="amountField.invalid && amountField.touched">
+        <div class="divider"></div>
 
-                                Amount must be greater than 0.
 
-                            </div>
+        <!-- ================================================= -->
+        <!-- FORM -->
+        <!-- ================================================= -->
 
-                        </div>
+        <form
+            #expenseForm="ngForm"
+            (ngSubmit)="saveExpense()"
+        >
 
-                        <!-- Category -->
 
-                        <div class="mb-3">
+            <!-- ================================================= -->
+            <!-- EXPENSE TITLE -->
+            <!-- ================================================= -->
 
-                            <label class="form-label fw-semibold">
-                                📂 Category
-                            </label>
+            <div class="form-group full-width">
 
-                            <input type="text" class="form-control form-control-lg" placeholder="Food, Transport..."
-                                name="category" [(ngModel)]="category" #categoryField="ngModel" required>
+                <label for="title">
+                    Expense Title
+                </label>
 
-                            <div class="text-danger mt-1" *ngIf="categoryField.invalid && categoryField.touched">
+                <div class="input-wrapper">
 
-                                Category is required.
+                    <i class="bi bi-pencil"></i>
 
-                            </div>
-
-                        </div>
-
-                        <!-- Date -->
-
-                        <div class="mb-4">
-
-                            <label class="form-label fw-semibold">
-                                📅 Date
-                            </label>
-
-                            <input type="date" class="form-control form-control-lg" name="date" [(ngModel)]="date"
-                                #dateField="ngModel" required>
-
-                            <div class="text-danger mt-1" *ngIf="dateField.invalid && dateField.touched">
-
-                                Date is required.
-
-                            </div>
-
-                        </div>
-
-                        <div class="d-flex justify-content-between">
-
-                            <button type="button" class="cancel-button" (click)="cancel()">
-                                Cancel
-                            </button>
-
-                            <button type="submit" class="btn btn-success px-5" [disabled]="expenseForm.invalid">
-
-                                <i class="bi bi-check-circle me-2"></i>
-
-                                {{ id ? 'Update Expense' : 'Save Expense' }}
-
-                            </button>
-
-                        </div>
-
-                    </form>
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        [(ngModel)]="title"
+                        placeholder="What did you spend on?"
+                        required
+                    >
 
                 </div>
 
             </div>
+
+
+            <!-- ================================================= -->
+            <!-- AMOUNT + CATEGORY -->
+            <!-- ================================================= -->
+
+            <div class="form-row">
+
+
+                <!-- ================================================= -->
+                <!-- AMOUNT -->
+                <!-- ================================================= -->
+
+                <div class="form-group">
+
+                    <label for="amount">
+                        Amount
+                    </label>
+
+                    <div class="input-wrapper amount-wrapper">
+
+                        <i class="bi bi-cash-stack"></i>
+
+                        <input
+                            type="number"
+                            id="amount"
+                            name="amount"
+                            [(ngModel)]="amount"
+                            min="0"
+                            step="0.01"
+                            placeholder="0.00"
+                            required
+                        >
+
+                        <span class="currency">
+                            DH
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================================================= -->
+                <!-- CATEGORY -->
+                <!-- ================================================= -->
+
+                <div class="form-group category-field">
+
+                    <label>
+                        Category
+                    </label>
+
+
+                    <div class="category-select-wrapper">
+
+
+                        <!-- ================================================= -->
+                        <!-- CATEGORY SELECT BUTTON -->
+                        <!-- ================================================= -->
+
+                        <button
+                            type="button"
+                            class="category-select"
+                            [class.open]="categoryDropdownOpen"
+                            (click)="toggleCategoryDropdown()"
+                        >
+
+                            <div class="category-selected">
+
+                                <i
+                                    [class]="
+                                        category
+                                            ? getCategoryIcon(category)
+                                            : 'bi bi-grid'
+                                    "
+                                ></i>
+
+                                <span
+                                    [class.placeholder]="!category"
+                                >
+                                    {{ category || 'Select category' }}
+                                </span>
+
+                            </div>
+
+
+                            <i
+                                class="bi"
+                                [class.bi-chevron-down]="!categoryDropdownOpen"
+                                [class.bi-chevron-up]="categoryDropdownOpen"
+                            ></i>
+
+                        </button>
+
+
+                        <!-- ================================================= -->
+                        <!-- CATEGORY DROPDOWN -->
+                        <!-- ================================================= -->
+
+                        <div
+                            class="category-dropdown"
+                            *ngIf="categoryDropdownOpen"
+                        >
+
+                            <!-- FOOD -->
+
+                            <button
+                                type="button"
+                                class="category-option"
+                                [class.selected]="category === 'Food'"
+                                (click)="selectCategory('Food')"
+                            >
+
+                                <span class="category-option-icon">
+                                    <i class="bi bi-egg-fried"></i>
+                                </span>
+
+                                <span>
+                                    Food
+                                </span>
+
+                                <i
+                                    *ngIf="category === 'Food'"
+                                    class="bi bi-check2"
+                                ></i>
+
+                            </button>
+
+
+                            <!-- SHOPPING -->
+
+                            <button
+                                type="button"
+                                class="category-option"
+                                [class.selected]="category === 'Shopping'"
+                                (click)="selectCategory('Shopping')"
+                            >
+
+                                <span class="category-option-icon">
+                                    <i class="bi bi-bag"></i>
+                                </span>
+
+                                <span>
+                                    Shopping
+                                </span>
+
+                                <i
+                                    *ngIf="category === 'Shopping'"
+                                    class="bi bi-check2"
+                                ></i>
+
+                            </button>
+
+
+                            <!-- COFFEE -->
+
+                            <button
+                                type="button"
+                                class="category-option"
+                                [class.selected]="category === 'Coffee'"
+                                (click)="selectCategory('Coffee')"
+                            >
+
+                                <span class="category-option-icon">
+                                    <i class="bi bi-cup-hot"></i>
+                                </span>
+
+                                <span>
+                                    Coffee
+                                </span>
+
+                                <i
+                                    *ngIf="category === 'Coffee'"
+                                    class="bi bi-check2"
+                                ></i>
+
+                            </button>
+
+
+                            <!-- BILLS -->
+
+                            <button
+                                type="button"
+                                class="category-option"
+                                [class.selected]="category === 'Bills'"
+                                (click)="selectCategory('Bills')"
+                            >
+
+                                <span class="category-option-icon">
+                                    <i class="bi bi-receipt"></i>
+                                </span>
+
+                                <span>
+                                    Bills
+                                </span>
+
+                                <i
+                                    *ngIf="category === 'Bills'"
+                                    class="bi bi-check2"
+                                ></i>
+
+                            </button>
+
+
+                            <!-- WATER -->
+
+                            <button
+                                type="button"
+                                class="category-option"
+                                [class.selected]="category === 'Water'"
+                                (click)="selectCategory('Water')"
+                            >
+
+                                <span class="category-option-icon">
+                                    <i class="bi bi-droplet"></i>
+                                </span>
+
+                                <span>
+                                    Water
+                                </span>
+
+                                <i
+                                    *ngIf="category === 'Water'"
+                                    class="bi bi-check2"
+                                ></i>
+
+                            </button>
+
+
+                            <!-- ENTERTAINMENT -->
+
+                            <button
+                                type="button"
+                                class="category-option"
+                                [class.selected]="category === 'Entertainment'"
+                                (click)="selectCategory('Entertainment')"
+                            >
+
+                                <span class="category-option-icon">
+                                    <i class="bi bi-controller"></i>
+                                </span>
+
+                                <span>
+                                    Entertainment
+                                </span>
+
+                                <i
+                                    *ngIf="category === 'Entertainment'"
+                                    class="bi bi-check2"
+                                ></i>
+
+                            </button>
+
+
+                            <!-- STUDY -->
+
+                            <button
+                                type="button"
+                                class="category-option"
+                                [class.selected]="category === 'Study'"
+                                (click)="selectCategory('Study')"
+                            >
+
+                                <span class="category-option-icon">
+                                    <i class="bi bi-book"></i>
+                                </span>
+
+                                <span>
+                                    Study
+                                </span>
+
+                                <i
+                                    *ngIf="category === 'Study'"
+                                    class="bi bi-check2"
+                                ></i>
+
+                            </button>
+
+
+                            <!-- OUTILS -->
+
+                            <button
+                                type="button"
+                                class="category-option"
+                                [class.selected]="category === 'Outils'"
+                                (click)="selectCategory('Outils')"
+                            >
+
+                                <span class="category-option-icon">
+                                    <i class="bi bi-tools"></i>
+                                </span>
+
+                                <span>
+                                    Outils
+                                </span>
+
+                                <i
+                                    *ngIf="category === 'Outils'"
+                                    class="bi bi-check2"
+                                ></i>
+
+                            </button>
+
+
+                            <!-- TRANSPORT -->
+
+                            <button
+                                type="button"
+                                class="category-option"
+                                [class.selected]="category === 'Transport'"
+                                (click)="selectCategory('Transport')"
+                            >
+
+                                <span class="category-option-icon">
+                                    <i class="bi bi-car-front"></i>
+                                </span>
+
+                                <span>
+                                    Transport
+                                </span>
+
+                                <i
+                                    *ngIf="category === 'Transport'"
+                                    class="bi bi-check2"
+                                ></i>
+
+                            </button>
+
+
+                            <!-- OTHER -->
+
+                            <button
+                                type="button"
+                                class="category-option"
+                                [class.selected]="category === 'Other'"
+                                (click)="selectCategory('Other')"
+                            >
+
+                                <span class="category-option-icon">
+                                    <i class="bi bi-three-dots"></i>
+                                </span>
+
+                                <span>
+                                    Other
+                                </span>
+
+                                <i
+                                    *ngIf="category === 'Other'"
+                                    class="bi bi-check2"
+                                ></i>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ================================================= -->
+                    <!-- OTHER CATEGORY INPUT -->
+                    <!-- ================================================= -->
+
+                    <div
+                        *ngIf="category === 'Other'"
+                        class="other-category"
+                    >
+
+                        <i class="bi bi-pencil"></i>
+
+                        <input
+                            type="text"
+                            name="otherCategory"
+                            [(ngModel)]="otherCategory"
+                            placeholder="Enter your category..."
+                        >
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- DATE -->
+            <!-- ================================================= -->
+
+            <div class="form-group full-width">
+
+                <label for="date">
+                    Date
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="bi bi-calendar3"></i>
+
+                    <input
+                        type="date"
+                        id="date"
+                        name="date"
+                        [(ngModel)]="date"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- BOTTOM DIVIDER -->
+            <!-- ================================================= -->
+
+            <div class="divider bottom-divider"></div>
+
+
+            <!-- ================================================= -->
+            <!-- ACTIONS -->
+            <!-- ================================================= -->
+
+            <div class="form-actions">
+
+                <button
+                    type="button"
+                    class="cancel-button"
+                    (click)="cancel()"
+                >
+
+                    <i class="bi bi-x-lg"></i>
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="save-button"
+                    [disabled]="expenseForm.invalid || loading"
+                >
+
+                    <i
+                        class="bi"
+                        [class.bi-plus-lg]="!id"
+                        [class.bi-check-lg]="id"
+                    ></i>
+
+                    {{
+                        loading
+                            ? 'Saving...'
+                            : (id ? 'Update Expense' : 'Add Expense')
+                    }}
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- INFORMATION CARD -->
+    <!-- ================================================= -->
+
+    <div class="info-card">
+
+        <div class="info-icon">
+
+            <i class="bi bi-lightbulb"></i>
+
+        </div>
+
+        <div>
+
+            <h3>
+                Keep your expenses organized
+            </h3>
+
+            <p>
+                Add accurate information so you can easily
+                track your spending later.
+            </p>
 
         </div>
 

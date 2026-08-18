@@ -1,0 +1,172 @@
+<div class="layout" [class.sidebar-collapsed]="!sidebarOpen">
+
+    <!-- ========================= -->
+    <!-- SIDEBAR -->
+    <!-- ========================= -->
+
+    <aside class="sidebar">
+
+        <!-- LOGO -->
+        <div class="sidebar-header">
+
+            <div class="logo-icon">
+                <i class="bi bi-wallet2"></i>
+            </div>
+
+            <div class="logo-text" *ngIf="sidebarOpen">
+
+                <h4>
+                    Expense Tracker
+                </h4>
+
+                <small>
+                    Manage your finances
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- SIDEBAR TOGGLE -->
+        <button type="button" class="sidebar-toggle" (click)="toggleSidebar()"
+            [attr.title]="sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'">
+
+            <i class="bi" [ngClass]="
+                    sidebarOpen
+                        ? 'bi-chevron-left'
+                        : 'bi-chevron-right'
+                ">
+            </i>
+
+        </button>
+
+
+        <!-- ========================= -->
+        <!-- CONNECTED ACCOUNT -->
+        <!-- ========================= -->
+
+        <div class="account-card">
+
+            <div class="account-icon">
+
+                <i class="bi bi-person-fill"></i>
+
+            </div>
+
+
+            <div class="account-info" *ngIf="sidebarOpen">
+
+                <small>
+                    CONNECTED ACCOUNT
+                </small>
+
+                <strong>
+                    {{ username }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- MENU -->
+        <!-- ========================= -->
+
+        <div class="menu">
+
+            <small class="menu-title" *ngIf="sidebarOpen">
+
+                MENU
+
+            </small>
+
+            <!-- EXPENSES -->
+
+            <a routerLink="/expenses" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+                class="menu-item">
+
+                <i class="bi bi-receipt"></i>
+
+                <span *ngIf="sidebarOpen">
+                    Home
+                </span>
+
+            </a>
+
+
+            <!-- MONTHLY EXPENSES -->
+
+            <a routerLink="/expenses/monthly" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+                class="menu-item">
+
+                <i class="bi bi-calendar3"></i>
+
+                <span *ngIf="sidebarOpen">
+                    Monthly Expenses
+                </span>
+
+            </a>
+            
+            <!-- DASHBOARD -->
+
+            <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+                class="menu-item">
+
+                <i class="bi bi-grid"></i>
+
+                <span *ngIf="sidebarOpen">
+                    Dashboard
+                </span>
+
+            </a>
+
+
+
+
+
+            <!-- ADD EXPENSE -->
+
+            <a routerLink="/expenses/add" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+                class="menu-item">
+
+                <i class="bi bi-plus-circle"></i>
+
+                <span *ngIf="sidebarOpen">
+                    Add Expense
+                </span>
+
+            </a>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- LOGOUT -->
+        <!-- ========================= -->
+
+        <button type="button" class="logout-btn" (click)="logout()">
+
+            <i class="bi bi-box-arrow-left"></i>
+
+            <span *ngIf="sidebarOpen">
+                Logout
+            </span>
+
+        </button>
+
+    </aside>
+
+
+    <!-- ========================= -->
+    <!-- MAIN CONTENT -->
+    <!-- ========================= -->
+
+    <main class="main-content">
+
+        <router-outlet></router-outlet>
+
+    </main>
+
+</div>

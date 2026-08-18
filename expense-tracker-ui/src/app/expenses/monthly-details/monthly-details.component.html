@@ -1,166 +1,660 @@
-<div class="monthly-details-page">
+<div class="monthly-dashboard">
 
-  <!-- HEADER -->
-  <div class="page-header">
+    <!-- ========================= -->
+    <!-- HEADER -->
+    <!-- ========================= -->
 
-    <div>
-      <h1>
-        {{ monthName }} {{ year }}
-      </h1>
+    <div class="page-header">
 
-      <p>
-        View all your expenses for this month
-      </p>
-    </div>
+        <div class="header-left">
 
-    <a
-      routerLink="/expenses/monthly"
-      class="back-button"
-    >
-      ← Back to Monthly Expenses
-    </a>
+            <button
+                class="back-button"
+                (click)="goBack()"
+            >
+                <i class="bi bi-arrow-left"></i>
+            </button>
 
-  </div>
+            <div>
 
+                <div class="eyebrow">
+                    MONTHLY OVERVIEW
+                </div>
 
-  <!-- SUMMARY -->
-  <div class="summary-container">
+                <h1>
+                    {{ monthName }} {{ year }}
+                </h1>
 
-    <div class="summary-card">
+                <p>
+                    Your spending activity for this month
+                </p>
 
-      <span class="summary-label">
-        Total Expenses
-      </span>
+            </div>
 
-      <span class="summary-count">
-        {{ totalExpenses }}
-      </span>
-
-    </div>
+        </div>
 
 
-    <div class="summary-card">
-
-      <span class="summary-label">
-        Total Amount
-      </span>
-
-      <span class="summary-amount">
-        {{ totalAmount | number:'1.2-2' }} DH
-      </span>
-
-    </div>
-
-  </div>
-
-
-  <!-- LOADING -->
-  <div
-    *ngIf="loading"
-    class="loading"
-  >
-    Loading expenses...
-  </div>
-
-
-  <!-- NO EXPENSES -->
-  <div
-    *ngIf="!loading && expenses.length === 0"
-    class="empty-state"
-  >
-
-    <div class="empty-icon">
-      📅
-    </div>
-
-    <h3>
-      No expenses
-    </h3>
-
-    <p>
-      There are no expenses for {{ monthName }} {{ year }}.
-    </p>
-
-  </div>
-
-
-  <!-- EXPENSES TABLE -->
-  <div
-    *ngIf="!loading && expenses.length > 0"
-    class="expenses-container"
-  >
-
-    <div class="table-header">
-
-      <div>
-        <span class="calendar-icon">📅</span>
-
-        {{ monthName }} {{ year }}
-      </div>
-
-      <div class="monthly-total">
-        Monthly Total:
-        {{ totalAmount | number:'1.2-2' }} DH
-      </div>
-
-    </div>
-
-
-    <table>
-
-      <thead>
-
-        <tr>
-
-          <th>Title</th>
-
-          <th>Amount</th>
-
-          <th>Category</th>
-
-          <th>Date</th>
-
-        </tr>
-
-      </thead>
-
-
-      <tbody>
-
-        <tr
-          *ngFor="let expense of expenses"
+        <button
+            class="all-months-button"
+            routerLink="/expenses/monthly"
         >
 
-          <td>
-            <strong>
-              {{ expense.title }}
-            </strong>
-          </td>
+            <i class="bi bi-calendar3"></i>
 
-          <td>
-            <strong>
-              {{ expense.amount | number:'1.2-2' }} DH
-            </strong>
-          </td>
+            All months
 
-          <td>
+        </button>
 
-            <span class="category">
-              {{ expense.category }}
-            </span>
+    </div>
 
-          </td>
 
-          <td>
-            {{ expense.date }}
-          </td>
+    <!-- ========================= -->
+    <!-- ERROR -->
+    <!-- ========================= -->
 
-        </tr>
+    <div
+        *ngIf="errorMessage"
+        class="error-card"
+    >
 
-      </tbody>
+        <i class="bi bi-exclamation-circle"></i>
 
-    </table>
+        <span>
+            {{ errorMessage }}
+        </span>
 
-  </div>
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- LOADING -->
+    <!-- ========================= -->
+
+    <div
+        *ngIf="loading"
+        class="loading"
+    >
+
+        <div class="spinner"></div>
+
+        <span>
+            Loading {{ monthName }} {{ year }}...
+        </span>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- CONTENT -->
+    <!-- ========================= -->
+
+    <div *ngIf="!loading">
+
+
+        <!-- ========================= -->
+        <!-- STATISTICS -->
+        <!-- ========================= -->
+
+        <div class="stats-grid">
+
+
+            <!-- TOTAL EXPENSES -->
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-icon blue">
+
+                        <i class="bi bi-receipt"></i>
+
+                    </div>
+
+                    <span>
+                        TRANSACTIONS
+                    </span>
+
+                </div>
+
+                <div class="stat-value">
+                    {{ totalExpenses }}
+                </div>
+
+                <div class="stat-label">
+                    Total Expenses
+                </div>
+
+                <div class="stat-description">
+                    Expenses recorded this month
+                </div>
+
+            </div>
+
+
+            <!-- TOTAL AMOUNT -->
+
+            <div class="stat-card featured">
+
+                <div class="stat-top">
+
+                    <div class="stat-icon green">
+
+                        <i class="bi bi-wallet2"></i>
+
+                    </div>
+
+                    <span>
+                        TOTAL SPENDING
+                    </span>
+
+                </div>
+
+                <div class="stat-value green-text">
+                    {{ totalAmount | number:'1.2-2' }}
+                    <small>DH</small>
+                </div>
+
+                <div class="stat-label">
+                    Total Amount
+                </div>
+
+                <div class="stat-description">
+                    Total money spent this month
+                </div>
+
+            </div>
+
+
+            <!-- AVERAGE -->
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-icon purple">
+
+                        <i class="bi bi-calculator"></i>
+
+                    </div>
+
+                    <span>
+                        AVERAGE
+                    </span>
+
+                </div>
+
+                <div class="stat-value">
+                    {{ averageExpense | number:'1.2-2' }}
+                    <small>DH</small>
+                </div>
+
+                <div class="stat-label">
+                    Average Expense
+                </div>
+
+                <div class="stat-description">
+                    Average amount per transaction
+                </div>
+
+            </div>
+
+
+            <!-- BIGGEST -->
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <div class="stat-icon orange">
+
+                        <i class="bi bi-arrow-up-circle"></i>
+
+                    </div>
+
+                    <span>
+                        HIGHEST
+                    </span>
+
+                </div>
+
+                <div class="stat-value">
+                    {{ biggestExpense?.amount | number:'1.2-2' }}
+                    <small>DH</small>
+                </div>
+
+                <div class="stat-label">
+                    Biggest Expense
+                </div>
+
+                <div class="stat-description">
+
+                    {{ biggestExpense?.title || 'No expenses' }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- CATEGORY + DAILY -->
+        <!-- ========================= -->
+
+        <div class="main-grid">
+
+
+            <!-- ========================= -->
+            <!-- CATEGORY -->
+            <!-- ========================= -->
+
+            <div class="dashboard-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h2>
+                            Spending by Category
+                        </h2>
+
+                        <p>
+                            Where your money went this month
+                        </p>
+
+                    </div>
+
+                    <div class="card-icon">
+
+                        <i class="bi bi-pie-chart"></i>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    *ngIf="categories.length > 0"
+                    class="category-list"
+                >
+
+                    <div
+                        *ngFor="let category of categories"
+                        class="category-item"
+                    >
+
+                        <div class="category-info">
+
+                            <div class="category-name">
+
+                                <span class="dot"></span>
+
+                                {{ category.name }}
+
+                            </div>
+
+                            <span class="category-count">
+
+                                {{ category.count }}
+                                expenses
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="category-right">
+
+                            <strong>
+
+                                {{ category.amount | number:'1.2-2' }}
+                                DH
+
+                            </strong>
+
+                            <span>
+
+                                {{ category.percentage | number:'1.0-0' }}%
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    *ngIf="categories.length === 0"
+                    class="empty"
+                >
+
+                    <i class="bi bi-pie-chart"></i>
+
+                    <p>
+                        No category data
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- ========================= -->
+            <!-- DAILY ACTIVITY -->
+            <!-- ========================= -->
+
+            <div class="dashboard-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h2>
+                            Spending Activity
+                        </h2>
+
+                        <p>
+                            Daily activity during {{ monthName }}
+                        </p>
+
+                    </div>
+
+                    <div class="card-icon">
+
+                        <i class="bi bi-calendar-week"></i>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    *ngIf="dailySummary.length > 0"
+                    class="daily-list"
+                >
+
+                    <div
+                        *ngFor="let day of dailySummary"
+                        class="daily-item"
+                    >
+
+                        <div class="daily-date">
+
+                            <div class="date-icon">
+
+                                <i class="bi bi-calendar-event"></i>
+
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    {{ formatDate(day.date) }}
+                                </strong>
+
+                                <span>
+                                    {{ day.count }}
+                                    {{ day.count === 1 ? 'expense' : 'expenses' }}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <strong class="daily-amount">
+
+                            {{ day.amount | number:'1.2-2' }}
+                            DH
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    *ngIf="dailySummary.length === 0"
+                    class="empty"
+                >
+
+                    <i class="bi bi-calendar-x"></i>
+
+                    <p>
+                        No activity this month
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- EXPENSES TABLE -->
+        <!-- ========================= -->
+
+        <div class="expenses-card">
+
+            <div class="expenses-header">
+
+                <div>
+
+                    <div class="section-title">
+
+                        <div class="section-icon">
+
+                            <i class="bi bi-receipt"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h2>
+                                {{ monthName }} {{ year }} Expenses
+                            </h2>
+
+                            <p>
+                                All transactions recorded during this month
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="monthly-total">
+
+                    <span>
+                        Monthly Total
+                    </span>
+
+                    <strong>
+                        {{ totalAmount | number:'1.2-2' }} DH
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- TABLE -->
+
+            <div
+                *ngIf="expenses.length > 0"
+                class="table-container"
+            >
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                EXPENSE
+                            </th>
+
+                            <th>
+                                CATEGORY
+                            </th>
+
+                            <th>
+                                DATE
+                            </th>
+
+                            <th class="amount-column">
+                                AMOUNT
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr
+                            *ngFor="let expense of expenses"
+                        >
+
+                            <td>
+
+                                <div class="expense-title">
+
+                                    <div class="expense-icon">
+
+                                        <i class="bi bi-receipt"></i>
+
+                                    </div>
+
+                                    <div>
+
+                                        <strong>
+                                            {{ expense.title }}
+                                        </strong>
+
+                                        <span>
+                                            Expense
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <td>
+
+                                <span class="category-badge">
+
+                                    {{ expense.category }}
+
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <span class="date-text">
+
+                                    {{ formatDate(expense.date) }}
+
+                                </span>
+
+                            </td>
+
+
+                            <td class="amount-column">
+
+                                <strong class="expense-amount">
+
+                                    {{ expense.amount | number:'1.2-2' }}
+                                    DH
+
+                                </strong>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- EMPTY -->
+
+            <div
+                *ngIf="expenses.length === 0"
+                class="empty-expenses"
+            >
+
+                <div class="empty-icon">
+
+                    <i class="bi bi-receipt"></i>
+
+                </div>
+
+                <h3>
+                    No expenses
+                </h3>
+
+                <p>
+                    You don't have any expenses recorded for
+                    {{ monthName }} {{ year }}.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- MONTH INSIGHT -->
+        <!-- ========================= -->
+
+        <div class="insight-card">
+
+            <div class="insight-icon">
+
+                <i class="bi bi-lightbulb"></i>
+
+            </div>
+
+            <div>
+
+                <h3>
+                    Monthly overview
+                </h3>
+
+                <p>
+
+                    You recorded
+                    <strong>{{ totalExpenses }}</strong>
+                    {{ totalExpenses === 1 ? 'expense' : 'expenses' }}
+                    in {{ monthName }} {{ year }},
+                    for a total of
+                    <strong>
+                        {{ totalAmount | number:'1.2-2' }} DH
+                    </strong>.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>

@@ -1,47 +1,205 @@
-<div class="container mt-5" style="max-width: 400px">
+<div class="register-page">
 
-  <h2 class="mb-4 text-center">Create Account</h2>
+    <!-- ========================= -->
+    <!-- LEFT SIDE -->
+    <!-- ========================= -->
 
-  <div class="mb-3">
+    <div class="register-brand">
 
-    <label class="form-label">Username</label>
+        <div class="brand-content">
 
-    <input
-      type="text"
-      class="form-control"
-      [(ngModel)]="username"
-      placeholder="Username">
+            <div class="brand-icon">
+                <i class="bi bi-wallet2"></i>
+            </div>
 
-  </div>
+            <h1>
+                Expense Tracker
+            </h1>
 
-  <div class="mb-3">
+            <p>
+                Start managing your finances smarter.
+            </p>
 
-    <label class="form-label">Password</label>
+            <div class="brand-features">
 
-    <input
-      type="password"
-      class="form-control"
-      [(ngModel)]="password"
-      placeholder="Password">
+                <div class="feature">
 
-  </div>
+                    <div class="feature-icon">
+                        <i class="bi bi-plus-circle"></i>
+                    </div>
 
-  <button
-    class="btn btn-primary w-100"
-    (click)="register()">
+                    <span>
+                        Create your personal account
+                    </span>
 
-    Create Account
+                </div>
 
-  </button>
 
-  <div class="text-center mt-3">
+                <div class="feature">
 
-    <span>Already have an account? </span>
+                    <div class="feature-icon">
+                        <i class="bi bi-wallet2"></i>
+                    </div>
 
-    <a routerLink="/login">
-      Login
-    </a>
+                    <span>
+                        Track your daily expenses
+                    </span>
 
-  </div>
+                </div>
+
+
+                <div class="feature">
+
+                    <div class="feature-icon">
+                        <i class="bi bi-bar-chart-line"></i>
+                    </div>
+
+                    <span>
+                        Keep your finances organized
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- RIGHT SIDE -->
+    <!-- ========================= -->
+
+    <div class="register-section">
+
+        <div class="register-card">
+
+            <!-- HEADER -->
+
+            <div class="register-header">
+
+                <div class="mobile-brand-icon">
+                    <i class="bi bi-wallet2"></i>
+                </div>
+
+                <h2>
+                    Create your account
+                </h2>
+
+                <p>
+                    Join Expense Tracker and start managing your expenses
+                </p>
+
+            </div>
+
+
+            <!-- ========================= -->
+            <!-- FORM -->
+            <!-- ========================= -->
+
+            <form (ngSubmit)="register()">
+
+                <!-- USERNAME -->
+
+                <div class="form-group">
+
+                    <label>
+                        Username
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-person"></i>
+
+                        <input
+                            type="text"
+                            name="username"
+                            [(ngModel)]="username"
+                            placeholder="Choose a username"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label>
+                        Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-lock"></i>
+
+                        <input
+                            [type]="showPassword ? 'text' : 'password'"
+                            name="password"
+                            [(ngModel)]="password"
+                            placeholder="Create a password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            (click)="showPassword = !showPassword"
+                        >
+
+                            <i
+                                [class]="showPassword
+                                    ? 'bi bi-eye-slash'
+                                    : 'bi bi-eye'"
+                            ></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- REGISTER BUTTON -->
+
+                <button
+                    type="submit"
+                    class="register-button"
+                >
+
+                    <span>
+                        Create account
+                    </span>
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </button>
+
+            </form>
+
+
+            <!-- ========================= -->
+            <!-- LOGIN LINK -->
+            <!-- ========================= -->
+
+            <div class="login-link">
+
+                <span>
+                    Already have an account?
+                </span>
+
+                <a routerLink="/login">
+                    Sign in
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>

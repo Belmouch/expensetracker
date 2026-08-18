@@ -26,14 +26,20 @@ public class ExpenseSpecification {
     // TITLE
     // =========================
 
-    public static Specification<Expense> hasTitle(String title) {
+ // =========================
+// TITLE
+// =========================
 
-        return (root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(
-                        root.get("title"),
-                        title
-                );
-    }
+public static Specification<Expense> hasTitle(String title) {
+
+    return (root, query, criteriaBuilder) ->
+            criteriaBuilder.like(
+                    criteriaBuilder.lower(
+                            root.get("title")
+                    ),
+                    "%" + title.toLowerCase() + "%"
+            );
+}
 
     // =========================
     // MIN AMOUNT

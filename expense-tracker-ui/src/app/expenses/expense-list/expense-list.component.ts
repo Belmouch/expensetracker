@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
+import { MonthlyStatistics } from '../../models/monthly-statistics';
+import { ExpenseStatisticsResponse } from '../../models/expense-statistics-response';
+
 import { ExpenseService } from '../expense.service';
 import { Expense } from '../../models/expense';
 
 import Swal from 'sweetalert2';
-import { ExpenseStatisticsResponse } from '../../models/expense-statistics-response';
 
 
 // =========================
@@ -50,6 +52,12 @@ export class ExpenseListComponent implements OnInit {
   // =========================
 
   statistics: ExpenseStatisticsResponse | null = null;
+
+  username = '';
+
+  monthlyStatistics: MonthlyStatistics[] = [];
+
+  currentMonthStatistics: MonthlyStatistics | null = null;
 
 
   // =========================
@@ -104,9 +112,13 @@ export class ExpenseListComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.username = this.expenseService.getUsername();
+
     this.loadExpenses();
 
     this.loadStatistics();
+
+    this.loadMonthlyStatistics();
 
   }
 
@@ -123,6 +135,7 @@ export class ExpenseListComponent implements OnInit {
       .getExpenses(
         this.page,
         this.size,
+        this.searchText,
         this.fromDate || undefined,
         this.toDate || undefined
       )
@@ -130,14 +143,20 @@ export class ExpenseListComponent implements OnInit {
 
         next: (response) => {
 
+          // Expenses returned by backend
           this.expenses = response.content;
 
+          // Pagination information
           this.totalPages = response.totalPages;
 
           this.totalElements = response.totalElements;
 
-          // Apply search
-          this.searchExpenses();
+          // No client-side search anymore
+          // Backend already filtered the results
+          this.filteredExpenses = [...this.expenses];
+
+          // Group expenses by date
+          this.buildDailyExpenses();
 
           this.loading = false;
 
@@ -160,7 +179,7 @@ export class ExpenseListComponent implements OnInit {
 
 
   // =========================
-  // LOAD STATISTICS
+  // LOAD GLOBAL STATISTICS
   // =========================
 
   loadStatistics(): void {
@@ -190,35 +209,59 @@ export class ExpenseListComponent implements OnInit {
 
 
   // =========================
-  // SEARCH BY TITLE
+  // LOAD MONTHLY STATISTICS
+  // =========================
+
+  loadMonthlyStatistics(): void {
+
+    this.expenseService
+      .getMonthlyStatistics()
+      .subscribe({
+
+        next: (response) => {
+
+          this.monthlyStatistics = response;
+
+          const now = new Date();
+
+          const currentYear = now.getFullYear();
+
+          const currentMonth = now.getMonth() + 1;
+
+          this.currentMonthStatistics =
+            response.find(
+              item =>
+                item.year === currentYear &&
+                item.month === currentMonth
+            ) || null;
+
+        },
+
+        error: (error) => {
+
+          console.error(
+            'Error loading monthly statistics:',
+            error
+          );
+
+        }
+
+      });
+
+  }
+
+
+  // =========================
+  // SEARCH
   // =========================
 
   searchExpenses(): void {
 
-    const search = this.searchText
-      .trim()
-      .toLowerCase();
+    // Go back to first page
+    this.page = 0;
 
-
-    if (!search) {
-
-      this.filteredExpenses = [...this.expenses];
-
-    } else {
-
-      this.filteredExpenses =
-        this.expenses.filter(
-          expense =>
-            expense.title
-              .toLowerCase()
-              .includes(search)
-        );
-
-    }
-
-
-    // Rebuild daily groups
-    this.buildDailyExpenses();
+    // Search is now handled by backend
+    this.loadExpenses();
 
   }
 
@@ -296,9 +339,14 @@ export class ExpenseListComponent implements OnInit {
     ) {
 
       Swal.fire({
+
         icon: 'warning',
+
         title: 'Invalid dates',
-        text: 'The start date cannot be after the end date.'
+
+        text:
+          'The start date cannot be after the end date.'
+
       });
 
       return;
@@ -341,7 +389,7 @@ export class ExpenseListComponent implements OnInit {
 
   get totalExpenses(): number {
 
-    return this.totalElements;
+    return this.statistics?.totalExpenses ?? 0;
 
   }
 
@@ -358,12 +406,37 @@ export class ExpenseListComponent implements OnInit {
 
 
   // =========================
+  // CURRENT MONTH EXPENSES
+  // =========================
+
+  get currentMonthExpenses(): number {
+
+    return this.currentMonthStatistics?.count ?? 0;
+
+  }
+
+
+  // =========================
+  // CURRENT MONTH AMOUNT
+  // =========================
+
+  get currentMonthAmount(): number {
+
+    return this.currentMonthStatistics?.total ?? 0;
+
+  }
+
+
+  // =========================
   // NEXT PAGE
   // =========================
 
   nextPage(): void {
 
-    if (this.page < this.totalPages - 1) {
+    if (
+      this.page <
+      this.totalPages - 1
+    ) {
 
       this.page++;
 
@@ -401,7 +474,8 @@ export class ExpenseListComponent implements OnInit {
 
       title: 'Delete Expense?',
 
-      text: 'You will not be able to recover this expense!',
+      text:
+        'You will not be able to recover this expense!',
 
       icon: 'warning',
 
@@ -411,9 +485,11 @@ export class ExpenseListComponent implements OnInit {
 
       cancelButtonColor: '#dc3545',
 
-      confirmButtonText: 'Yes, delete it!',
+      confirmButtonText:
+        'Yes, delete it!',
 
-      cancelButtonText: 'Cancel'
+      cancelButtonText:
+        'Cancel'
 
     }).then((result) => {
 
@@ -425,9 +501,15 @@ export class ExpenseListComponent implements OnInit {
 
             next: () => {
 
+              // Reload expenses
               this.loadExpenses();
 
+              // Reload global statistics
               this.loadStatistics();
+
+              // Reload monthly statistics
+              this.loadMonthlyStatistics();
+
 
               Swal.fire({
 
@@ -435,7 +517,8 @@ export class ExpenseListComponent implements OnInit {
 
                 title: 'Deleted!',
 
-                text: 'Expense deleted successfully.',
+                text:
+                  'Expense deleted successfully.',
 
                 timer: 1500,
 
@@ -458,7 +541,8 @@ export class ExpenseListComponent implements OnInit {
 
                 title: 'Error',
 
-                text: 'Unable to delete expense.'
+                text:
+                  'Unable to delete expense.'
 
               });
 
@@ -483,15 +567,26 @@ export class ExpenseListComponent implements OnInit {
 
       title: 'Logout?',
 
-      text: 'Do you want to logout?',
+      text:
+        'Do you want to logout?',
 
       icon: 'question',
 
       showCancelButton: true,
 
-      confirmButtonText: 'Logout',
+      confirmButtonText:
+        'Logout',
 
-      cancelButtonText: 'Cancel'
+      cancelButtonText:
+        'Cancel',
+
+      confirmButtonColor:
+        '#198754',
+
+      cancelButtonColor:
+        '#dc3545',
+
+      reverseButtons: true
 
     }).then((result) => {
 

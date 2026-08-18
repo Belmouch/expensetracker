@@ -39,8 +39,9 @@ public class ExpenseController {
     public Page<ExpenseResponse> getAllExpenses(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "asc") String direction,
+            @RequestParam(defaultValue = "date") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction,
+            @RequestParam(required = false) String search,
             @RequestParam(required = false) LocalDate fromDate,
             @RequestParam(required = false) LocalDate toDate) {
 
@@ -49,6 +50,7 @@ public class ExpenseController {
                 size,
                 sortBy,
                 direction,
+                search,
                 fromDate,
                 toDate
         );

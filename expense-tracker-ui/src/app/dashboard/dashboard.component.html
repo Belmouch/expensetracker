@@ -1,106 +1,594 @@
-<!-- Loading -->
-<div class="loading-container" *ngIf="loading">
+<div class="dashboard-page">
 
-  <div class="spinner"></div>
+  <!-- ========================= -->
+  <!-- HEADER -->
+  <!-- ========================= -->
 
-  <p>Loading dashboard...</p>
-
-</div>
-
-
-<!-- Error -->
-<div
-  class="error-container"
-  *ngIf="!loading && errorMessage">
-
-  <p>{{ errorMessage }}</p>
-
-  <button (click)="loadStatistics()">
-    Try Again
-  </button>
-
-</div>
-
-
-<!-- Dashboard -->
-<div
-  class="dashboard"
-  *ngIf="!loading && !errorMessage">
-
-  <!-- Header -->
   <div class="dashboard-header">
 
     <div>
-      <h1>Dashboard</h1>
-      <p>Overview of your expenses</p>
-    </div>
 
-  </div>
-
-
-  <!-- Statistics Cards -->
-  <div class="stats-grid">
-
-    <!-- Total Expenses -->
-    <div class="stat-card">
-
-      <div class="stat-icon">
-        💰
+      <div class="eyebrow">
+        FINANCIAL OVERVIEW
       </div>
 
-      <div>
-        <p>Total Expenses</p>
+      <h1>
+        Dashboard
+      </h1>
 
-        <h2>
-          {{ statistics?.totalExpenses ?? 0 }}
-        </h2>
-      </div>
+      <p>
+        Overview of your expenses and spending activity
+      </p>
 
     </div>
 
+    <div class="header-badge">
 
-    <!-- Total Amount -->
-    <div class="stat-card">
-
-      <div class="stat-icon">
-        💵
-      </div>
-
-      <div>
-        <p>Total Amount</p>
-
-        <h2>
-          {{ statistics?.totalAmount ?? 0 }} $
-        </h2>
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- Chart Card -->
-  <div class="chart-card">
-
-    <div class="chart-header">
-
-      <h2>Expenses by Category</h2>
+      <i class="bi bi-graph-up-arrow"></i>
 
       <span>
-        Distribution
+        Spending overview
       </span>
 
     </div>
 
+  </div>
 
-    <div class="chart-container">
 
-      <canvas
-        baseChart
-        [data]="pieChartData"
-        [type]="pieChartType"
-        [options]="pieChartOptions">
-      </canvas>
+  <!-- ========================= -->
+  <!-- ERROR -->
+  <!-- ========================= -->
+
+  <div *ngIf="errorMessage" class="alert alert-danger rounded-4">
+
+    {{ errorMessage }}
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!-- LOADING -->
+  <!-- ========================= -->
+
+  <div *ngIf="loading" class="loading-container">
+
+    <div class="spinner-border text-success"></div>
+
+    <p>
+      Loading dashboard...
+    </p>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!-- CONTENT -->
+  <!-- ========================= -->
+
+  <div *ngIf="!loading">
+
+
+    <!-- ========================= -->
+    <!-- STATISTICS -->
+    <!-- ========================= -->
+
+    <div class="stats-grid">
+
+
+      <!-- TOTAL AMOUNT -->
+
+      <div class="stat-card primary-stat">
+
+        <div class="stat-top">
+
+          <div class="stat-icon green-icon">
+            <i class="bi bi-wallet2"></i>
+          </div>
+
+          <span class="stat-period">
+            ALL TIME
+          </span>
+
+        </div>
+
+        <div class="stat-value">
+
+          {{ totalAmount | number:'1.2-2' }}
+
+          <span>DH</span>
+
+        </div>
+
+        <div class="stat-title">
+          Total Amount
+        </div>
+
+        <div class="stat-footer">
+
+          <i class="bi bi-arrow-up-right"></i>
+
+          Total spending
+
+        </div>
+
+      </div>
+
+
+      <!-- THIS MONTH AMOUNT -->
+
+      <div class="stat-card month-stat">
+
+        <div class="stat-top">
+
+          <div class="stat-icon blue-icon">
+            <i class="bi bi-calendar2-check"></i>
+          </div>
+
+          <span class="stat-period">
+            THIS MONTH
+          </span>
+
+        </div>
+
+        <div class="stat-value">
+
+          {{ currentMonthAmount | number:'1.2-2' }}
+
+          <span>DH</span>
+
+        </div>
+
+        <div class="stat-title">
+          This Month Amount
+        </div>
+
+        <div class="stat-footer green-text">
+
+          <i class="bi bi-graph-up-arrow"></i>
+
+          Current spending
+
+        </div>
+
+      </div>
+
+
+      <!-- TOTAL EXPENSES -->
+
+      <div class="stat-card">
+
+        <div class="stat-top">
+
+          <div class="stat-icon purple-icon">
+            <i class="bi bi-receipt"></i>
+          </div>
+
+          <span class="stat-period">
+            ALL TIME
+          </span>
+
+        </div>
+
+        <div class="stat-value">
+          {{ totalExpenses }}
+        </div>
+
+        <div class="stat-title">
+          Total Expenses
+        </div>
+
+        <div class="stat-footer">
+
+          <i class="bi bi-list-check"></i>
+
+          All transactions
+
+        </div>
+
+      </div>
+
+
+      <!-- THIS MONTH EXPENSES -->
+
+      <div class="stat-card">
+
+        <div class="stat-top">
+
+          <div class="stat-icon orange-icon">
+            <i class="bi bi-calendar3"></i>
+          </div>
+
+          <span class="stat-period">
+            THIS MONTH
+          </span>
+
+        </div>
+
+        <div class="stat-value">
+          {{ currentMonthExpenses }}
+        </div>
+
+        <div class="stat-title">
+          This Month Expenses
+        </div>
+
+        <div class="stat-footer">
+
+          <i class="bi bi-calendar-check"></i>
+
+          Current month
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- CHART + MONTHLY -->
+    <!-- ========================= -->
+
+    <div class="main-grid">
+
+
+      <!-- CATEGORY -->
+
+      <div class="dashboard-card category-card">
+
+        <div class="card-header">
+
+          <div>
+
+            <h2>
+              Expenses by Category
+            </h2>
+
+            <p>
+              Distribution of your spending
+            </p>
+
+          </div>
+
+          <div class="card-header-icon">
+            <i class="bi bi-pie-chart"></i>
+          </div>
+
+        </div>
+
+
+        <div *ngIf="categories.length > 0" class="category-content">
+
+          <div class="chart-wrapper">
+
+            <canvas baseChart [type]="pieChartType" [data]="pieChartData" [options]="pieChartOptions">
+            </canvas>
+
+            <div class="chart-center">
+
+              <strong>
+                {{ totalExpenses }}
+              </strong>
+
+              <span>
+                Expenses
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="category-list">
+
+            <div *ngFor="let category of categories" class="category-item">
+
+              <div class="category-left">
+
+                <span class="category-dot"></span>
+
+                <span class="category-name">
+                  {{ category.name }}
+                </span>
+
+              </div>
+
+              <div class="category-right">
+
+                <strong>
+                  {{ category.count }}
+                </strong>
+
+                <small>
+                  {{ getCategoryPercentage(category.count) }}%
+                </small>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div *ngIf="categories.length === 0" class="empty-state">
+
+          <i class="bi bi-pie-chart"></i>
+
+          <p>
+            No category data available
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- MONTHLY SUMMARY -->
+
+      <div class="dashboard-card monthly-card">
+
+        <div class="card-header">
+
+          <div>
+
+            <h2>
+              Monthly Summary
+            </h2>
+
+            <p>
+              Your latest spending activity
+            </p>
+
+          </div>
+
+          <div class="card-header-icon">
+            <i class="bi bi-calendar3"></i>
+          </div>
+
+        </div>
+
+
+        <div *ngIf="recentMonths.length > 0" class="monthly-list">
+
+          <div *ngFor="let month of recentMonths" class="monthly-item">
+
+            <div class="monthly-icon">
+
+              <i class="bi bi-calendar-event"></i>
+
+            </div>
+
+
+            <div class="monthly-info">
+
+              <strong>
+                {{ getMonthName(+month.month) }}
+              </strong>
+
+              <span>
+                {{ month.year }}
+              </span>
+
+            </div>
+
+
+            <div class="monthly-values">
+
+              <strong>
+                {{ month.total | number:'1.2-2' }} DH
+              </strong>
+
+              <span>
+                {{ month.count }} expenses
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div *ngIf="recentMonths.length === 0" class="empty-state">
+
+          <i class="bi bi-calendar-x"></i>
+
+          <p>
+            No monthly data available
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- RECENT EXPENSES -->
+    <!-- ========================= -->
+
+    <div class="dashboard-card recent-card">
+
+      <div class="card-header recent-header">
+
+        <div>
+
+          <h2>
+            Recent Expenses
+          </h2>
+
+          <p>
+            Your latest transactions
+          </p>
+
+        </div>
+
+        <button type="button" class="view-all-btn" (click)="goToExpenses()">
+          View all
+
+          <i class="bi bi-arrow-right"></i>
+        </button>
+
+      </div>
+
+
+      <div *ngIf="recentExpenses.length > 0" class="recent-table-wrapper">
+
+        <table class="recent-table">
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Expense
+              </th>
+
+              <th>
+                Category
+              </th>
+
+              <th>
+                Date
+              </th>
+
+              <th class="amount-column">
+                Amount
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            <tr *ngFor="let expense of recentExpenses">
+
+              <td>
+
+                <div class="expense-name">
+
+                  <div class="expense-avatar">
+
+                    <i class="bi bi-receipt"></i>
+
+                  </div>
+
+                  <div>
+
+                    <strong>
+                      {{ expense.title }}
+                    </strong>
+
+                    <span>
+                      Expense
+                    </span>
+
+                  </div>
+
+                </div>
+
+              </td>
+
+
+              <td>
+
+                <span class="category-badge">
+
+                  {{ expense.category }}
+
+                </span>
+
+              </td>
+
+
+              <td>
+
+                <span class="expense-date">
+
+                  {{ expense.date | date:'MMM d, y' }}
+
+                </span>
+
+              </td>
+
+
+              <td class="amount-column">
+
+                <strong class="expense-amount">
+
+                  {{ expense.amount | number:'1.2-2' }} DH
+
+                </strong>
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <div *ngIf="recentExpenses.length === 0" class="empty-state recent-empty">
+
+        <i class="bi bi-receipt"></i>
+
+        <p>
+          No recent expenses
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- INSIGHT -->
+    <!-- ========================= -->
+
+    <div class="insight-card">
+
+      <div class="insight-icon">
+
+        <i class="bi bi-lightbulb"></i>
+
+      </div>
+
+
+      <div>
+
+        <h3>
+          Spending overview
+        </h3>
+
+        <p>
+
+          You have recorded
+
+          <strong>
+            {{ currentMonthExpenses }}
+          </strong>
+
+          expenses this month,
+
+          representing
+
+          <strong>
+            {{ currentMonthAmount | number:'1.2-2' }} DH
+          </strong>
+
+          in spending.
+
+        </p>
+
+      </div>
 
     </div>
 

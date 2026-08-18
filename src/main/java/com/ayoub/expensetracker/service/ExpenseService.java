@@ -49,6 +49,7 @@ public class ExpenseService {
             int size,
             String sortBy,
             String direction,
+            String search,
             LocalDate fromDate,
             LocalDate toDate) {
 
@@ -66,6 +67,13 @@ public class ExpenseService {
 
         Specification<Expense> specification
                 = ExpenseSpecification.hasUser(currentUser);
+        // SEARCH BY TITLE
+        if (search != null && !search.isBlank()) {
+
+            specification = specification.and(
+                    ExpenseSpecification.hasTitle(search)
+            );
+        }
 
         // FROM DATE
         if (fromDate != null) {
@@ -305,25 +313,25 @@ public class ExpenseService {
 // EXPENSES BY MONTH
 // =========================
 
-public List<ExpenseResponse> getExpensesByMonth(
-        int year,
-        int month
-) {
+    public List<ExpenseResponse> getExpensesByMonth(
+            int year,
+            int month
+    ) {
 
-    User currentUser = getCurrentUser();
+        User currentUser = getCurrentUser();
 
-    LocalDate startDate = LocalDate.of(year, month, 1);
+        LocalDate startDate = LocalDate.of(year, month, 1);
 
-    LocalDate endDate = startDate.plusMonths(1);
+        LocalDate endDate = startDate.plusMonths(1);
 
-    return expenseRepository
-            .findByUserAndDateGreaterThanEqualAndDateLessThanOrderByDateDesc(
-                    currentUser,
-                    startDate,
-                    endDate
-            )
-            .stream()
-            .map(this::mapToResponse)
-            .collect(Collectors.toList());
-}
+        return expenseRepository
+                .findByUserAndDateGreaterThanEqualAndDateLessThanOrderByDateDesc(
+                        currentUser,
+                        startDate,
+                        endDate
+                )
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
 }

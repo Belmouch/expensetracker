@@ -1,292 +1,349 @@
-<div class="container mt-5">
+<div class="expense-page">
 
-    <!-- ========================= -->
-    <!-- HEADER -->
-    <!-- ========================= -->
+    <!-- ================= HEADER ================= -->
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <header class="topbar">
 
-        <div>
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="bi bi-wallet2"></i>
+            </div>
 
-            <h2 class="fw-bold text-success mb-0">
-                Expense Tracker
+            <div>
+                <h1>Expense Tracker</h1>
+                <p>Manage your finances with ease</p>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="header-actions">
+
+                <button class="btn-primary" routerLink="/expenses/add">
+
+                    <i class="bi bi-plus-lg"></i>
+                    Add Expense
+
+                </button>
+
+
+
+
+
+
+            </div>
+
+           
+
+
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ================= STATISTICS ================= -->
+
+    <section class="stats-grid">
+
+
+        <!-- TOTAL EXPENSES -->
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div class="stat-icon blue">
+                    <i class="bi bi-receipt"></i>
+                </div>
+
+                <span>ALL TIME</span>
+
+            </div>
+
+            <h2>
+                {{ totalExpenses }}
             </h2>
 
-            <small class="text-muted">
-                Manage your daily expenses
-            </small>
+            <p>Total Expenses</p>
 
         </div>
 
-        <div>
 
-            <button class="btn btn-success me-2" routerLink="/expenses/add">
+        <!-- MONTH EXPENSES -->
 
-                <i class="bi bi-plus-circle me-2"></i>
+        <div class="stat-card">
 
-                Add Expense
+            <div class="stat-top">
 
-            </button>
+                <div class="stat-icon green">
+                    <i class="bi bi-calendar-check"></i>
+                </div>
 
+                <span>THIS MONTH</span>
 
+            </div>
 
-            <button class="btn btn-primary me-2" routerLink="/dashboard">
+            <h2>
+                {{ currentMonthExpenses }}
+            </h2>
 
-                <i class="bi bi-bar-chart-line me-2"></i>
-
-                Dashboard
-
-            </button>
-
-
-            <button class="btn btn-outline-danger" (click)="logout()">
-
-                <i class="bi bi-box-arrow-right me-2"></i>
-
-                Logout
-
-            </button>
+            <p>Monthly Expenses</p>
 
         </div>
+
+
+        <!-- TOTAL AMOUNT -->
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div class="stat-icon emerald">
+                    <i class="bi bi-cash-stack"></i>
+                </div>
+
+                <span>ALL TIME</span>
+
+            </div>
+
+            <h2>
+                {{ totalAmount | number:'1.2-2' }}
+                <small>DH</small>
+            </h2>
+
+            <p>Total Amount</p>
+
+        </div>
+
+
+        <!-- MONTH AMOUNT -->
+
+        <div class="stat-card highlight">
+
+            <div class="stat-top">
+
+                <div class="stat-icon light-green">
+                    <i class="bi bi-graph-up-arrow"></i>
+                </div>
+
+                <span>THIS MONTH</span>
+
+            </div>
+
+            <h2>
+                {{ currentMonthAmount | number:'1.2-2' }}
+                <small>DH</small>
+            </h2>
+
+            <p>This Month Amount</p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= MONTHLY LINK ================= -->
+
+
+
+    <!-- ================= LOADING ================= -->
+
+    <div *ngIf="loading" class="loading">
+
+        <div class="spinner"></div>
+
+        <p>Loading your expenses...</p>
 
     </div>
-
-
     <!-- ========================= -->
-    <!-- SEARCH + DATE FILTER -->
+    <!-- FILTER EXPENSES -->
     <!-- ========================= -->
 
-    <div class="card border-0 shadow-sm rounded-4 mb-4">
+    <div class="filter-card">
 
-        <div class="card-body">
+        <!-- HEADER -->
 
-            <div class="row g-3 align-items-end">
+        <div class="filter-header">
 
-                <!-- Search -->
+            <div class="filter-icon">
+                <i class="bi bi-funnel"></i>
+            </div>
 
-                <div class="col-md-4">
+            <div>
+                <h5>Filter expenses</h5>
+                <p>Search and filter your transactions</p>
+            </div>
 
-                    <label class="form-label fw-semibold">
-                        Search
-                    </label>
+        </div>
 
-                    <input type="text" class="form-control" placeholder="🔍 Search expense..." [(ngModel)]="searchText"
+
+        <!-- FILTER FORM -->
+
+        <div class="filter-form">
+
+            <!-- SEARCH -->
+
+            <div class="filter-field search-field">
+
+                <label>
+                    Search
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="bi bi-search"></i>
+
+                    <input type="text" placeholder="Search by title..." [(ngModel)]="searchText"
                         (input)="searchExpenses()">
 
                 </div>
 
-
-                <!-- From Date -->
-
-                <div class="col-md-3">
-
-                    <label class="form-label fw-semibold">
-                        From date
-                    </label>
-
-                    <input type="date" class="form-control" [(ngModel)]="fromDate">
-
-                </div>
+            </div>
 
 
-                <!-- To Date -->
+            <!-- FROM DATE -->
 
-                <div class="col-md-3">
+            <div class="filter-field">
 
-                    <label class="form-label fw-semibold">
-                        To date
-                    </label>
+                <label>
+                    From date
+                </label>
 
-                    <input type="date" class="form-control" [(ngModel)]="toDate">
+                <div class="input-wrapper">
 
-                </div>
+                    <i class="bi bi-calendar3"></i>
 
-
-                <!-- Buttons -->
-
-                <div class="col-md-2 d-flex gap-2">
-
-                    <button class="btn btn-success w-100" (click)="applyDateFilter()">
-
-                        <i class="bi bi-funnel me-1"></i>
-
-                        Filter
-
-                    </button>
-
-
-                    <button class="btn btn-outline-secondary" (click)="clearFilters()" title="Clear filters">
-
-                        <i class="bi bi-x-lg"></i>
-
-                    </button>
+                    <input type="date" [(ngModel)]="fromDate">
 
                 </div>
 
             </div>
+
+
+            <!-- TO DATE -->
+
+            <div class="filter-field">
+
+                <label>
+                    To date
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="bi bi-calendar3"></i>
+
+                    <input type="date" [(ngModel)]="toDate">
+
+                </div>
+
+            </div>
+
+
+            <!-- FILTER BUTTON -->
+
+            <button type="button" class="filter-btn" (click)="applyDateFilter()">
+
+                <i class="bi bi-funnel"></i>
+
+                <span>Filter</span>
+
+            </button>
+
+
+            <!-- CLEAR -->
+
+            <button type="button" class="clear-btn" (click)="clearFilters()" title="Clear filters">
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
 
         </div>
 
     </div>
 
+    <!-- ================= EXPENSES ================= -->
 
-    <!-- ========================= -->
-    <!-- STATISTICS -->
-    <!-- ========================= -->
+    <section *ngIf="!loading && dailyExpenses.length > 0" class="expenses-section">
 
-    <div class="row mb-4">
 
-        <!-- Total Expenses -->
+        <div class="section-header">
 
-        <div class="col-md-6">
+            <div>
 
-            <div class="card border-0 shadow-sm">
+                <h2>Your Expenses</h2>
 
-                <div class="card-body">
-
-                    <h6 class="text-muted">
-                        Total Expenses
-                    </h6>
-
-                    <h3 class="fw-bold text-primary">
-                        {{ totalExpenses }}
-                    </h3>
-
-                </div>
+                <p>
+                    Track your daily transactions
+                </p>
 
             </div>
 
-        </div>
-
-
-        <!-- Total Amount -->
-
-        <div class="col-md-6">
-
-            <div class="card border-0 shadow-sm">
-
-                <div class="card-body">
-
-                    <h6 class="text-muted">
-                        Total Amount
-                    </h6>
-
-                    <h3 class="fw-bold text-success">
-                        {{ totalAmount | number:'1.2-2' }} DH
-                    </h3>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-    <div class="monthly-link-card">
-
-        <a routerLink="/expenses/monthly" class="monthly-link">
-
-            <div class="monthly-icon">
-                <i class="bi bi-calendar3"></i>
-            </div>
-
-            <div class="monthly-info">
-                <h5>Monthly Expenses</h5>
-                <p>View and manage your expenses by month</p>
-            </div>
-
-            <i class="bi bi-arrow-right monthly-arrow"></i>
-
-        </a>
-
-    </div>
-
-
-    <!-- ========================= -->
-    <!-- LOADING -->
-    <!-- ========================= -->
-
-    <div *ngIf="loading" class="text-center my-5">
-
-        <div class="spinner-border text-success" role="status">
-
-            <span class="visually-hidden">
-                Loading...
+            <span class="expense-count">
+                {{ totalExpenses }} expenses
             </span>
 
         </div>
 
-        <p class="mt-3 text-muted">
-            Loading expenses...
-        </p>
 
-    </div>
+        <!-- DAILY GROUP -->
+
+        <div *ngFor="let day of dailyExpenses" class="day-card">
 
 
-    <!-- ========================= -->
-    <!-- DAILY EXPENSES -->
-    <!-- ========================= -->
-
-    <div *ngIf="!loading && dailyExpenses.length > 0">
-
-        <div *ngFor="let day of dailyExpenses" class="card shadow border-0 rounded-4 mb-4">
-
-            <!-- ========================= -->
             <!-- DAY HEADER -->
-            <!-- ========================= -->
 
-            <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+            <div class="day-header">
 
-                <div>
+                <div class="day-info">
 
-                    <i class="bi bi-calendar3 me-2"></i>
+                    <div class="day-icon">
+                        <i class="bi bi-calendar3"></i>
+                    </div>
 
-                    <strong>
-                        {{ day.date | date:'EEEE, MMMM d, y' }}
-                    </strong>
+                    <div>
+
+                        <strong>
+                            {{ day.date | date:'EEEE, MMMM d, y' }}
+                        </strong>
+
+                        <span>
+                            {{ day.expenses.length }} transactions
+                        </span>
+
+                    </div>
 
                 </div>
 
 
-                <span class="badge bg-light text-success fs-6">
+                <div class="daily-total">
 
-                    Daily Total:
-                    {{ day.total | number:'1.2-2' }} DH
+                    <span>Daily total</span>
 
-                </span>
+                    <strong>
+                        {{ day.total | number:'1.2-2' }} DH
+                    </strong>
+
+                </div>
 
             </div>
 
 
-            <!-- ========================= -->
             <!-- TABLE -->
-            <!-- ========================= -->
 
-            <div class="table-responsive">
+            <div class="table-wrapper">
 
-                <table class="table table-hover align-middle mb-0">
+                <table>
 
-                    <thead class="table-light">
+                    <thead>
 
                         <tr>
 
-                            <th>
-                                Title
-                            </th>
-
-                            <th>
-                                Amount
-                            </th>
-
-                            <th>
-                                Category
-                            </th>
-
-                            <th>
-                                Date
-                            </th>
-
-                            <th class="text-center">
+                            <th>Expense</th>
+                            <th>Amount</th>
+                            <th>Category</th>
+                            <th>Date</th>
+                            <th class="actions-head">
                                 Actions
                             </th>
 
@@ -299,69 +356,70 @@
 
                         <tr *ngFor="let expense of day.expenses">
 
-                            <!-- Title -->
+                            <!-- TITLE -->
 
                             <td>
 
-                                <strong>
-                                    {{ expense.title }}
+                                <div class="expense-name">
+
+                                    <div class="expense-dot"></div>
+
+                                    <strong>
+                                        {{ expense.title }}
+                                    </strong>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- AMOUNT -->
+
+                            <td>
+
+                                <strong class="amount">
+                                    {{ expense.amount | number:'1.2-2' }}
+                                    DH
                                 </strong>
 
                             </td>
 
 
-                            <!-- Amount -->
+                            <!-- CATEGORY -->
 
                             <td>
 
-                                <strong>
-                                    {{ expense.amount | number:'1.2-2' }} DH
-                                </strong>
-
-                            </td>
-
-
-                            <!-- Category -->
-
-                            <td>
-
-                                <span class="badge bg-primary">
-
+                                <span class="category">
                                     {{ expense.category }}
-
                                 </span>
 
                             </td>
 
 
-                            <!-- Date -->
+                            <!-- DATE -->
 
-                            <td>
+                            <td class="date-cell">
 
                                 {{ expense.date }}
 
                             </td>
 
 
-                            <!-- Actions -->
+                            <!-- ACTIONS -->
 
-                            <td class="text-center">
+                            <td class="actions">
 
-                                <!-- Edit -->
-
-                                <button class="btn btn-warning btn-sm me-2" [routerLink]="[
-                                        '/expenses/edit',
-                                        expense.id
-                                    ]">
+                                <button class="edit-btn" [routerLink]="[
+                    '/expenses/edit',
+                    expense.id
+                  ]" title="Edit">
 
                                     <i class="bi bi-pencil"></i>
 
                                 </button>
 
 
-                                <!-- Delete -->
-
-                                <button class="btn btn-danger btn-sm" (click)="deleteExpense(expense.id)">
+                                <button class="delete-btn" (click)="deleteExpense(expense.id)" title="Delete">
 
                                     <i class="bi bi-trash"></i>
 
@@ -379,73 +437,58 @@
 
         </div>
 
-    </div>
+    </section>
 
 
-    <!-- ========================= -->
-    <!-- NO EXPENSES -->
-    <!-- ========================= -->
+    <!-- ================= EMPTY ================= -->
 
-    <div *ngIf="!loading && dailyExpenses.length === 0" class="card shadow border-0 rounded-4">
+    <div *ngIf="!loading && dailyExpenses.length === 0" class="empty-state">
 
-        <div class="card-body text-center p-5">
-
-            <i class="bi bi-receipt text-muted" style="font-size: 3rem;">
-            </i>
-
-            <h5 class="mt-3 text-muted">
-                No expenses found
-            </h5>
-
-            <p class="text-muted mb-0">
-
-                Try changing your search or date filters.
-
-            </p>
-
+        <div class="empty-icon">
+            <i class="bi bi-receipt"></i>
         </div>
 
+        <h3>No expenses found</h3>
+
+        <p>
+            Try changing your search or date filters.
+        </p>
+
+        <button class="btn-primary" routerLink="/expenses/add">
+
+            <i class="bi bi-plus-lg"></i>
+            Add Expense
+
+        </button>
+
     </div>
 
 
-    <!-- ========================= -->
-    <!-- PAGINATION -->
-    <!-- ========================= -->
+    <!-- ================= PAGINATION ================= -->
 
-    <div class="d-flex justify-content-between align-items-center mt-4 mb-5">
+    <div class="pagination">
 
-        <small class="text-muted">
+        <span>
 
-            Showing page
-            {{ page + 1 }}
-            of
-            {{ totalPages }}
+            Page {{ page + 1 }} of {{ totalPages }}
 
-            ({{ totalElements }} expenses)
-
-        </small>
+        </span>
 
 
         <div>
 
-            <!-- Previous -->
+            <button class="page-btn" (click)="previousPage()" [disabled]="page === 0">
 
-            <button class="btn btn-outline-secondary me-2" (click)="previousPage()" [disabled]="page === 0">
-
-                <i class="bi bi-arrow-left"></i>
-
+                <i class="bi bi-chevron-left"></i>
                 Previous
 
             </button>
 
 
-            <!-- Next -->
-
-            <button class="btn btn-success" (click)="nextPage()" [disabled]="page >= totalPages - 1">
+            <button class="page-btn next" (click)="nextPage()" [disabled]="page >= totalPages - 1">
 
                 Next
-
-                <i class="bi bi-arrow-right"></i>
+                <i class="bi bi-chevron-right"></i>
 
             </button>
 

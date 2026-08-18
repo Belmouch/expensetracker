@@ -16,7 +16,9 @@ import { RegisterRequest } from '../../models/register-request';
 export class RegisterComponent {
 
   username = '';
+ 
   password = '';
+  showPassword = false;
 
   constructor(
     private authService: AuthService,

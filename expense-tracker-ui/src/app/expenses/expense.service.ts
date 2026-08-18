@@ -19,30 +19,37 @@ export class ExpenseService {
   // GET EXPENSES
   // =========================
 
-  getExpenses(
-    page: number,
-    size: number,
-    fromDate?: string,
-    toDate?: string
-  ): Observable<PageResponse<Expense>> {
+ getExpenses(
+  page: number,
+  size: number,
+  search?: string,
+  fromDate?: string,
+  toDate?: string
+): Observable<PageResponse<Expense>> {
 
-    let params = new HttpParams()
-      .set('page', page)
-      .set('size', size);
+  let params = new HttpParams()
+    .set('page', page)
+    .set('size', size)
+    .set('sortBy', 'date')
+    .set('direction', 'desc');
 
-    if (fromDate) {
-      params = params.set('fromDate', fromDate);
-    }
-
-    if (toDate) {
-      params = params.set('toDate', toDate);
-    }
-
-    return this.http.get<PageResponse<Expense>>(
-      this.api,
-      { params }
-    );
+  if (search && search.trim()) {
+    params = params.set('search', search.trim());
   }
+
+  if (fromDate) {
+    params = params.set('fromDate', fromDate);
+  }
+
+  if (toDate) {
+    params = params.set('toDate', toDate);
+  }
+
+  return this.http.get<PageResponse<Expense>>(
+    this.api,
+    { params }
+  );
+}
 
   // =========================
   // GET BY ID
@@ -94,6 +101,34 @@ export class ExpenseService {
       `${this.api}/${id}`
     );
   }
+  // =========================
+// GET CONNECTED USERNAME
+// =========================
+
+getUsername(): string {
+
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    return '';
+  }
+
+  try {
+
+    const payload = JSON.parse(
+      atob(token.split('.')[1])
+    );
+
+    return payload.sub || payload.username || '';
+
+  } catch (error) {
+
+    console.error('Error reading username from token:', error);
+
+    return '';
+
+  }
+}
 
   // =========================
   // LOGOUT
