@@ -1,132 +1,155 @@
-/* =========================
-   PAGE
-========================= */
+/* =========================================================
+   MONTHLY DASHBOARD
+   ========================================================= */
+
+:host {
+    display: block;
+    min-height: 100vh;
+    width: 100%;
+    background: #071735;
+    color: #ffffff;
+}
 
 .monthly-dashboard {
-    padding: 32px 36px 60px;
-    max-width: 1450px;
-    margin: 0 auto;
-    color: #10251d;
+    width: 100%;
+    min-height: 100vh;
+    padding: 32px 42px 60px;
+    background: #071735;
+    box-sizing: border-box;
 }
 
 
-/* =========================
+/* =========================================================
    HEADER
-========================= */
+   ========================================================= */
 
 .page-header {
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 25px;
     margin-bottom: 32px;
 }
 
 .header-left {
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: 20px;
 }
 
 .back-button {
-    width: 46px;
-    height: 46px;
-    border-radius: 14px;
-    border: 1px solid #dce8e3;
+    width: 64px;
+    height: 64px;
+    min-width: 64px;
+    border: none;
+    border-radius: 18px;
     background: #ffffff;
-    color: #148957;
+    color: #15915f;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
+    font-size: 26px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: 0.2s ease;
 }
 
 .back-button:hover {
-    background: #eaf7f1;
-    transform: translateX(-2px);
+    transform: translateY(-2px);
+    background: #f4f7f8;
 }
 
 .eyebrow {
-    color: #168b59;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
+    color: #15915f;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 2px;
     margin-bottom: 5px;
 }
 
 .page-header h1 {
     margin: 0;
-    font-size: 38px;
+    font-size: 42px;
+    line-height: 1.1;
     font-weight: 800;
-    letter-spacing: -1px;
+    color: #ffffff;
 }
 
 .page-header p {
-    margin: 5px 0 0;
-    color: #7b8d86;
-    font-size: 15px;
+    margin: 7px 0 0;
+    color: #9bb0d0;
+    font-size: 17px;
 }
 
 .all-months-button {
-    height: 46px;
-    padding: 0 20px;
-    border: 1px solid #168b59;
-    border-radius: 12px;
-    background: white;
-    color: #168b59;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
+    height: 54px;
+    padding: 0 22px;
+    border: 1px solid #15915f;
+    border-radius: 15px;
+    background: transparent;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 700;
     display: flex;
     align-items: center;
     gap: 9px;
-    transition: all 0.2s ease;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.all-months-button i {
+    color: #15915f;
 }
 
 .all-months-button:hover {
-    background: #168b59;
-    color: white;
+    background: #15915f;
+    color: #ffffff;
+}
+
+.all-months-button:hover i {
+    color: #ffffff;
 }
 
 
-/* =========================
+/* =========================================================
    ERROR
-========================= */
+   ========================================================= */
 
 .error-card {
-    background: #fff4f4;
-    border: 1px solid #ffd7d7;
-    color: #c93535;
-    padding: 15px 18px;
-    border-radius: 14px;
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 25px;
+    gap: 12px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    border-radius: 12px;
+    background: #3a1820;
+    border: 1px solid #7d3040;
+    color: #ff8798;
+}
+
+.error-card i {
+    font-size: 20px;
 }
 
 
-/* =========================
+/* =========================================================
    LOADING
-========================= */
+   ========================================================= */
 
 .loading {
-    min-height: 350px;
+    min-height: 300px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
     gap: 15px;
-    color: #758780;
+    color: #9bb0d0;
 }
 
 .spinner {
-    width: 36px;
-    height: 36px;
-    border: 3px solid #dceee6;
-    border-top-color: #168b59;
+    width: 38px;
+    height: 38px;
+    border: 4px solid #203a69;
+    border-top-color: #477bea;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
 }
@@ -138,181 +161,201 @@
 }
 
 
-/* =========================
-   STATISTICS
-========================= */
+/* =========================================================
+   STATISTICS GRID
+   ========================================================= */
 
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 18px;
-    margin-bottom: 22px;
+    margin-bottom: 28px;
 }
 
 .stat-card {
-    background: white;
-    border: 1px solid #e1eae6;
-    border-radius: 20px;
-    padding: 24px;
-    min-height: 185px;
+    min-width: 0;
+    min-height: 230px;
+    padding: 24px 26px;
     box-sizing: border-box;
-    box-shadow: 0 5px 20px rgba(18, 53, 40, 0.035);
+
+    background: #ffffff;
+    border-radius: 20px;
+
+    color: #071735;
+
+    display: flex;
+    flex-direction: column;
+
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
 }
 
 .stat-card.featured {
-    background: linear-gradient(
-        145deg,
-        #ffffff 0%,
-        #f0faf5 100%
-    );
+    background: #f1faf7;
 }
 
 .stat-top {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin-bottom: 22px;
 }
 
 .stat-top > span {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.8px;
-    color: #91a19b;
+    color: #82909f;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-align: right;
 }
 
 .stat-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 13px;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 19px;
+
+    font-size: 22px;
 }
 
 .stat-icon.blue {
     background: #edf4ff;
-    color: #2875df;
+    color: #477bea;
 }
 
 .stat-icon.green {
-    background: #e7f7ef;
-    color: #168b59;
+    background: #e5f7f0;
+    color: #15915f;
 }
 
 .stat-icon.purple {
-    background: #f2edff;
-    color: #7654d6;
+    background: #f0eaff;
+    color: #7651e8;
 }
 
 .stat-icon.orange {
-    background: #fff3e6;
-    color: #e88925;
+    background: #fff1df;
+    color: #f28a20;
 }
 
 .stat-value {
-    font-size: 30px;
+    font-size: 34px;
     line-height: 1;
     font-weight: 800;
-    color: #10251d;
-    margin-bottom: 8px;
+    color: #07131e;
+    margin-bottom: 10px;
+}
+
+.stat-value.green-text {
+    color: #15915f;
 }
 
 .stat-value small {
     font-size: 15px;
-    font-weight: 700;
-}
-
-.green-text {
-    color: #168b59;
+    font-weight: 800;
 }
 
 .stat-label {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
-    color: #52665e;
+    color: #14263b;
+    margin-bottom: 8px;
 }
 
 .stat-description {
-    margin-top: 7px;
-    font-size: 12px;
-    color: #95a39e;
+    color: #8b99a8;
+    font-size: 13px;
+    line-height: 1.4;
 }
 
 
-/* =========================
-   MAIN GRID
-========================= */
+/* =========================================================
+   CATEGORY + DAILY GRID
+   ========================================================= */
 
 .main-grid {
     display: grid;
-    grid-template-columns: 1.25fr 0.75fr;
+    grid-template-columns: minmax(0, 1.65fr) minmax(320px, 0.75fr);
     gap: 20px;
-    margin-bottom: 22px;
+    margin-bottom: 28px;
 }
 
 
-/* =========================
-   DASHBOARD CARD
-========================= */
+/* =========================================================
+   DASHBOARD CARDS
+   ========================================================= */
 
 .dashboard-card {
-    background: white;
-    border: 1px solid #e1eae6;
+    background: #ffffff;
     border-radius: 20px;
-    padding: 25px;
-    min-height: 400px;
-    box-shadow: 0 5px 20px rgba(18, 53, 40, 0.035);
+    overflow: hidden;
+    color: #071735;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    min-width: 0;
 }
 
 .card-header {
+    min-height: 88px;
+    padding: 18px 24px;
+
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
-    margin-bottom: 22px;
+
+    border-bottom: 1px solid #e7edf1;
+    box-sizing: border-box;
 }
 
 .card-header h2 {
     margin: 0;
     font-size: 20px;
-    font-weight: 750;
+    font-weight: 800;
+    color: #071735;
 }
 
 .card-header p {
     margin: 5px 0 0;
+    color: #8796a5;
     font-size: 13px;
-    color: #899991;
 }
 
 .card-icon {
-    width: 43px;
-    height: 43px;
-    border-radius: 13px;
-    background: #eaf7f1;
-    color: #168b59;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: #e7f7f1;
+    color: #15915f;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 19px;
+
+    font-size: 21px;
 }
 
 
-/* =========================
-   CATEGORY
-========================= */
+/* =========================================================
+   CATEGORY LIST
+   ========================================================= */
 
 .category-list {
-    display: flex;
-    flex-direction: column;
+    padding: 0 24px;
 }
 
 .category-item {
-    padding: 16px 4px;
-    border-bottom: 1px solid #edf1ef;
+    min-height: 72px;
+    padding: 12px 0;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 20px;
+
+    border-bottom: 1px solid #e7edf1;
+    box-sizing: border-box;
 }
 
 .category-item:last-child {
@@ -320,228 +363,282 @@
 }
 
 .category-info {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+    min-width: 0;
 }
 
 .category-name {
     display: flex;
     align-items: center;
-    gap: 9px;
+    gap: 10px;
+
     font-size: 14px;
-    font-weight: 650;
+    font-weight: 700;
+    color: #20324a;
 }
 
 .dot {
-    width: 9px;
-    height: 9px;
+    width: 10px;
+    height: 10px;
+    min-width: 10px;
     border-radius: 50%;
-    background: #168b59;
+    background: #15915f;
 }
 
 .category-count {
-    color: #95a39e;
+    display: block;
+    margin-top: 6px;
+    color: #91a0ad;
     font-size: 12px;
-    margin-left: 18px;
 }
 
 .category-right {
-    display: flex;
-    align-items: center;
-    gap: 14px;
+    text-align: right;
+    flex-shrink: 0;
 }
 
 .category-right strong {
+    display: block;
+    color: #15915f;
     font-size: 14px;
+    font-weight: 800;
 }
 
 .category-right span {
-    min-width: 38px;
-    text-align: right;
+    display: block;
+    margin-top: 5px;
+    color: #15915f;
     font-size: 12px;
-    color: #168b59;
-    font-weight: 700;
+    font-weight: 800;
 }
 
 
-/* =========================
-   DAILY
-========================= */
+/* =========================================================
+   DAILY ACTIVITY
+   ========================================================= */
 
 .daily-list {
-    max-height: 320px;
+    max-height: 360px;
     overflow-y: auto;
-    padding-right: 4px;
+    padding: 0 20px 0 24px;
 }
 
 .daily-list::-webkit-scrollbar {
-    width: 5px;
+    width: 6px;
+}
+
+.daily-list::-webkit-scrollbar-track {
+    background: transparent;
 }
 
 .daily-list::-webkit-scrollbar-thumb {
-    background: #d6e4de;
+    background: #b7d9cc;
     border-radius: 10px;
 }
 
 .daily-item {
+    min-height: 72px;
+    padding: 10px 0;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 14px 3px;
-    border-bottom: 1px solid #edf1ef;
+    gap: 15px;
+
+    border-bottom: 1px solid #e7edf1;
+}
+
+.daily-item:last-child {
+    border-bottom: none;
 }
 
 .daily-date {
     display: flex;
     align-items: center;
     gap: 12px;
+    min-width: 0;
 }
 
 .date-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 11px;
-    background: #eef8f4;
-    color: #168b59;
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+
+    border-radius: 12px;
+    background: #e7f7f1;
+    color: #15915f;
+
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.daily-date div:last-child {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-}
-
 .daily-date strong {
+    display: block;
+    color: #21334b;
     font-size: 13px;
 }
 
 .daily-date span {
-    font-size: 11px;
-    color: #91a09a;
+    display: block;
+    margin-top: 4px;
+    color: #94a0ac;
+    font-size: 12px;
 }
 
 .daily-amount {
-    color: #168b59;
+    color: #15915f;
+    font-size: 14px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   EMPTY STATES
+   ========================================================= */
+
+.empty {
+    min-height: 180px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    color: #9aa7b3;
+}
+
+.empty i {
+    font-size: 32px;
+    margin-bottom: 10px;
+    color: #b4c1cb;
+}
+
+.empty p {
+    margin: 0;
     font-size: 14px;
 }
 
 
-/* =========================
-   EXPENSES CARD
-========================= */
+/* =========================================================
+   EXPENSES TABLE
+   ========================================================= */
 
 .expenses-card {
-    background: white;
-    border: 1px solid #e1eae6;
+    background: #ffffff;
     border-radius: 20px;
     overflow: hidden;
-    margin-bottom: 22px;
-    box-shadow: 0 5px 20px rgba(18, 53, 40, 0.035);
+    color: #071735;
+
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+
+    margin-bottom: 28px;
 }
 
 .expenses-header {
-    padding: 22px 25px;
+    min-height: 88px;
+    padding: 20px 26px;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid #edf1ef;
+
+    border-bottom: 1px solid #e7edf1;
 }
 
 .section-title {
     display: flex;
     align-items: center;
-    gap: 13px;
+    gap: 14px;
 }
 
 .section-icon {
-    width: 43px;
-    height: 43px;
+    width: 46px;
+    height: 46px;
     border-radius: 13px;
-    background: #eaf7f1;
-    color: #168b59;
+
+    background: #edf4ff;
+    color: #477bea;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
+    font-size: 20px;
 }
 
 .section-title h2 {
     margin: 0;
-    font-size: 20px;
+    color: #071735;
+    font-size: 19px;
+    font-weight: 800;
 }
 
 .section-title p {
-    margin: 4px 0 0;
-    color: #8b9b94;
+    margin: 5px 0 0;
+    color: #8b99a8;
     font-size: 13px;
 }
 
 .monthly-total {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 3px;
+    text-align: right;
 }
 
 .monthly-total span {
-    color: #8b9b94;
-    font-size: 11px;
-    text-transform: uppercase;
-    font-weight: 700;
+    display: block;
+    color: #8b99a8;
+    font-size: 12px;
+    margin-bottom: 5px;
 }
 
 .monthly-total strong {
-    color: #168b59;
-    font-size: 18px;
+    color: #15915f;
+    font-size: 20px;
+    font-weight: 800;
 }
 
-
-/* =========================
-   TABLE
-========================= */
-
 .table-container {
+    width: 100%;
     overflow-x: auto;
 }
 
-table {
+.table-container table {
     width: 100%;
     border-collapse: collapse;
 }
 
-thead {
-    background: #f8faf9;
-}
+.table-container th {
+    padding: 15px 26px;
 
-th {
-    text-align: left;
-    padding: 14px 25px;
-    color: #899991;
+    background: #f7f9fa;
+
+    color: #8997a4;
     font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.7px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+
+    text-align: left;
+    white-space: nowrap;
 }
 
-td {
-    padding: 15px 25px;
-    border-top: 1px solid #edf1ef;
-    font-size: 14px;
+.table-container td {
+    padding: 16px 26px;
+    border-bottom: 1px solid #edf0f2;
+    vertical-align: middle;
 }
 
-tbody tr {
-    transition: background 0.15s ease;
+.table-container tbody tr:last-child td {
+    border-bottom: none;
 }
 
-tbody tr:hover {
-    background: #fafcfb;
+.table-container tbody tr:hover {
+    background: #fafcfc;
 }
 
-.amount-column {
-    text-align: right;
-}
+
+/* =========================================================
+   EXPENSE TITLE
+   ========================================================= */
 
 .expense-title {
     display: flex;
@@ -552,159 +649,176 @@ tbody tr:hover {
 .expense-icon {
     width: 40px;
     height: 40px;
+    min-width: 40px;
+
     border-radius: 11px;
-    background: #eef8f4;
-    color: #168b59;
+    background: #edf4ff;
+    color: #477bea;
+
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.expense-title div:last-child {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-}
-
 .expense-title strong {
+    display: block;
+    color: #182b42;
     font-size: 14px;
 }
 
 .expense-title span {
-    color: #99a59f;
+    display: block;
+    margin-top: 4px;
+    color: #98a4ae;
     font-size: 11px;
 }
+
+
+/* =========================================================
+   CATEGORY BADGE
+   ========================================================= */
 
 .category-badge {
     display: inline-flex;
     align-items: center;
-    padding: 7px 11px;
-    border-radius: 9px;
-    background: #eef4ff;
-    color: #3470c7;
+
+    padding: 6px 11px;
+    border-radius: 20px;
+
+    background: #e8f7f1;
+    color: #15915f;
+
     font-size: 12px;
-    font-weight: 650;
+    font-weight: 700;
 }
 
 .date-text {
-    color: #70817a;
+    color: #647487;
     font-size: 13px;
 }
 
+.amount-column {
+    text-align: right !important;
+}
+
 .expense-amount {
-    color: #168b59;
+    color: #15915f;
     font-size: 14px;
+    font-weight: 800;
+    white-space: nowrap;
 }
 
 
-/* =========================
-   EMPTY
-========================= */
+/* =========================================================
+   EMPTY EXPENSES
+   ========================================================= */
 
-.empty {
+.empty-expenses {
     min-height: 280px;
+
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: #9aa8a2;
-}
 
-.empty i {
-    font-size: 35px;
-    margin-bottom: 10px;
-}
-
-.empty p {
-    margin: 0;
-    font-size: 13px;
-}
-
-.empty-expenses {
-    padding: 65px 20px;
     text-align: center;
-    color: #899991;
 }
 
 .empty-icon {
     width: 65px;
     height: 65px;
-    margin: 0 auto 15px;
     border-radius: 18px;
-    background: #eef8f4;
-    color: #168b59;
+
+    background: #edf4ff;
+    color: #477bea;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 26px;
+
+    font-size: 27px;
+    margin-bottom: 15px;
 }
 
 .empty-expenses h3 {
-    margin: 0 0 6px;
-    color: #263b33;
+    margin: 0 0 7px;
+    color: #1c2d40;
+    font-size: 18px;
 }
 
 .empty-expenses p {
+    max-width: 400px;
     margin: 0;
+    color: #91a0ad;
     font-size: 13px;
 }
 
 
-/* =========================
-   INSIGHT
-========================= */
+/* =========================================================
+   MONTH INSIGHT
+   ========================================================= */
 
 .insight-card {
-    background: linear-gradient(
-        135deg,
-        #f0faf6,
-        #f8fcfa
-    );
-    border: 1px solid #dcefe7;
-    border-radius: 18px;
-    padding: 19px 22px;
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 18px;
+
+    padding: 20px 24px;
+    margin-bottom: 20px;
+
+    background: #e9f8f2;
+    border: 1px solid #cdeee1;
+    border-radius: 18px;
+
+    color: #173a2d;
 }
 
 .insight-icon {
-    width: 45px;
-    height: 45px;
-    flex-shrink: 0;
-    border-radius: 13px;
-    background: white;
-    color: #168b59;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+
+    border-radius: 14px;
+    background: #ffffff;
+    color: #15915f;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
+
+    font-size: 21px;
 }
 
 .insight-card h3 {
     margin: 0 0 5px;
-    font-size: 15px;
+    font-size: 16px;
+    font-weight: 800;
 }
 
 .insight-card p {
     margin: 0;
-    color: #758780;
+    color: #648073;
     font-size: 13px;
+    line-height: 1.5;
 }
 
 .insight-card strong {
-    color: #168b59;
+    color: #15915f;
 }
 
 
-/* =========================
+/* =========================================================
    RESPONSIVE
-========================= */
+   ========================================================= */
 
-@media (max-width: 1100px) {
+@media (max-width: 1200px) {
+
+    .monthly-dashboard {
+        padding: 28px 30px 50px;
+    }
 
     .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .main-grid {
@@ -714,13 +828,18 @@ tbody tr:hover {
 }
 
 
-@media (max-width: 700px) {
+@media (max-width: 768px) {
 
     .monthly-dashboard {
-        padding: 22px 15px 40px;
+        padding: 22px 18px 40px;
     }
 
     .page-header {
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    .header-left {
         align-items: flex-start;
     }
 
@@ -728,28 +847,84 @@ tbody tr:hover {
         font-size: 30px;
     }
 
+    .page-header p {
+        font-size: 14px;
+    }
+
+    .back-button {
+        width: 52px;
+        height: 52px;
+        min-width: 52px;
+    }
+
     .all-months-button {
-        padding: 0 13px;
+        height: 48px;
+        padding: 0 14px;
     }
 
     .stats-grid {
         grid-template-columns: 1fr;
     }
 
+    .stat-card {
+        min-height: 200px;
+    }
+
     .expenses-header {
         align-items: flex-start;
         flex-direction: column;
-        gap: 15px;
+        gap: 18px;
     }
 
     .monthly-total {
-        align-items: flex-start;
+        text-align: left;
     }
 
-    th,
-    td {
-        padding-left: 15px;
-        padding-right: 15px;
+}
+
+
+@media (max-width: 520px) {
+
+    .page-header {
+        flex-direction: column;
+    }
+
+    .header-left {
+        width: 100%;
+    }
+
+    .all-months-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .page-header h1 {
+        font-size: 26px;
+    }
+
+    .category-item,
+    .daily-item {
+        gap: 10px;
+    }
+
+    .card-header {
+        padding: 16px;
+    }
+
+    .category-list,
+    .daily-list {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .expenses-header {
+        padding: 18px;
+    }
+
+    .table-container th,
+    .table-container td {
+        padding-left: 16px;
+        padding-right: 16px;
     }
 
 }

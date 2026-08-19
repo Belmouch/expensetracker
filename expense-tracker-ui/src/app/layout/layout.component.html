@@ -108,7 +108,7 @@
                 </span>
 
             </a>
-            
+
             <!-- DASHBOARD -->
 
             <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
@@ -138,6 +138,27 @@
                 </span>
 
             </a>
+
+        </div>
+        <!-- ==========================================
+     THEME SWITCHER
+========================================== -->
+
+        <div class="theme-switcher">
+
+            <button type="button" class="theme-button" (click)="toggleTheme()">
+
+                <i class="bi" [class.bi-moon-stars]="!themeService.isDark()" [class.bi-sun]="themeService.isDark()"></i>
+
+                <span>
+                    {{
+                    themeService.isDark()
+                    ? 'Light Mode'
+                    : 'Dark Mode'
+                    }}
+                </span>
+
+            </button>
 
         </div>
 

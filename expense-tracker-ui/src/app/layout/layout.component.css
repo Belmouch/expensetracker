@@ -1,540 +1,85 @@
-/* ========================= */
-/* LAYOUT */
-/* ========================= */
+/* =========================================================
+   LAYOUT
+========================================================= */
 
-.app-layout {
+.layout {
     min-height: 100vh;
-
-    background: #f5f8f6;
-
-    display: flex;
-}
-
-
-/* ========================= */
-/* SIDEBAR */
-/* ========================= */
-
-.sidebar {
-
-    width: 265px;
-
-    min-height: 100vh;
-
-    background: #ffffff;
-
-    border-right: 1px solid #e5ebe7;
-
-    padding: 28px 18px;
-
-    display: flex;
-    flex-direction: column;
-
-    position: fixed;
-
-    left: 0;
-    top: 0;
-    bottom: 0;
-
-    z-index: 100;
-
-}
-
-
-/* ========================= */
-/* LOGO */
-/* ========================= */
-
-.sidebar-logo {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 12px;
-
-    padding: 0 8px;
-
-    margin-bottom: 32px;
-
-}
-
-
-.logo-icon {
-
-    width: 48px;
-    height: 48px;
-
-    border-radius: 14px;
-
-    background: #198754;
-
-    color: white;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    font-size: 22px;
-
-    box-shadow:
-        0 8px 20px rgba(25, 135, 84, 0.18);
-
-}
-
-
-.logo-text h3 {
-
-    margin: 0;
-
-    font-size: 17px;
-
-    font-weight: 750;
-
-    color: #17221d;
-
-}
-
-
-.logo-text span {
-
-    display: block;
-
-    margin-top: 3px;
-
-    font-size: 11px;
-
-    color: #8a9690;
-
-}
-
-
-/* ========================= */
-/* ACCOUNT */
-/* ========================= */
-
-.account-card {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 12px;
-
-    padding: 13px;
-
-    margin-bottom: 30px;
-
-    background: #f1f8f4;
-
-    border: 1px solid #e2f0e8;
-
-    border-radius: 14px;
-
-}
-
-
-.account-avatar {
-
-    width: 40px;
-    height: 40px;
-
-    flex-shrink: 0;
-
-    border-radius: 50%;
-
-    background: #dff2e8;
-
-    color: #198754;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-}
-
-
-.account-info {
-
-    min-width: 0;
-
-    display: flex;
-
-    flex-direction: column;
-
-}
-
-
-.account-info span {
-
-    font-size: 9px;
-
-    font-weight: 650;
-
-    letter-spacing: .6px;
-
-    color: #8b9992;
-
-}
-
-
-.account-info strong {
-
-    margin-top: 3px;
-
-    font-size: 14px;
-
-    color: #1d2923;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-    white-space: nowrap;
-
-}
-
-
-/* ========================= */
-/* NAVIGATION */
-/* ========================= */
-
-.sidebar-nav {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 6px;
-
-}
-
-
-.nav-title {
-
-    font-size: 10px;
-
-    font-weight: 700;
-
-    letter-spacing: 1px;
-
-    color: #9aa59f;
-
-    padding: 0 12px;
-
-    margin-bottom: 7px;
-
-}
-
-
-.nav-item {
-
-    height: 46px;
-
-    padding: 0 13px;
-
-    border-radius: 11px;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 13px;
-
-    text-decoration: none;
-
-    color: #69756f;
-
-    font-size: 14px;
-
-    font-weight: 550;
-
-    transition: all .2s ease;
-
-}
-
-
-.nav-item i {
-
-    width: 20px;
-
-    text-align: center;
-
-    font-size: 17px;
-
-}
-
-
-.nav-item:hover {
-
-    background: #f1f8f4;
-
-    color: #198754;
-
-}
-
-
-.nav-item.active {
-
-    background: #198754;
-
-    color: #ffffff;
-
-    box-shadow:
-        0 7px 16px rgba(25, 135, 84, .16);
-
-}
-
-
-/* ========================= */
-/* BOTTOM */
-/* ========================= */
-
-.sidebar-bottom {
-
-    margin-top: auto;
-
-}
-
-
-.logout-btn {
-
     width: 100%;
 
-    height: 45px;
-
-    border: none;
-
-    border-radius: 11px;
-
-    background: #fff5f5;
-
-    color: #dc3545;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 13px;
-
-    padding: 0 13px;
-
-    font-size: 14px;
-
-    font-weight: 550;
-
-    cursor: pointer;
-
-    transition: .2s ease;
-
+    background: var(--app-bg);
+    color: var(--app-text);
 }
 
 
-.logout-btn i {
+/* =========================================================
+   SIDEBAR
+========================================================= */
 
-    font-size: 17px;
+.sidebar {
+    position: fixed;
 
-}
+    top: 0;
+    left: 0;
 
-
-.logout-btn:hover {
-
-    background: #ffe5e5;
-
-}
-
-
-/* ========================= */
-/* MAIN CONTENT */
-/* ========================= */
-
-.main-content {
-
-    width: calc(100% - 265px);
-
-    margin-left: 265px;
-
-    min-height: 100vh;
-
-    padding: 30px 38px;
+    width: 340px;
+    height: 100vh;
 
     box-sizing: border-box;
 
-}
+    padding: 24px;
 
+    background: var(--app-card);
 
-/* ========================= */
-/* RESPONSIVE */
-/* ========================= */
-
-@media (max-width: 900px) {
-
-    .sidebar {
-
-        width: 220px;
-
-    }
-
-    .main-content {
-
-        width: calc(100% - 220px);
-
-        margin-left: 220px;
-
-        padding: 25px;
-
-    }
-
-}
-
-
-@media (max-width: 700px) {
-
-    .sidebar {
-
-        width: 70px;
-
-        padding: 22px 10px;
-
-    }
-
-    .sidebar-logo {
-
-        justify-content: center;
-
-    }
-
-    .logo-text,
-    .account-info,
-    .nav-title,
-    .nav-item span,
-    .logout-btn span {
-
-        display: none;
-
-    }
-
-    .account-card {
-
-        justify-content: center;
-
-        padding: 10px;
-
-    }
-
-    .nav-item {
-
-        justify-content: center;
-
-        padding: 0;
-
-    }
-
-    .logout-btn {
-
-        justify-content: center;
-
-        padding: 0;
-
-    }
-
-    .main-content {
-
-        width: calc(100% - 70px);
-
-        margin-left: 70px;
-
-        padding: 20px;
-
-    }
-
-}
-.layout {
-    min-height: 100vh;
-    background: #f5f8f7;
-}
-
-
-/* =========================
-   SIDEBAR
-========================= */
-
-.sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-
-    width: 305px;
-    height: 100vh;
-
-    background: white;
-
-    border-right: 1px solid #e5ebe8;
-
-    padding: 22px;
+    border-right: 1px solid var(--app-border);
 
     display: flex;
     flex-direction: column;
 
-    transition: width 0.3s ease;
-
     z-index: 1000;
+
+    transition:
+        width 0.3s ease,
+        background-color 0.3s ease,
+        border-color 0.3s ease;
 }
 
 
-/* =========================
-   COLLAPSED
-========================= */
+/* =========================================================
+   COLLAPSED SIDEBAR
+========================================================= */
 
-.sidebar-collapsed .sidebar {
-    width: 90px;
+.layout.sidebar-collapsed .sidebar {
+    width: 92px;
+    padding: 24px 16px;
 }
 
 
-/* =========================
-   MAIN CONTENT
-========================= */
-
-.main-content {
-    margin-left: 305px;
-
-    min-height: 100vh;
-
-    padding: 30px 40px;
-
-    transition: margin-left 0.3s ease;
-}
-
-
-.sidebar-collapsed .main-content {
-    margin-left: 90px;
-}
-
-
-/* =========================
-   LOGO
-========================= */
+/* =========================================================
+   SIDEBAR HEADER
+========================================================= */
 
 .sidebar-header {
     display: flex;
+
     align-items: center;
 
     gap: 14px;
 
-    margin-bottom: 30px;
+    margin-bottom: 28px;
 }
 
+
 .logo-icon {
-    width: 56px;
-    height: 56px;
+    width: 58px;
+    height: 58px;
 
-    background: #198754;
-
-    color: white;
+    flex-shrink: 0;
 
     border-radius: 16px;
+
+    background: var(--app-primary);
+
+    color: #ffffff;
 
     display: flex;
     align-items: center;
@@ -542,44 +87,70 @@
 
     font-size: 25px;
 
-    flex-shrink: 0;
+    box-shadow:
+        0 8px 20px rgba(22, 139, 89, 0.18);
 }
 
+
+body.dark-theme .logo-icon {
+    background: #4779e8;
+
+    box-shadow:
+        0 8px 25px rgba(71, 121, 232, 0.30);
+}
+
+
 .logo-text {
+    min-width: 0;
+}
+
+
+.logo-text h4 {
+    margin: 0 0 4px;
+
+    color: var(--app-text);
+
+    font-size: 22px;
+
+    font-weight: 800;
+
+    letter-spacing: -0.4px;
+
     white-space: nowrap;
 }
 
-.logo-text h4 {
-    margin: 0;
-
-    font-weight: 700;
-}
 
 .logo-text small {
-    color: #7b8a84;
+    color: var(--app-text-secondary);
+
+    font-size: 13px;
+
+    white-space: nowrap;
 }
 
 
-/* =========================
-   TOGGLE
-========================= */
+/* =========================================================
+   SIDEBAR TOGGLE
+========================================================= */
 
 .sidebar-toggle {
     position: absolute;
 
-    right: -14px;
-    top: 80px;
+    top: 105px;
+    right: -17px;
 
-    width: 30px;
-    height: 30px;
+    width: 34px;
+    height: 34px;
+
+    padding: 0;
 
     border-radius: 50%;
 
-    border: 1px solid #dce5e1;
+    border: 1px solid var(--app-border);
 
-    background: white;
+    background: var(--app-card);
 
-    color: #198754;
+    color: var(--app-primary);
 
     display: flex;
     align-items: center;
@@ -587,197 +158,597 @@
 
     cursor: pointer;
 
-    box-shadow: 0 3px 10px rgba(0,0,0,.08);
+    z-index: 20;
 
-    transition: .2s;
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.06);
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
 }
+
 
 .sidebar-toggle:hover {
-    background: #198754;
-    color: white;
+    background: var(--app-primary-soft);
+
+    border-color: var(--app-primary);
+
+    transform: scale(1.05);
 }
 
 
-/* =========================
-   ACCOUNT
-========================= */
+body.dark-theme .sidebar-toggle {
+    background: #102653;
+
+    border-color: #2b4578;
+
+    color: #6f9aff;
+}
+
+
+body.dark-theme .sidebar-toggle:hover {
+    background: #182f63;
+
+    border-color: #4779e8;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   ACCOUNT CARD
+========================================================= */
 
 .account-card {
-    background: #f1f8f5;
+    width: 100%;
 
-    border: 1px solid #dceee6;
-
-    border-radius: 18px;
+    box-sizing: border-box;
 
     padding: 14px;
 
+    margin-bottom: 30px;
+
+    border: 1px solid var(--app-border);
+
+    border-radius: 18px;
+
+    background: var(--app-primary-soft);
+
     display: flex;
+
     align-items: center;
 
     gap: 12px;
-
-    margin-bottom: 32px;
 }
 
+
 .account-icon {
-    width: 45px;
-    height: 45px;
+    width: 46px;
+    height: 46px;
 
-    background: #dff3ea;
-
-    color: #198754;
+    flex-shrink: 0;
 
     border-radius: 50%;
+
+    background: var(--app-card);
+
+    color: var(--app-primary);
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    flex-shrink: 0;
+    font-size: 18px;
 }
+
 
 .account-info {
-    display: flex;
-    flex-direction: column;
-
-    white-space: nowrap;
+    min-width: 0;
 }
+
 
 .account-info small {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: var(--app-text-muted);
+
     font-size: 10px;
-    color: #82908a;
+
+    font-weight: 600;
+
+    letter-spacing: 0.4px;
 }
+
 
 .account-info strong {
+    display: block;
+
+    color: var(--app-text);
+
     font-size: 15px;
-}
-
-
-/* =========================
-   MENU
-========================= */
-
-.menu {
-    display: flex;
-    flex-direction: column;
-
-    gap: 8px;
-}
-
-.menu-title {
-    color: #98a59f;
 
     font-weight: 700;
 
-    font-size: 12px;
+    white-space: nowrap;
 
-    margin: 0 0 10px 12px;
+    overflow: hidden;
+
+    text-overflow: ellipsis;
 }
 
+
+body.dark-theme .account-card {
+    background: #102653;
+
+    border-color: #263d70;
+}
+
+
+body.dark-theme .account-icon {
+    background: #172f62;
+
+    color: #6f9aff;
+}
+
+
+/* =========================================================
+   MENU
+========================================================= */
+
+.menu {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+.menu-title {
+    margin: 0 0 10px;
+
+    padding-left: 12px;
+
+    color: var(--app-text-muted);
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.6px;
+}
+
+
+/* =========================================================
+   MENU ITEMS
+========================================================= */
+
 .menu-item {
-    height: 52px;
+    width: 100%;
+
+    min-height: 50px;
+
+    box-sizing: border-box;
 
     padding: 0 16px;
 
     border-radius: 14px;
 
-    display: flex;
-    align-items: center;
-
-    gap: 16px;
-
     text-decoration: none;
 
-    color: #6f7c76;
+    color: var(--app-text-secondary);
+
+    background: transparent;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    font-size: 15px;
 
     font-weight: 600;
 
-    transition: .2s;
-
-    white-space: nowrap;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
 }
+
 
 .menu-item i {
-    font-size: 20px;
-
     width: 22px;
 
-    text-align: center;
-
     flex-shrink: 0;
+
+    font-size: 19px;
+
+    text-align: center;
 }
+
 
 .menu-item:hover {
-    background: #edf7f2;
+    background: var(--app-card-hover);
 
-    color: #198754;
+    color: var(--app-text);
+
+    transform: translateX(2px);
 }
+
+
+/* =========================================================
+   ACTIVE MENU
+========================================================= */
 
 .menu-item.active {
-    background: #198754;
+    background: var(--app-primary);
 
-    color: white;
+    color: #ffffff;
 
-    box-shadow: 0 8px 20px rgba(25,135,84,.18);
+    box-shadow:
+        0 8px 20px rgba(22, 139, 89, 0.16);
 }
 
 
-/* =========================
-   COLLAPSED MENU
-========================= */
+.menu-item.active:hover {
+    background: var(--app-primary-dark);
 
-.sidebar-collapsed .menu-item {
+    color: #ffffff;
+
+    transform: none;
+}
+
+
+/* =========================================================
+   DARK ACTIVE MENU
+========================================================= */
+
+body.dark-theme .menu-item.active {
+    background: #345fc2;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 8px 25px rgba(52, 95, 194, 0.30);
+}
+
+
+body.dark-theme .menu-item.active:hover {
+    background: #4779e8;
+}
+
+
+/* =========================================================
+   THEME SWITCHER
+========================================================= */
+
+.theme-switcher {
+    margin-top: auto;
+
+    margin-bottom: 12px;
+}
+
+
+.theme-button {
+    width: 100%;
+
+    min-height: 50px;
+
+    box-sizing: border-box;
+
+    padding: 0 16px;
+
+    border: 1px solid var(--app-border);
+
+    border-radius: 14px;
+
+    background: var(--app-card);
+
+    color: var(--app-text-secondary);
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.theme-button i {
+    width: 22px;
+
+    flex-shrink: 0;
+
+    color: var(--app-primary);
+
+    font-size: 19px;
+
+    text-align: center;
+}
+
+
+.theme-button:hover {
+    background: var(--app-primary-soft);
+
+    border-color: var(--app-primary);
+
+    color: var(--app-primary);
+
+    transform: translateY(-1px);
+}
+
+
+body.dark-theme .theme-button {
+    background: #102653;
+
+    border-color: #263d70;
+
+    color: #aebde0;
+}
+
+
+body.dark-theme .theme-button i {
+    color: #e100ff;
+}
+
+
+body.dark-theme .theme-button:hover {
+    background: #182f63;
+
+    border-color: #4779e8;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+.logout-btn {
+    width: 100%;
+
+    min-height: 50px;
+
+    box-sizing: border-box;
+
+    padding: 0 16px;
+
+    border: 1px solid transparent;
+
+    border-radius: 14px;
+
+    background: var(--app-danger-soft);
+
+    color: var(--app-danger);
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.logout-btn i {
+    width: 22px;
+
+    font-size: 18px;
+
+    text-align: center;
+}
+
+
+.logout-btn:hover {
+    background: var(--app-danger);
+
+    color: #ffffff;
+
+    border-color: var(--app-danger);
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+========================================================= */
+
+.main-content {
+    min-height: 100vh;
+
+    margin-left: 340px;
+
+    width: calc(100% - 340px);
+
+    box-sizing: border-box;
+
+    background: var(--app-bg);
+
+    color: var(--app-text);
+
+    transition:
+        margin-left 0.3s ease,
+        width 0.3s ease,
+        background-color 0.3s ease,
+        color 0.3s ease;
+}
+
+
+/* =========================================================
+   COLLAPSED MAIN CONTENT
+========================================================= */
+
+.layout.sidebar-collapsed .main-content {
+    margin-left: 92px;
+
+    width: calc(100% - 92px);
+}
+
+
+/* =========================================================
+   COLLAPSED SIDEBAR ELEMENTS
+========================================================= */
+
+.layout.sidebar-collapsed .logo-text,
+.layout.sidebar-collapsed .account-info,
+.layout.sidebar-collapsed .menu-title,
+.layout.sidebar-collapsed .menu-item span,
+.layout.sidebar-collapsed .theme-button span,
+.layout.sidebar-collapsed .logout-btn span {
+    display: none;
+}
+
+
+.layout.sidebar-collapsed .sidebar-header {
     justify-content: center;
-
-    padding: 0;
 }
 
-.sidebar-collapsed .account-card {
+
+.layout.sidebar-collapsed .account-card {
     justify-content: center;
 
     padding: 10px;
 }
 
 
-/* =========================
-   LOGOUT
-========================= */
-
-.logout-btn {
-    margin-top: auto;
-
-    height: 50px;
-
-    border: 0;
-
-    border-radius: 14px;
-
-    background: #fff1f1;
-
-    color: #dc3545;
-
-    font-weight: 600;
-
-    display: flex;
-    align-items: center;
-
-    gap: 15px;
-
-    padding: 0 16px;
-
-    cursor: pointer;
-
-    transition: .2s;
-}
-
-.logout-btn:hover {
-    background: #dc3545;
-
-    color: white;
-}
-
-.sidebar-collapsed .logout-btn {
+.layout.sidebar-collapsed .menu-item {
     justify-content: center;
 
     padding: 0;
+}
+
+
+.layout.sidebar-collapsed .theme-button {
+    justify-content: center;
+
+    padding: 0;
+}
+
+
+.layout.sidebar-collapsed .logout-btn {
+    justify-content: center;
+
+    padding: 0;
+}
+
+
+/* =========================================================
+   DARK MAIN
+========================================================= */
+
+body.dark-theme .main-content {
+    background: #081638;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   DARK SCROLLBAR
+========================================================= */
+
+body.dark-theme ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+
+body.dark-theme ::-webkit-scrollbar-track {
+    background: #081638;
+}
+
+
+body.dark-theme ::-webkit-scrollbar-thumb {
+    background: #263d70;
+
+    border-radius: 10px;
+}
+
+
+body.dark-theme ::-webkit-scrollbar-thumb:hover {
+    background: #4779e8;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .sidebar {
+        width: 280px;
+    }
+
+    .main-content {
+        margin-left: 280px;
+
+        width: calc(100% - 280px);
+    }
+
+    .layout.sidebar-collapsed .sidebar {
+        width: 88px;
+    }
+
+    .layout.sidebar-collapsed .main-content {
+        margin-left: 88px;
+
+        width: calc(100% - 88px);
+    }
+}
+
+
+@media (max-width: 800px) {
+
+    .sidebar {
+        width: 270px;
+
+        transform: translateX(0);
+    }
+
+    .layout.sidebar-collapsed .sidebar {
+        width: 270px;
+
+        transform: translateX(-100%);
+    }
+
+    .main-content,
+    .layout.sidebar-collapsed .main-content {
+        margin-left: 0;
+
+        width: 100%;
+    }
+
 }

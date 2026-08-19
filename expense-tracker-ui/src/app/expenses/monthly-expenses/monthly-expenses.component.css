@@ -1,173 +1,489 @@
+/* =========================================================
+   MONTHLY EXPENSES PAGE
+========================================================= */
+
 .container {
-  max-width: 1400px;
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 30px 35px;
+    box-sizing: border-box;
 }
 
 
-/* =========================
+/* =========================================================
+   HEADER
+========================================================= */
+
+.container > .d-flex {
+    margin-bottom: 28px !important;
+}
+
+.container h1 {
+    color: #4a7bea !important;
+    font-size: 34px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.container > .d-flex p {
+    color: #9bb0d0 !important;
+    font-size: 15px;
+    margin-top: 5px;
+}
+
+.container .btn-outline-success {
+    color: #6ea0ff;
+    border: 1px solid #4678dc;
+    background: transparent;
+    border-radius: 10px;
+    padding: 11px 18px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.container .btn-outline-success:hover {
+    background: #4779e8;
+    color: white;
+}
+
+
+/* =========================================================
+   MONTHS GRID
+   IMPORTANT: 4 CARDS PER ROW
+========================================================= */
+
+.container .row {
+    display: grid !important;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 16px !important;
+
+    margin: 0 !important;
+}
+
+
+/* Remove Bootstrap column sizing */
+
+.container .row > div {
+    width: 100% !important;
+    max-width: none !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+
+/* =========================================================
    MONTH CARD
-========================= */
+========================================================= */
 
 .month-card {
+    width: 100%;
+    height: 220px;
 
-  background: white;
+    background: #132b5d;
 
-  border-radius: 16px;
+    border: 1px solid #294675;
+    border-radius: 14px;
 
-  border: 1px solid #e9ecef;
+    overflow: hidden;
 
-  overflow: hidden;
+    display: flex;
+    flex-direction: column;
 
-  cursor: pointer;
+    cursor: pointer;
 
-  transition: all 0.25s ease;
+    box-sizing: border-box;
 
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .month-card:hover {
+    transform: translateY(-3px);
 
-  transform: translateY(-5px);
-
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-
-  border-color: #198754;
-
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 
-/* =========================
-   HEADER
-========================= */
+/* =========================================================
+   MONTH HEADER
+========================================================= */
 
 .month-header {
+    height: 68px;
+    min-height: 68px;
 
-  background: #198754;
+    padding: 12px 15px;
 
-  color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-  padding: 20px;
+    background: #4779e8;
 
-  display: flex;
+    color: white;
 
-  justify-content: space-between;
-
-  align-items: center;
-
+    box-sizing: border-box;
 }
 
 .month-header h3 {
+    margin: 0;
 
-  margin: 0;
-
-  font-size: 22px;
-
-  font-weight: 700;
-
+    font-size: 20px;
+    font-weight: 700;
 }
 
 .month-header span {
+    display: block;
 
-  font-size: 14px;
+    margin-top: 2px;
 
-  opacity: 0.85;
+    font-size: 12px;
 
+    color: #e5edff;
 }
 
+
+/* =========================================================
+   CALENDAR ICON
+========================================================= */
 
 .calendar-icon {
+    width: 36px;
+    height: 36px;
 
-  width: 45px;
+    border-radius: 50%;
 
-  height: 45px;
+    background: rgba(255, 255, 255, 0.15);
 
-  border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-  background: rgba(255, 255, 255, 0.2);
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  font-size: 20px;
-
+.calendar-icon i {
+    font-size: 15px;
+    color: white;
 }
 
 
-/* =========================
-   BODY
-========================= */
+/* =========================================================
+   MONTH BODY
+========================================================= */
 
 .month-body {
+    flex: 1;
 
-  padding: 20px;
+    padding: 5px 15px;
 
+    background: #132b5d;
+
+    box-sizing: border-box;
 }
 
 
+/* =========================================================
+   STAT ITEM
+========================================================= */
+
 .stat-item {
+    height: 47px;
 
-  display: flex;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-  justify-content: space-between;
+    border-bottom: 1px solid #294675;
+}
 
-  align-items: center;
+.stat-item:last-child {
+    border-bottom: none;
+}
 
-  padding: 10px 0;
+.stat-item span {
+    display: flex;
+    align-items: center;
 
-  color: #6c757d;
+    color: #a9bddd;
 
-  border-bottom: 1px solid #f1f1f1;
+    font-size: 12px;
+}
 
+.stat-item span i {
+    color: #8ba8d5;
+
+    font-size: 14px;
+
+    margin-right: 6px !important;
 }
 
 .stat-item strong {
+    color: white;
 
-  color: #212529;
-
-  font-size: 17px;
-
+    font-size: 13px;
+    font-weight: 700;
 }
 
 
-.stat-item.total {
-
-  border-bottom: none;
-
-  padding-bottom: 0;
-
-}
-
+/* =========================================================
+   TOTAL
+========================================================= */
 
 .stat-item.total strong {
+    color: #4f8cff;
 
-  color: #198754;
+    font-size: 15px;
 
-  font-size: 21px;
-
+    white-space: nowrap;
 }
 
 
-/* =========================
+/* =========================================================
    FOOTER
-========================= */
+========================================================= */
 
 .month-footer {
+    height: 40px;
+    min-height: 40px;
 
-  padding: 14px 20px;
+    padding: 0 15px;
 
-  background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-  display: flex;
+    background: #102653;
 
-  justify-content: space-between;
+    border-top: 1px solid #294675;
 
-  align-items: center;
+    box-sizing: border-box;
+}
 
-  color: #198754;
+.month-footer span {
+    color: #6ea0ff;
 
-  font-weight: 600;
+    font-size: 12px;
 
+    font-weight: 600;
+}
+
+.month-footer i {
+    color: #6ea0ff;
+
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.text-center {
+    color: #9bb0d0;
+}
+
+
+/* =========================================================
+   NO DATA
+========================================================= */
+
+.alert {
+    border-radius: 10px;
+}
+
+
+/* =========================================================
+   LIGHT MODE
+========================================================= */
+
+:host-context(body:not(.dark-theme)) .container h1 {
+    color: #198754 !important;
+}
+
+:host-context(body:not(.dark-theme)) .container > .d-flex p {
+    color: #66736e !important;
+}
+
+:host-context(body:not(.dark-theme)) .container .btn-outline-success {
+    color: #198754;
+    border-color: #198754;
+}
+
+:host-context(body:not(.dark-theme)) .container .btn-outline-success:hover {
+    background: #198754;
+    color: white;
+}
+
+:host-context(body:not(.dark-theme)) .month-card {
+    background: white;
+
+    border-color: #dce7e2;
+
+    box-shadow:
+        0 5px 15px rgba(30, 60, 45, 0.06);
+}
+
+:host-context(body:not(.dark-theme)) .month-header {
+    background: #198754;
+}
+
+:host-context(body:not(.dark-theme)) .month-body {
+    background: white;
+}
+
+:host-context(body:not(.dark-theme)) .stat-item {
+    border-color: #edf1ef;
+}
+
+:host-context(body:not(.dark-theme)) .stat-item span {
+    color: #6d7974;
+}
+
+:host-context(body:not(.dark-theme)) .stat-item span i {
+    color: #7e8d86;
+}
+
+:host-context(body:not(.dark-theme)) .stat-item strong {
+    color: #26332e;
+}
+
+:host-context(body:not(.dark-theme)) .stat-item.total strong {
+    color: #198754;
+}
+
+:host-context(body:not(.dark-theme)) .month-footer {
+    background: #f8faf9;
+    border-color: #edf1ef;
+}
+
+:host-context(body:not(.dark-theme)) .month-footer span,
+:host-context(body:not(.dark-theme)) .month-footer i {
+    color: #198754;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+/* 4 cards */
+@media (min-width: 1200px) {
+
+    .container .row {
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr));
+    }
+}
+
+
+/* 3 cards */
+@media (min-width: 992px) and (max-width: 1199px) {
+
+    .container .row {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+}
+
+
+/* 2 cards */
+@media (min-width: 600px) and (max-width: 991px) {
+
+    .container .row {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* 1 card */
+@media (max-width: 599px) {
+
+    .container {
+        padding: 20px 15px;
+    }
+
+    .container .row {
+        grid-template-columns: 1fr;
+    }
+
+    .month-card {
+        height: 220px;
+    }
+}
+/* =========================================================
+   REMOVE TOP WHITE STRIP
+========================================================= */
+
+:host {
+    display: block;
+    min-height: 100vh;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+
+/* Remove any spacing before the page */
+
+:host > * {
+    margin-top: 0 !important;
+}
+
+
+/* Main page container */
+
+.container {
+    margin-top: 0 !important;
+    padding-top: 42px !important;
+}
+
+
+/* Prevent Bootstrap/body spacing from creating the strip */
+
+.container.mt-5 {
+    margin-top: 0 !important;
+}
+
+
+/* =========================================================
+   BODY / PAGE BACKGROUND
+========================================================= */
+
+:host-context(body) {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+
+/* If your main application content has top spacing */
+
+:host-context(.main-content),
+:host-context(.content),
+:host-context(.page-content),
+:host-context(.app-content) {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+:host-context(body.dark-theme) {
+    background: #071738 !important;
+}
+
+
+/* =========================================================
+   LIGHT MODE
+========================================================= */
+
+:host-context(body:not(.dark-theme)) {
+    background: #f5f9f7 !important;
 }

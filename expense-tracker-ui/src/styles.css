@@ -1,1 +1,532 @@
 /* You can add global styles to this file, and also import other style files */
+/* =========================================================
+   EXPENSE TRACKER
+   GLOBAL THEME SYSTEM
+   Navy + Blue + Magenta
+========================================================= */
+
+
+/* =========================================================
+   LIGHT THEME
+========================================================= */
+
+:root {
+
+    /* Main */
+    --app-bg: #f3f6ff;
+
+    /* Cards */
+    --app-card: #ffffff;
+
+    /* Text */
+    --app-text: #07194f;
+    --app-text-muted: #7180a5;
+
+    /* Borders */
+    --app-border: #dce4f5;
+
+    /* Primary Blue */
+    --primary: #3456a5;
+    --primary-hover: #29488f;
+
+    /* Accent Magenta */
+    --accent: #e600d9;
+    --accent-hover: #c900bd;
+
+    /* Inputs */
+    --input-bg: #ffffff;
+
+    /* Soft colors */
+    --soft-blue: #edf2ff;
+    --soft-accent: #fff0fc;
+
+    /* Sidebar */
+    --sidebar-bg: #ffffff;
+    --sidebar-active: #3456a5;
+    --sidebar-text: #68789f;
+
+    /* Shadows */
+    --shadow:
+        0 10px 30px rgba(7, 25, 79, 0.08);
+
+    --shadow-hover:
+        0 15px 35px rgba(7, 25, 79, 0.12);
+}
+
+
+/* =========================================================
+   DARK THEME
+========================================================= */
+
+html.dark-theme,
+body.dark-theme {
+
+    /* Main */
+    --app-bg: #07194f;
+
+    /* Cards */
+    --app-card: #0d286b;
+
+    /* Text */
+    --app-text: #f7f9ff;
+    --app-text-muted: #9aa9d0;
+
+    /* Borders */
+    --app-border: #25458d;
+
+    /* Primary Blue */
+    --primary: #4165b8;
+    --primary-hover: #5275c9;
+
+    /* Accent */
+    --accent: #e600d9;
+    --accent-hover: #ff24ed;
+
+    /* Inputs */
+    --input-bg: #102e76;
+
+    /* Soft colors */
+    --soft-blue: #112f78;
+    --soft-accent: #35105d;
+
+    /* Sidebar */
+    --sidebar-bg: #061542;
+    --sidebar-active: #3456a5;
+    --sidebar-text: #aab8dc;
+
+    /* Shadows */
+    --shadow:
+        0 12px 35px rgba(0, 0, 0, 0.30);
+
+    --shadow-hover:
+        0 15px 40px rgba(0, 0, 0, 0.40);
+}
+
+
+/* =========================================================
+   GLOBAL BODY
+========================================================= */
+
+html,
+body {
+
+    margin: 0;
+    padding: 0;
+
+    min-height: 100%;
+
+}
+
+
+body {
+
+    background: var(--app-bg);
+
+    color: var(--app-text);
+
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
+
+}
+
+
+/* =========================================================
+   GLOBAL TEXT
+========================================================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+label {
+
+    transition:
+        color 0.3s ease;
+
+}
+
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+.dashboard-card,
+.stat-card,
+.expense-card,
+.monthly-card,
+.info-card,
+.insight-card {
+
+    background: var(--app-card);
+
+    border-color: var(--app-border);
+
+    color: var(--app-text);
+
+    box-shadow: var(--shadow);
+
+    transition:
+        background-color 0.3s ease,
+        border-color 0.3s ease,
+        color 0.3s ease,
+        box-shadow 0.3s ease;
+
+}
+
+
+.dashboard-card:hover,
+.stat-card:hover {
+
+    box-shadow: var(--shadow-hover);
+
+}
+
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+input,
+textarea,
+select {
+
+    background: var(--input-bg);
+
+    color: var(--app-text);
+
+    border-color: var(--app-border);
+
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease,
+        border-color 0.3s ease;
+
+}
+
+
+input::placeholder,
+textarea::placeholder {
+
+    color: var(--app-text-muted);
+
+}
+
+
+/* =========================================================
+   INPUT WRAPPERS
+========================================================= */
+
+.input-wrapper {
+
+    background: var(--input-bg);
+
+    border-color: var(--app-border);
+
+}
+
+
+.input-wrapper input {
+
+    color: var(--app-text);
+
+}
+
+
+.input-wrapper > i {
+
+    color: var(--app-text-muted);
+
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.primary-button,
+.save-button {
+
+    background: var(--primary);
+
+    color: #ffffff;
+
+}
+
+
+.primary-button:hover,
+.save-button:hover:not(:disabled) {
+
+    background: var(--primary-hover);
+
+}
+
+
+/* =========================================================
+   MAGENTA ACCENT
+========================================================= */
+
+.accent-button {
+
+    background: var(--accent);
+
+    color: #ffffff;
+
+}
+
+
+.accent-button:hover {
+
+    background: var(--accent-hover);
+
+}
+
+
+/* =========================================================
+   CATEGORY
+========================================================= */
+
+.category-select {
+
+    background: var(--input-bg);
+
+    border-color: var(--app-border);
+
+    color: var(--app-text);
+
+}
+
+
+.category-dropdown {
+
+    background: var(--app-card);
+
+    border-color: var(--app-border);
+
+    box-shadow: var(--shadow);
+
+}
+
+
+.category-option {
+
+    background: var(--soft-blue);
+
+    color: var(--app-text);
+
+}
+
+
+.category-option:hover {
+
+    background: var(--primary);
+
+    color: #ffffff;
+
+}
+
+
+.category-option.selected {
+
+    background: var(--primary);
+
+    color: #ffffff;
+
+}
+
+
+/* =========================================================
+   OTHER CATEGORY
+========================================================= */
+
+.other-category {
+
+    background: var(--input-bg);
+
+    border-color: var(--app-border);
+
+}
+
+
+.other-category input {
+
+    color: var(--app-text);
+
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar {
+
+    background: var(--sidebar-bg);
+
+    border-color: var(--app-border);
+
+    transition:
+        background-color 0.3s ease,
+        border-color 0.3s ease;
+
+}
+
+
+.sidebar .nav-item {
+
+    color: var(--sidebar-text);
+
+}
+
+
+.sidebar .nav-item.active {
+
+    background: var(--sidebar-active);
+
+    color: #ffffff;
+
+}
+
+
+/* =========================================================
+   LINKS
+========================================================= */
+
+a {
+
+    color: var(--primary);
+
+}
+
+
+/* =========================================================
+   DIVIDERS
+========================================================= */
+
+.divider,
+.bottom-divider {
+
+    background: var(--app-border);
+
+}
+
+
+/* =========================================================
+   TRANSITION
+========================================================= */
+
+* {
+
+    transition:
+        background-color 0.25s ease,
+        border-color 0.25s ease,
+        color 0.25s ease;
+
+}
+/* =========================================================
+   GLOBAL THEME VARIABLES
+========================================================= */
+
+:root {
+    /* Light theme */
+    --app-bg: #f4f8f6;
+    --app-card: #ffffff;
+    --app-card-hover: #f8fcfa;
+
+    --app-text: #14231d;
+    --app-text-secondary: #71827a;
+    --app-text-muted: #8a9a93;
+
+    --app-border: #dce8e3;
+
+    --app-primary: #168b59;
+    --app-primary-dark: #117b4e;
+    --app-primary-soft: #e9f7f1;
+
+    --app-input: #ffffff;
+
+    --app-danger: #dc3545;
+    --app-danger-soft: #fff1f2;
+
+    --app-shadow:
+        0 10px 30px rgba(26, 72, 53, 0.06);
+}
+
+
+/* =========================================================
+   DARK THEME
+========================================================= */
+
+body.dark-theme {
+
+    --app-bg: #081638;
+
+    --app-card: #102653;
+    --app-card-hover: #162f62;
+
+    --app-text: #ffffff;
+    --app-text-secondary: #aebde0;
+    --app-text-muted: #8194c0;
+
+    --app-border: #263d70;
+
+    --app-primary: #4779e8;
+    --app-primary-dark: #365fc2;
+    --app-primary-soft: #182f63;
+
+    --app-input: #0d2049;
+
+    --app-danger: #ff5c70;
+    --app-danger-soft: #3a1c36;
+
+    --app-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.25);
+
+    --app-accent: #e100ff;
+}
+
+
+/* =========================================================
+   GLOBAL BODY
+========================================================= */
+
+html,
+body {
+    background: var(--app-bg);
+    color: var(--app-text);
+
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
+}
+
+body.dark-theme {
+    background: #081638;
+}
+
+
+/* =========================================================
+   GLOBAL TRANSITION
+========================================================= */
+
+body,
+button,
+input,
+select,
+textarea,
+div,
+section,
+main,
+aside,
+header,
+nav {
+    transition:
+        background-color 0.25s ease,
+        border-color 0.25s ease,
+        color 0.25s ease,
+        box-shadow 0.25s ease;
+}
