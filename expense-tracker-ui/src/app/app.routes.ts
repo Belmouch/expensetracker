@@ -11,7 +11,7 @@ import { MonthlyExpensesComponent } from './expenses/monthly-expenses/monthly-ex
 import { MonthlyDetailsComponent } from './expenses/monthly-details/monthly-details.component';
 
 import { LayoutComponent } from './layout/layout.component';
-
+import { BudgetManagementComponent } from './budget/budget-management.component';
 
 export const routes: Routes = [
 
@@ -24,7 +24,6 @@ export const routes: Routes = [
         redirectTo: 'login',
         pathMatch: 'full'
     },
-
 
     // =========================
     // AUTH
@@ -42,7 +41,6 @@ export const routes: Routes = [
                 .then(m => m.RegisterComponent)
     },
 
-
     // =========================
     // PROTECTED APP
     // =========================
@@ -54,55 +52,70 @@ export const routes: Routes = [
 
         children: [
 
-            // Dashboard
+            // =========================
+            // DASHBOARD
+            // =========================
 
             {
                 path: 'dashboard',
                 component: DashboardComponent
             },
 
-
-            // Expenses
+            // =========================
+            // EXPENSES
+            // =========================
 
             {
                 path: 'expenses',
                 component: ExpenseListComponent
             },
 
-
-            // Add
+            // =========================
+            // ADD EXPENSE
+            // =========================
 
             {
                 path: 'expenses/add',
                 component: AddExpenseComponent
             },
 
-
-            // Edit
+            // =========================
+            // EDIT EXPENSE
+            // =========================
 
             {
                 path: 'expenses/edit/:id',
                 component: AddExpenseComponent
             },
 
-
-            // Monthly
+            // =========================
+            // MONTHLY EXPENSES
+            // =========================
 
             {
                 path: 'expenses/monthly',
                 component: MonthlyExpensesComponent
             },
 
-
-            // Monthly details
+            // =========================
+            // MONTHLY DETAILS
+            // =========================
 
             {
                 path: 'expenses/monthly/:year/:month',
                 component: MonthlyDetailsComponent
+            },
+
+            // =========================
+            // BUDGET
+            // =========================
+
+            {
+                path: 'budget',
+                component: BudgetManagementComponent
             }
 
         ]
-
     }
 
 ];

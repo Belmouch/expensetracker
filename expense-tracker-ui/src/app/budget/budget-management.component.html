@@ -1,0 +1,294 @@
+<div class="budget-page">
+
+  <!-- HEADER -->
+  <div class="page-header">
+
+    <div>
+      <div class="eyebrow">
+        FINANCIAL PLANNING
+      </div>
+
+      <h1>
+        Budget Management
+      </h1>
+
+      <p>
+        Set and track your spending limits
+      </p>
+    </div>
+
+    <button class="add-budget-button">
+      <i class="bi bi-plus-lg"></i>
+      Add Budget
+    </button>
+
+  </div>
+
+
+  <!-- ERROR -->
+  <div
+    *ngIf="errorMessage"
+    class="error-card"
+  >
+    <i class="bi bi-exclamation-circle"></i>
+
+    <span>
+      {{ errorMessage }}
+    </span>
+  </div>
+
+
+  <!-- LOADING -->
+  <div
+    *ngIf="loading"
+    class="loading"
+  >
+    <div class="spinner"></div>
+
+    <span>
+      Loading budgets...
+    </span>
+  </div>
+
+
+  <!-- CONTENT -->
+  <div *ngIf="!loading">
+
+    <!-- STATISTICS -->
+    <div class="stats-grid">
+
+      <!-- TOTAL -->
+      <div class="stat-card">
+
+        <div class="stat-top">
+
+          <div class="stat-icon">
+            <i class="bi bi-wallet2"></i>
+          </div>
+
+          <span>
+            TOTAL BUDGET
+          </span>
+
+        </div>
+
+        <div class="stat-value">
+          {{ totalBudget | number:'1.2-2' }}
+          <small>DH</small>
+        </div>
+
+        <div class="stat-label">
+          Budget Limit
+        </div>
+
+      </div>
+
+
+      <!-- SPENT -->
+      <div class="stat-card">
+
+        <div class="stat-top">
+
+          <div class="stat-icon">
+            <i class="bi bi-arrow-up-circle"></i>
+          </div>
+
+          <span>
+            TOTAL SPENT
+          </span>
+
+        </div>
+
+        <div class="stat-value">
+          {{ totalSpent | number:'1.2-2' }}
+          <small>DH</small>
+        </div>
+
+        <div class="stat-label">
+          Money spent
+        </div>
+
+      </div>
+
+
+      <!-- REMAINING -->
+      <div class="stat-card featured">
+
+        <div class="stat-top">
+
+          <div class="stat-icon">
+            <i class="bi bi-piggy-bank"></i>
+          </div>
+
+          <span>
+            REMAINING
+          </span>
+
+        </div>
+
+        <div class="stat-value">
+          {{ totalRemaining | number:'1.2-2' }}
+          <small>DH</small>
+        </div>
+
+        <div class="stat-label">
+          Available budget
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- BUDGET LIST -->
+
+    <div class="budgets-section">
+
+      <div class="section-header">
+
+        <div>
+          <h2>
+            Your Budgets
+          </h2>
+
+          <p>
+            Track your spending limits
+          </p>
+        </div>
+
+        <span class="budget-count">
+          {{ budgets.length }}
+          {{ budgets.length === 1 ? 'budget' : 'budgets' }}
+        </span>
+
+      </div>
+
+
+      <!-- EMPTY -->
+
+      <div
+        *ngIf="budgets.length === 0"
+        class="empty-card"
+      >
+
+        <div class="empty-icon">
+          <i class="bi bi-wallet2"></i>
+        </div>
+
+        <h3>
+          No budgets yet
+        </h3>
+
+        <p>
+          Create your first budget to start tracking your spending.
+        </p>
+
+        <button class="add-budget-button">
+          <i class="bi bi-plus-lg"></i>
+          Create Budget
+        </button>
+
+      </div>
+
+
+      <!-- BUDGET CARDS -->
+
+      <div
+        *ngFor="let budget of budgets"
+        class="budget-card"
+      >
+
+        <div class="budget-card-header">
+
+          <div class="budget-title">
+
+            <div class="category-icon">
+              <i class="bi bi-wallet2"></i>
+            </div>
+
+            <div>
+              <h3>
+                {{ budget.category }}
+              </h3>
+
+              <span>
+                {{ budget.startDate }}
+                →
+                {{ budget.endDate }}
+              </span>
+            </div>
+
+          </div>
+
+          <strong class="budget-amount">
+            {{ budget.amount | number:'1.2-2' }}
+            DH
+          </strong>
+
+        </div>
+
+
+        <!-- PROGRESS -->
+
+        <div class="progress-info">
+
+          <span>
+            Spent
+          </span>
+
+          <strong>
+            {{ budget.spent | number:'1.2-2' }}
+            DH
+          </strong>
+
+        </div>
+
+        <div class="progress-bar">
+
+          <div
+            class="progress"
+            [style.width.%]="budget.percentage"
+          ></div>
+
+        </div>
+
+        <div class="progress-bottom">
+
+          <span>
+            {{ budget.percentage | number:'1.2-2' }}%
+          </span>
+
+          <span>
+            {{ budget.remaining | number:'1.2-2' }}
+            DH remaining
+          </span>
+
+        </div>
+
+
+        <!-- ACTIONS -->
+
+        <div class="budget-actions">
+
+          <button class="edit-button">
+            <i class="bi bi-pencil"></i>
+            Edit
+          </button>
+
+          <button
+            class="delete-button"
+            (click)="deleteBudget(budget.id)"
+          >
+            <i class="bi bi-trash"></i>
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

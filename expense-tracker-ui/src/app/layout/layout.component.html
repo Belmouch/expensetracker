@@ -121,8 +121,18 @@
                 </span>
 
             </a>
+            <!-- BUDGET -->
 
+            <a routerLink="/budget" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+                class="menu-item">
 
+                <i class="bi bi-wallet2"></i>
+
+                <span *ngIf="sidebarOpen">
+                    Budget
+                </span>
+
+            </a>
 
 
 
