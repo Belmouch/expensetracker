@@ -11,40 +11,33 @@ export class BudgetService {
 
   private api = 'http://localhost:8080/budgets';
 
-  constructor(
-    private http: HttpClient
-  ) {}
+  constructor(private http: HttpClient) {}
 
-
-  // =========================================================
+  // =========================
   // GET MY BUDGETS
-  // =========================================================
+  // =========================
 
   getMyBudgets(): Observable<Budget[]> {
 
     return this.http.get<Budget[]>(
       `${this.api}/me`
     );
-
   }
 
-
-  // =========================================================
-  // GET BUDGET BY ID
-  // =========================================================
+  // =========================
+  // GET BY ID
+  // =========================
 
   getBudgetById(id: number): Observable<Budget> {
 
     return this.http.get<Budget>(
       `${this.api}/${id}`
     );
-
   }
 
-
-  // =========================================================
-  // CREATE BUDGET
-  // =========================================================
+  // =========================
+  // CREATE MY BUDGET
+  // =========================
 
   createBudget(
     budget: any
@@ -54,13 +47,11 @@ export class BudgetService {
       `${this.api}/me`,
       budget
     );
-
   }
 
-
-  // =========================================================
-  // UPDATE BUDGET
-  // =========================================================
+  // =========================
+  // UPDATE
+  // =========================
 
   updateBudget(
     id: number,
@@ -71,13 +62,11 @@ export class BudgetService {
       `${this.api}/${id}`,
       budget
     );
-
   }
 
-
-  // =========================================================
-  // DELETE BUDGET
-  // =========================================================
+  // =========================
+  // DELETE
+  // =========================
 
   deleteBudget(
     id: number
@@ -86,7 +75,5 @@ export class BudgetService {
     return this.http.delete<void>(
       `${this.api}/${id}`
     );
-
   }
-
 }

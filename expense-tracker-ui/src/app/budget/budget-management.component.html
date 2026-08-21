@@ -1,6 +1,9 @@
 <div class="budget-page">
 
+  <!-- ===================================================== -->
   <!-- HEADER -->
+  <!-- ===================================================== -->
+
   <div class="page-header">
 
     <div>
@@ -17,7 +20,11 @@
       </p>
     </div>
 
-    <button class="add-budget-button">
+    <button
+      type="button"
+      class="add-budget-button"
+      (click)="openCreateForm()"
+    >
       <i class="bi bi-plus-lg"></i>
       Add Budget
     </button>
@@ -25,39 +32,56 @@
   </div>
 
 
+  <!-- ===================================================== -->
   <!-- ERROR -->
+  <!-- ===================================================== -->
+
   <div
     *ngIf="errorMessage"
     class="error-card"
   >
+
     <i class="bi bi-exclamation-circle"></i>
 
     <span>
       {{ errorMessage }}
     </span>
+
   </div>
 
 
+  <!-- ===================================================== -->
   <!-- LOADING -->
+  <!-- ===================================================== -->
+
   <div
     *ngIf="loading"
     class="loading"
   >
+
     <div class="spinner"></div>
 
     <span>
       Loading budgets...
     </span>
+
   </div>
 
 
+  <!-- ===================================================== -->
   <!-- CONTENT -->
+  <!-- ===================================================== -->
+
   <div *ngIf="!loading">
 
+    <!-- =================================================== -->
     <!-- STATISTICS -->
+    <!-- =================================================== -->
+
     <div class="stats-grid">
 
-      <!-- TOTAL -->
+      <!-- TOTAL BUDGET -->
+
       <div class="stat-card">
 
         <div class="stat-top">
@@ -73,8 +97,13 @@
         </div>
 
         <div class="stat-value">
+
           {{ totalBudget | number:'1.2-2' }}
-          <small>DH</small>
+
+          <small>
+            DH
+          </small>
+
         </div>
 
         <div class="stat-label">
@@ -84,7 +113,8 @@
       </div>
 
 
-      <!-- SPENT -->
+      <!-- TOTAL SPENT -->
+
       <div class="stat-card">
 
         <div class="stat-top">
@@ -100,8 +130,13 @@
         </div>
 
         <div class="stat-value">
+
           {{ totalSpent | number:'1.2-2' }}
-          <small>DH</small>
+
+          <small>
+            DH
+          </small>
+
         </div>
 
         <div class="stat-label">
@@ -112,6 +147,7 @@
 
 
       <!-- REMAINING -->
+
       <div class="stat-card featured">
 
         <div class="stat-top">
@@ -127,8 +163,13 @@
         </div>
 
         <div class="stat-value">
+
           {{ totalRemaining | number:'1.2-2' }}
-          <small>DH</small>
+
+          <small>
+            DH
+          </small>
+
         </div>
 
         <div class="stat-label">
@@ -140,13 +181,18 @@
     </div>
 
 
-    <!-- BUDGET LIST -->
+    <!-- =================================================== -->
+    <!-- BUDGET SECTION -->
+    <!-- =================================================== -->
 
     <div class="budgets-section">
+
+      <!-- SECTION HEADER -->
 
       <div class="section-header">
 
         <div>
+
           <h2>
             Your Budgets
           </h2>
@@ -154,17 +200,23 @@
           <p>
             Track your spending limits
           </p>
+
         </div>
 
         <span class="budget-count">
+
           {{ budgets.length }}
+
           {{ budgets.length === 1 ? 'budget' : 'budgets' }}
+
         </span>
 
       </div>
 
 
-      <!-- EMPTY -->
+      <!-- ================================================= -->
+      <!-- EMPTY STATE -->
+      <!-- ================================================= -->
 
       <div
         *ngIf="budgets.length === 0"
@@ -172,7 +224,9 @@
       >
 
         <div class="empty-icon">
+
           <i class="bi bi-wallet2"></i>
+
         </div>
 
         <h3>
@@ -183,30 +237,46 @@
           Create your first budget to start tracking your spending.
         </p>
 
-        <button class="add-budget-button">
+        <button
+          type="button"
+          class="add-budget-button"
+          (click)="openCreateForm()"
+        >
+
           <i class="bi bi-plus-lg"></i>
+
           Create Budget
+
         </button>
 
       </div>
 
 
+      <!-- ================================================= -->
       <!-- BUDGET CARDS -->
+      <!-- ================================================= -->
 
       <div
         *ngFor="let budget of budgets"
         class="budget-card"
       >
 
+        <!-- ================================================= -->
+        <!-- BUDGET HEADER -->
+        <!-- ================================================= -->
+
         <div class="budget-card-header">
 
           <div class="budget-title">
 
             <div class="category-icon">
+
               <i class="bi bi-wallet2"></i>
+
             </div>
 
             <div>
+
               <h3>
                 {{ budget.category }}
               </h3>
@@ -216,19 +286,26 @@
                 →
                 {{ budget.endDate }}
               </span>
+
             </div>
 
           </div>
 
+
           <strong class="budget-amount">
+
             {{ budget.amount | number:'1.2-2' }}
+
             DH
+
           </strong>
 
         </div>
 
 
+        <!-- ================================================= -->
         <!-- PROGRESS -->
+        <!-- ================================================= -->
 
         <div class="progress-info">
 
@@ -237,55 +314,482 @@
           </span>
 
           <strong>
+
             {{ budget.spent | number:'1.2-2' }}
+
             DH
+
           </strong>
 
         </div>
+
 
         <div class="progress-bar">
 
           <div
             class="progress"
-            [style.width.%]="budget.percentage"
+            [style.width.%]="
+              Math.min(
+                Math.max(budget.percentage, 0),
+                100
+              )
+            "
           ></div>
 
         </div>
 
+
         <div class="progress-bottom">
 
           <span>
+
             {{ budget.percentage | number:'1.2-2' }}%
+
           </span>
 
           <span>
+
             {{ budget.remaining | number:'1.2-2' }}
+
             DH remaining
+
           </span>
 
         </div>
 
 
+        <!-- ================================================= -->
         <!-- ACTIONS -->
+        <!-- ================================================= -->
 
         <div class="budget-actions">
 
-          <button class="edit-button">
-            <i class="bi bi-pencil"></i>
-            Edit
-          </button>
+          <!-- VIEW DETAILS -->
 
           <button
+            type="button"
+            class="details-button"
+            [class.active]="selectedBudget?.id === budget.id"
+            (click)="toggleBudgetDetails(budget)"
+          >
+
+            <i
+              class="bi"
+              [ngClass]="
+                selectedBudget?.id === budget.id
+                  ? 'bi-chevron-up'
+                  : 'bi-bar-chart-line'
+              "
+            ></i>
+
+            {{
+              selectedBudget?.id === budget.id
+                ? 'Hide Details'
+                : 'View Details'
+            }}
+
+          </button>
+
+
+          <!-- EDIT -->
+
+          <button
+            type="button"
+            class="edit-button"
+            (click)="confirmEditBudget(budget)"
+          >
+
+            <i class="bi bi-pencil"></i>
+
+            Edit
+
+          </button>
+
+
+          <!-- DELETE -->
+
+          <button
+            type="button"
             class="delete-button"
             (click)="deleteBudget(budget.id)"
           >
+
             <i class="bi bi-trash"></i>
+
             Delete
+
           </button>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- BUDGET DETAILS -->
+        <!-- ================================================= -->
+
+        <div
+          *ngIf="selectedBudget?.id === budget.id"
+          class="budget-details-wrapper"
+        >
+
+          <app-budget-details
+            [budget]="budget"
+          ></app-budget-details>
 
         </div>
 
       </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- CREATE / EDIT BUDGET MODAL -->
+  <!-- ===================================================== -->
+
+  <div
+    *ngIf="showForm"
+    class="budget-modal-overlay"
+  >
+
+    <div class="budget-modal">
+
+
+      <!-- ================================================= -->
+      <!-- MODAL HEADER -->
+      <!-- ================================================= -->
+
+      <div class="modal-header">
+
+        <div>
+
+          <div class="eyebrow">
+            FINANCIAL PLANNING
+          </div>
+
+          <h2>
+
+            {{
+              editingBudget
+                ? 'Edit Budget'
+                : 'Create Budget'
+            }}
+
+          </h2>
+
+          <p>
+
+            {{
+              editingBudget
+                ? 'Update your budget details'
+                : 'Set a new spending limit'
+            }}
+
+          </p>
+
+        </div>
+
+
+        <!-- CLOSE -->
+
+        <button
+          type="button"
+          class="modal-close"
+          (click)="closeBudgetForm()"
+        >
+
+          <i class="bi bi-x-lg"></i>
+
+        </button>
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- FORM -->
+      <!-- ================================================= -->
+
+      <form
+        #budgetForm="ngForm"
+        (ngSubmit)="submitBudget()"
+      >
+
+
+        <!-- ================================================= -->
+        <!-- CATEGORY -->
+        <!-- ================================================= -->
+
+        <div class="form-group">
+
+          <label>
+            Category
+          </label>
+
+
+          <div class="category-dropdown">
+
+
+            <!-- SELECT -->
+
+            <button
+              type="button"
+              class="category-select"
+              [class.open]="categoryDropdownOpen"
+              (click)="toggleCategoryDropdown()"
+            >
+
+              <span class="selected-category">
+
+                <i
+                  class="bi"
+                  [ngClass]="getSelectedCategoryIcon()"
+                ></i>
+
+                <span>
+
+                  {{
+                    budgetFormData.category
+                      ? budgetFormData.category
+                      : 'Select a category'
+                  }}
+
+                </span>
+
+              </span>
+
+
+              <i
+                class="bi"
+                [ngClass]="
+                  categoryDropdownOpen
+                    ? 'bi-chevron-up'
+                    : 'bi-chevron-down'
+                "
+              ></i>
+
+            </button>
+
+
+            <!-- ================================================= -->
+            <!-- CATEGORY MENU -->
+            <!-- ================================================= -->
+
+            <div
+              *ngIf="categoryDropdownOpen"
+              class="category-menu"
+            >
+
+              <button
+                type="button"
+                class="category-option"
+                *ngFor="let category of categories"
+                [class.selected]="
+                  budgetFormData.category === category.name
+                "
+                (click)="selectCategory(category.name)"
+              >
+
+                <span class="category-option-icon">
+
+                  <i
+                    class="bi"
+                    [ngClass]="category.icon"
+                  ></i>
+
+                </span>
+
+                <span>
+                  {{ category.name }}
+                </span>
+
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <!-- ================================================= -->
+          <!-- CUSTOM CATEGORY -->
+          <!-- ================================================= -->
+
+          <div
+            *ngIf="budgetFormData.category === 'Other'"
+            class="custom-category-input"
+          >
+
+            <i class="bi bi-pencil"></i>
+
+            <input
+              type="text"
+              name="customCategory"
+              [(ngModel)]="customCategory"
+              placeholder="Enter your category..."
+              maxlength="100"
+            />
+
+          </div>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- AMOUNT -->
+        <!-- ================================================= -->
+
+        <div class="form-group">
+
+          <label for="amount">
+            Amount
+          </label>
+
+          <div class="amount-input">
+
+            <input
+              id="amount"
+              type="number"
+              name="amount"
+              [(ngModel)]="budgetFormData.amount"
+              placeholder="3000"
+              min="1"
+              step="1"
+              required
+            />
+
+            <span>
+              DH
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- DATES -->
+        <!-- ================================================= -->
+
+        <div class="form-row">
+
+
+          <!-- START DATE -->
+
+          <div class="form-group">
+
+            <label for="startDate">
+              Start Date
+            </label>
+
+            <input
+              id="startDate"
+              type="date"
+              name="startDate"
+              [(ngModel)]="budgetFormData.startDate"
+              required
+            />
+
+          </div>
+
+
+          <!-- END DATE -->
+
+          <div class="form-group">
+
+            <label for="endDate">
+              End Date
+            </label>
+
+            <input
+              id="endDate"
+              type="date"
+              name="endDate"
+              [(ngModel)]="budgetFormData.endDate"
+              required
+            />
+
+          </div>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- FORM ERROR -->
+        <!-- ================================================= -->
+
+        <div
+          *ngIf="formError"
+          class="form-error"
+        >
+
+          <i class="bi bi-exclamation-circle"></i>
+
+          <span>
+            {{ formError }}
+          </span>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- MODAL ACTIONS -->
+        <!-- ================================================= -->
+
+        <div class="modal-actions">
+
+
+          <!-- CANCEL -->
+
+          <button
+            type="button"
+            class="cancel-button"
+            (click)="closeBudgetForm()"
+          >
+
+            Cancel
+
+          </button>
+
+
+          <!-- SUBMIT -->
+
+          <button
+            type="submit"
+            class="save-button"
+            [disabled]="budgetForm.invalid || saving"
+          >
+
+            <!-- NORMAL -->
+
+            <span *ngIf="!saving">
+
+              <i class="bi bi-check-lg"></i>
+
+              {{
+                editingBudget
+                  ? 'Update Budget'
+                  : 'Create Budget'
+              }}
+
+            </span>
+
+
+            <!-- SAVING -->
+
+            <span *ngIf="saving">
+
+              <span class="button-spinner"></span>
+
+              Saving...
+
+            </span>
+
+          </button>
+
+        </div>
+
+      </form>
 
     </div>
 

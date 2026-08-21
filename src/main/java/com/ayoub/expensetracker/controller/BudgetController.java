@@ -1,18 +1,25 @@
 package com.ayoub.expensetracker.controller;
 
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.ayoub.expensetracker.dto.BudgetRequest;
 import com.ayoub.expensetracker.dto.BudgetResponse;
 import com.ayoub.expensetracker.service.BudgetService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/budgets")
@@ -21,8 +28,10 @@ public class BudgetController {
 
     private final BudgetService budgetService;
 
+
     // =========================================================
     // GET CURRENT USER BUDGETS
+    // GET /budgets/me
     // =========================================================
 
     @GetMapping("/me")
@@ -40,6 +49,7 @@ public class BudgetController {
 
     // =========================================================
     // CREATE BUDGET FOR CURRENT USER
+    // POST /budgets/me
     // =========================================================
 
     @PostMapping("/me")
@@ -63,6 +73,7 @@ public class BudgetController {
 
     // =========================================================
     // GET ALL BUDGETS FOR USER
+    // GET /budgets/user/{userId}
     // =========================================================
 
     @GetMapping("/user/{userId}")
@@ -78,6 +89,7 @@ public class BudgetController {
 
     // =========================================================
     // GET BUDGET BY ID
+    // GET /budgets/{id}
     // =========================================================
 
     @GetMapping("/{id}")
@@ -93,6 +105,7 @@ public class BudgetController {
 
     // =========================================================
     // UPDATE BUDGET
+    // PUT /budgets/{id}
     // =========================================================
 
     @PutMapping("/{id}")
@@ -112,6 +125,7 @@ public class BudgetController {
 
     // =========================================================
     // DELETE BUDGET
+    // DELETE /budgets/{id}
     // =========================================================
 
     @DeleteMapping("/{id}")
@@ -121,6 +135,8 @@ public class BudgetController {
 
         budgetService.deleteBudget(id);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity
+                .noContent()
+                .build();
     }
 }

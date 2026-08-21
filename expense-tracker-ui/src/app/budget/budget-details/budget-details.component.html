@@ -1,0 +1,557 @@
+<div class="budget-details">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <div class="details-header">
+
+    <div class="details-title">
+
+      <div class="details-icon">
+        <i class="bi bi-wallet2"></i>
+      </div>
+
+      <div>
+        <span class="details-eyebrow">
+          BUDGET DETAILS
+        </span>
+
+        <h2>
+          {{ budget.category }}
+        </h2>
+
+        <p>
+          {{ formatDate(budget.startDate) }}
+          →
+          {{ formatDate(budget.endDate) }}
+        </p>
+      </div>
+
+    </div>
+
+    <div
+      class="budget-status"
+      [ngClass]="budgetStatusClass"
+    >
+      <i
+        class="bi"
+        [ngClass]="{
+          'bi-check-circle': budgetStatusClass === 'success',
+          'bi-exclamation-circle': budgetStatusClass === 'warning',
+          'bi-x-circle': budgetStatusClass === 'danger'
+        }"
+      ></i>
+
+      {{ budgetStatus }}
+    </div>
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- MAIN BUDGET OVERVIEW -->
+  <!-- ===================================================== -->
+
+  <div class="budget-overview">
+
+    <!-- TOTAL BUDGET -->
+
+    <div class="overview-card">
+
+      <div class="overview-icon">
+        <i class="bi bi-wallet2"></i>
+      </div>
+
+      <div class="overview-content">
+
+        <span class="overview-label">
+          TOTAL BUDGET
+        </span>
+
+        <strong>
+          {{ formatAmount(budget.amount) }}
+          <small>DH</small>
+        </strong>
+
+        <p>
+          Budget limit
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- TOTAL SPENT -->
+
+    <div class="overview-card">
+
+      <div class="overview-icon spent-icon">
+        <i class="bi bi-arrow-up-circle"></i>
+      </div>
+
+      <div class="overview-content">
+
+        <span class="overview-label">
+          TOTAL SPENT
+        </span>
+
+        <strong>
+          {{ formatAmount(totalSpent) }}
+          <small>DH</small>
+        </strong>
+
+        <p>
+          Money spent
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- REMAINING -->
+
+    <div
+      class="overview-card"
+      [ngClass]="{
+        'negative': remaining < 0
+      }"
+    >
+
+      <div class="overview-icon remaining-icon">
+        <i class="bi bi-piggy-bank"></i>
+      </div>
+
+      <div class="overview-content">
+
+        <span class="overview-label">
+          REMAINING
+        </span>
+
+        <strong>
+          {{ formatAmount(remaining) }}
+          <small>DH</small>
+        </strong>
+
+        <p>
+          Available budget
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- PROGRESS -->
+  <!-- ===================================================== -->
+
+  <div class="progress-section">
+
+    <div class="progress-header">
+
+      <div>
+
+        <h3>
+          Budget Progress
+        </h3>
+
+        <p>
+          {{ formatAmount(totalSpent) }} DH spent
+          out of
+          {{ formatAmount(budget.amount) }} DH
+        </p>
+
+      </div>
+
+      <strong>
+        {{ percentage | number:'1.0-2' }}%
+      </strong>
+
+    </div>
+
+
+    <div class="progress-bar">
+
+      <div
+        class="progress"
+        [ngClass]="budgetStatusClass"
+        [style.width.%]="progressPercentage"
+      ></div>
+
+    </div>
+
+
+    <div class="progress-footer">
+
+      <span>
+        {{ formatAmount(totalSpent) }} DH spent
+      </span>
+
+      <span
+        [ngClass]="{
+          'negative-text': remaining < 0
+        }"
+      >
+        {{ formatAmount(remaining) }} DH remaining
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- LOADING -->
+  <!-- ===================================================== -->
+
+  <div
+    class="details-loading"
+    *ngIf="loading"
+  >
+
+    <div class="spinner"></div>
+
+    <p>
+      Loading budget expenses...
+    </p>
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- ERROR -->
+  <!-- ===================================================== -->
+
+  <div
+    class="details-error"
+    *ngIf="!loading && errorMessage"
+  >
+
+    <i class="bi bi-exclamation-triangle"></i>
+
+    <span>
+      {{ errorMessage }}
+    </span>
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- STATISTICS -->
+  <!-- ===================================================== -->
+
+  <div
+    class="statistics-section"
+    *ngIf="!loading && !errorMessage"
+  >
+
+    <div class="section-title">
+
+      <div>
+
+        <h3>
+          Spending Statistics
+        </h3>
+
+        <p>
+          Overview of your spending for this budget
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="statistics-grid">
+
+      <!-- NUMBER OF EXPENSES -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          <i class="bi bi-receipt"></i>
+        </div>
+
+        <div>
+
+          <span>
+            TRANSACTIONS
+          </span>
+
+          <strong>
+            {{ totalExpenses }}
+          </strong>
+
+          <p>
+            Total expenses
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- AVERAGE -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          <i class="bi bi-calculator"></i>
+        </div>
+
+        <div>
+
+          <span>
+            AVERAGE
+          </span>
+
+          <strong>
+            {{ formatAmount(averageExpense) }}
+            <small>DH</small>
+          </strong>
+
+          <p>
+            Average expense
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- HIGHEST -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          <i class="bi bi-arrow-up-circle"></i>
+        </div>
+
+        <div>
+
+          <span>
+            HIGHEST EXPENSE
+          </span>
+
+          <strong>
+            {{ formatAmount(highestExpense) }}
+            <small>DH</small>
+          </strong>
+
+          <p>
+            {{ highestExpenseTitle || 'No expenses yet' }}
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- STATUS -->
+
+      <div class="stat-card">
+
+        <div
+          class="stat-icon"
+          [ngClass]="budgetStatusClass"
+        >
+          <i
+            class="bi"
+            [ngClass]="{
+              'bi-check-circle': budgetStatusClass === 'success',
+              'bi-exclamation-circle': budgetStatusClass === 'warning',
+              'bi-x-circle': budgetStatusClass === 'danger'
+            }"
+          ></i>
+        </div>
+
+        <div>
+
+          <span>
+            STATUS
+          </span>
+
+          <strong>
+            {{ budgetStatus }}
+          </strong>
+
+          <p>
+            Current budget status
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- EXPENSE LIST -->
+  <!-- ===================================================== -->
+
+  <div
+    class="expenses-section"
+    *ngIf="!loading && !errorMessage"
+  >
+
+    <div class="section-title">
+
+      <div>
+
+        <h3>
+          Budget Expenses
+        </h3>
+
+        <p>
+          Expenses related to {{ budget.category }}
+        </p>
+
+      </div>
+
+      <div class="expense-count">
+
+        {{ totalExpenses }}
+
+        <span>
+          {{ totalExpenses === 1 ? 'expense' : 'expenses' }}
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- EMPTY -->
+
+    <div
+      class="empty-expenses"
+      *ngIf="expenses.length === 0"
+    >
+
+      <div class="empty-icon">
+        <i class="bi bi-receipt"></i>
+      </div>
+
+      <h4>
+        No expenses yet
+      </h4>
+
+      <p>
+        There are no expenses for this category
+        during this budget period.
+      </p>
+
+    </div>
+
+
+    <!-- EXPENSES -->
+
+    <div
+      class="expense-list"
+      *ngIf="expenses.length > 0"
+    >
+
+      <div
+        class="expense-item"
+        *ngFor="let expense of expenses"
+      >
+
+        <div class="expense-left">
+
+          <div class="expense-icon">
+            <i class="bi bi-receipt"></i>
+          </div>
+
+          <div class="expense-info">
+
+            <h4>
+              {{ expense.title }}
+            </h4>
+
+            <span>
+              {{ formatDate(expense.date) }}
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="expense-right">
+
+          <strong>
+            -{{ formatAmount(expense.amount) }}
+            <small>DH</small>
+          </strong>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- FOOTER SUMMARY -->
+  <!-- ===================================================== -->
+
+  <div
+    class="budget-summary"
+    *ngIf="!loading && !errorMessage"
+  >
+
+    <div class="summary-icon">
+      <i class="bi bi-lightbulb"></i>
+    </div>
+
+    <div class="summary-content">
+
+      <strong>
+        Budget Summary
+      </strong>
+
+      <p *ngIf="percentage < 50">
+        You're doing well! You have used less than half
+        of your budget.
+      </p>
+
+      <p
+        *ngIf="
+          percentage >= 50 &&
+          percentage < 80
+        "
+      >
+        You're halfway through your budget.
+        Keep monitoring your spending.
+      </p>
+
+      <p
+        *ngIf="
+          percentage >= 80 &&
+          percentage < 100
+        "
+      >
+        You're getting close to your budget limit.
+        Consider reducing your spending.
+      </p>
+
+      <p *ngIf="percentage >= 100">
+        You have exceeded your budget limit.
+        Review your expenses to control your spending.
+      </p>
+
+    </div>
+
+  </div>
+
+</div>

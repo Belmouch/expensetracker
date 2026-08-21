@@ -1,5 +1,10 @@
 package com.ayoub.expensetracker.service;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.ayoub.expensetracker.dto.BudgetRequest;
 import com.ayoub.expensetracker.dto.BudgetResponse;
 import com.ayoub.expensetracker.entity.Budget;
@@ -11,11 +16,6 @@ import com.ayoub.expensetracker.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class BudgetService {
@@ -26,10 +26,12 @@ public class BudgetService {
 
 
     // =========================================================
-    // GET CURRENT USER BUDGETS BY USERNAME
+    // GET CURRENT USER BUDGETS
     // =========================================================
 
-    public List<BudgetResponse> getUserBudgetsByUsername(String username) {
+    public List<BudgetResponse> getUserBudgetsByUsername(
+            String username
+    ) {
 
         User user = getUserByUsername(username);
 
@@ -64,17 +66,20 @@ public class BudgetService {
                 .user(user)
                 .build();
 
-        Budget savedBudget = budgetRepository.save(budget);
+        Budget savedBudget =
+                budgetRepository.save(budget);
 
         return mapToResponse(savedBudget);
     }
 
 
     // =========================================================
-    // GET ALL USER BUDGETS BY ID
+    // GET BUDGETS BY USER ID
     // =========================================================
 
-    public List<BudgetResponse> getUserBudgets(Long userId) {
+    public List<BudgetResponse> getUserBudgets(
+            Long userId
+    ) {
 
         User user = getUser(userId);
 
@@ -89,7 +94,9 @@ public class BudgetService {
     // GET BUDGET BY ID
     // =========================================================
 
-    public BudgetResponse getBudgetById(Long id) {
+    public BudgetResponse getBudgetById(
+            Long id
+    ) {
 
         Budget budget = budgetRepository.findById(id)
                 .orElseThrow(() ->
@@ -126,7 +133,8 @@ public class BudgetService {
                 .user(user)
                 .build();
 
-        Budget savedBudget = budgetRepository.save(budget);
+        Budget savedBudget =
+                budgetRepository.save(budget);
 
         return mapToResponse(savedBudget);
     }
@@ -153,12 +161,24 @@ public class BudgetService {
                 request.getEndDate()
         );
 
-        budget.setAmount(request.getAmount());
-        budget.setCategory(request.getCategory());
-        budget.setStartDate(request.getStartDate());
-        budget.setEndDate(request.getEndDate());
+        budget.setAmount(
+                request.getAmount()
+        );
 
-        Budget updatedBudget = budgetRepository.save(budget);
+        budget.setCategory(
+                request.getCategory()
+        );
+
+        budget.setStartDate(
+                request.getStartDate()
+        );
+
+        budget.setEndDate(
+                request.getEndDate()
+        );
+
+        Budget updatedBudget =
+                budgetRepository.save(budget);
 
         return mapToResponse(updatedBudget);
     }
@@ -168,7 +188,9 @@ public class BudgetService {
     // DELETE BUDGET
     // =========================================================
 
-    public void deleteBudget(Long id) {
+    public void deleteBudget(
+            Long id
+    ) {
 
         Budget budget = budgetRepository.findById(id)
                 .orElseThrow(() ->
@@ -182,12 +204,15 @@ public class BudgetService {
 
 
     // =========================================================
-    // MAPPING
+    // MAP ENTITY → RESPONSE
     // =========================================================
 
-    private BudgetResponse mapToResponse(Budget budget) {
+    private BudgetResponse mapToResponse(
+            Budget budget
+    ) {
 
-        Double spent = calculateSpent(budget);
+        Double spent =
+                calculateSpent(budget);
 
         Double remaining =
                 budget.getAmount() - spent;
@@ -218,7 +243,9 @@ public class BudgetService {
     // CALCULATE SPENT
     // =========================================================
 
-    private Double calculateSpent(Budget budget) {
+    private Double calculateSpent(
+            Budget budget
+    ) {
 
         User user = budget.getUser();
 
@@ -233,12 +260,16 @@ public class BudgetService {
 
                 .filter(expense ->
                         !expense.getDate()
-                                .isBefore(budget.getStartDate())
+                                .isBefore(
+                                        budget.getStartDate()
+                                )
                 )
 
                 .filter(expense ->
                         !expense.getDate()
-                                .isAfter(budget.getEndDate())
+                                .isAfter(
+                                        budget.getEndDate()
+                                )
                 )
 
                 .filter(expense ->
@@ -248,7 +279,9 @@ public class BudgetService {
                                 )
                 )
 
-                .mapToDouble(Expense::getAmount)
+                .mapToDouble(
+                        Expense::getAmount
+                )
 
                 .sum();
     }
@@ -258,12 +291,16 @@ public class BudgetService {
     // GET USER BY ID
     // =========================================================
 
-    private User getUser(Long userId) {
+    private User getUser(
+            Long userId
+    ) {
 
-        return userRepository.findById(userId)
+        return userRepository
+                .findById(userId)
                 .orElseThrow(() ->
                         new RuntimeException(
-                                "User not found with id: " + userId
+                                "User not found with id: "
+                                        + userId
                         )
                 );
     }
@@ -273,12 +310,16 @@ public class BudgetService {
     // GET USER BY USERNAME
     // =========================================================
 
-    private User getUserByUsername(String username) {
+    private User getUserByUsername(
+            String username
+    ) {
 
-        return userRepository.findByUsername(username)
+        return userRepository
+                .findByUsername(username)
                 .orElseThrow(() ->
                         new RuntimeException(
-                                "User not found with username: " + username
+                                "User not found with username: "
+                                        + username
                         )
                 );
     }
@@ -292,6 +333,13 @@ public class BudgetService {
             LocalDate startDate,
             LocalDate endDate
     ) {
+
+        if (endDate == null || startDate == null) {
+
+            throw new IllegalArgumentException(
+                    "Start date and end date are required"
+            );
+        }
 
         if (endDate.isBefore(startDate)) {
 
