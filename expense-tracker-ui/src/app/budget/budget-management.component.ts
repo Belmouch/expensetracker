@@ -1,11 +1,6 @@
-import {
-  Component,
-  OnInit
-} from '@angular/core';
-
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import Swal from 'sweetalert2';
 
 import {
@@ -14,23 +9,17 @@ import {
 } from '../models/budget.model';
 
 import { BudgetService } from '../services/budget.service';
-
 import { BudgetDetailsComponent } from './budget-details/budget-details.component';
-
 
 @Component({
   selector: 'app-budget-management',
-
   standalone: true,
-
   imports: [
     CommonModule,
     FormsModule,
     BudgetDetailsComponent
   ],
-
   templateUrl: './budget-management.component.html',
-
   styleUrl: './budget-management.component.css'
 })
 export class BudgetManagementComponent implements OnInit {
@@ -42,11 +31,9 @@ export class BudgetManagementComponent implements OnInit {
   budgets: Budget[] = [];
 
   loading = false;
-
   saving = false;
 
   errorMessage = '';
-
   formError = '';
 
 
@@ -56,28 +43,32 @@ export class BudgetManagementComponent implements OnInit {
 
   selectedBudget: Budget | null = null;
 
+  showBudgetDetails = false;
 
-  /**
-   * Expose Math to the Angular template.
-   * Useful for Math.min() / Math.max().
-   */
+
+  // Expose Math to Angular template
   readonly Math = Math;
 
 
-  toggleBudgetDetails(budget: Budget): void {
+  // =========================================================
+  // OPEN BUDGET DETAILS
+  // =========================================================
 
-    if (this.selectedBudget?.id === budget.id) {
-
-      this.selectedBudget = null;
-
-      return;
-    }
+  openBudgetDetails(budget: Budget): void {
 
     this.selectedBudget = budget;
+
+    this.showBudgetDetails = true;
   }
 
 
+  // =========================================================
+  // CLOSE BUDGET DETAILS
+  // =========================================================
+
   closeBudgetDetails(): void {
+
+    this.showBudgetDetails = false;
 
     this.selectedBudget = null;
   }
@@ -88,59 +79,47 @@ export class BudgetManagementComponent implements OnInit {
   // =========================================================
 
   categories = [
-
     {
       name: 'Food',
       icon: 'bi-egg-fried'
     },
-
     {
       name: 'Shopping',
       icon: 'bi-bag'
     },
-
     {
       name: 'Coffee',
       icon: 'bi-cup-hot'
     },
-
     {
       name: 'Bills',
       icon: 'bi-receipt'
     },
-
     {
       name: 'Water',
       icon: 'bi-droplet'
     },
-
     {
       name: 'Entertainment',
       icon: 'bi-controller'
     },
-
     {
       name: 'Study',
       icon: 'bi-book'
     },
-
     {
       name: 'Transport',
       icon: 'bi-car-front'
     },
-
     {
       name: 'Health',
       icon: 'bi-heart-pulse'
     },
-
     {
       name: 'Other',
       icon: 'bi-three-dots'
     }
-
   ];
-
 
   categoryDropdownOpen = false;
 
@@ -148,7 +127,7 @@ export class BudgetManagementComponent implements OnInit {
 
 
   // =========================================================
-  // MODAL
+  // FORM MODAL
   // =========================================================
 
   showForm = false;
@@ -161,15 +140,10 @@ export class BudgetManagementComponent implements OnInit {
   // =========================================================
 
   budgetFormData: BudgetRequest = {
-
     amount: 0,
-
     category: '',
-
     startDate: '',
-
     endDate: ''
-
   };
 
 
@@ -236,7 +210,6 @@ export class BudgetManagementComponent implements OnInit {
 
     this.errorMessage = '';
 
-
     this.budgetService
       .getMyBudgets()
       .subscribe({
@@ -250,10 +223,8 @@ export class BudgetManagementComponent implements OnInit {
 
           this.budgets = data;
 
-          /*
-           * If the currently opened budget
-           * was deleted, close details.
-           */
+
+          // If selected budget no longer exists
           if (
             this.selectedBudget &&
             !this.budgets.some(
@@ -262,7 +233,7 @@ export class BudgetManagementComponent implements OnInit {
             )
           ) {
 
-            this.selectedBudget = null;
+            this.closeBudgetDetails();
           }
 
           this.loading = false;
@@ -303,25 +274,20 @@ export class BudgetManagementComponent implements OnInit {
 
   selectCategory(category: string): void {
 
-    this.budgetFormData.category =
-      category;
+    this.budgetFormData.category = category;
 
     this.formError = '';
 
+    this.categoryDropdownOpen = false;
 
     if (category === 'Other') {
 
       this.customCategory = '';
 
-      this.categoryDropdownOpen = false;
-
       return;
     }
 
-
     this.customCategory = '';
-
-    this.categoryDropdownOpen = false;
   }
 
 
@@ -338,9 +304,8 @@ export class BudgetManagementComponent implements OnInit {
           this.budgetFormData.category
       );
 
-
-    return selected?.icon
-      ?? 'bi-three-dots';
+    return selected?.icon ??
+      'bi-three-dots';
   }
 
 
@@ -358,19 +323,12 @@ export class BudgetManagementComponent implements OnInit {
 
     this.categoryDropdownOpen = false;
 
-
     this.budgetFormData = {
-
       amount: 0,
-
       category: '',
-
       startDate: '',
-
       endDate: ''
-
     };
-
 
     this.showForm = true;
   }
@@ -393,10 +351,6 @@ export class BudgetManagementComponent implements OnInit {
     this.categoryDropdownOpen = false;
 
 
-    /*
-     * Check if category is predefined.
-     */
-
     const predefinedCategory =
       this.categories.some(
         category =>
@@ -416,14 +370,9 @@ export class BudgetManagementComponent implements OnInit {
         startDate: budget.startDate,
 
         endDate: budget.endDate
-
       };
 
     } else {
-
-      /*
-       * Custom category.
-       */
 
       this.budgetFormData = {
 
@@ -434,9 +383,7 @@ export class BudgetManagementComponent implements OnInit {
         startDate: budget.startDate,
 
         endDate: budget.endDate
-
       };
-
 
       this.customCategory =
         budget.category;
@@ -454,10 +401,8 @@ export class BudgetManagementComponent implements OnInit {
   closeBudgetForm(): void {
 
     if (this.saving) {
-
       return;
     }
-
 
     this.showForm = false;
 
@@ -487,11 +432,6 @@ export class BudgetManagementComponent implements OnInit {
     let finalCategory =
       this.budgetFormData.category.trim();
 
-
-    /*
-     * If "Other" is selected,
-     * use the custom category.
-     */
 
     if (finalCategory === 'Other') {
 
@@ -555,7 +495,7 @@ export class BudgetManagementComponent implements OnInit {
 
 
     // =======================================================
-    // DATE ORDER
+    // DATE ORDER VALIDATION
     // =======================================================
 
     if (
@@ -587,7 +527,6 @@ export class BudgetManagementComponent implements OnInit {
 
       endDate:
         this.budgetFormData.endDate
-
     };
 
 
@@ -596,10 +535,6 @@ export class BudgetManagementComponent implements OnInit {
       request
     );
 
-
-    // =======================================================
-    // START SAVING
-    // =======================================================
 
     this.saving = true;
 
@@ -624,7 +559,6 @@ export class BudgetManagementComponent implements OnInit {
               updatedBudget
             );
 
-
             this.saving = false;
 
             this.closeBudgetForm();
@@ -647,9 +581,7 @@ export class BudgetManagementComponent implements OnInit {
               timer: 1800,
 
               showConfirmButton: false
-
             });
-
           },
 
 
@@ -660,17 +592,14 @@ export class BudgetManagementComponent implements OnInit {
               error
             );
 
-
             this.formError =
               error?.error?.message ||
               'Unable to update budget.';
-
 
             this.saving = false;
           }
 
         });
-
 
       return;
     }
@@ -690,7 +619,6 @@ export class BudgetManagementComponent implements OnInit {
             'Budget created:',
             createdBudget
           );
-
 
           this.saving = false;
 
@@ -714,9 +642,7 @@ export class BudgetManagementComponent implements OnInit {
             timer: 1800,
 
             showConfirmButton: false
-
           });
-
         },
 
 
@@ -727,11 +653,9 @@ export class BudgetManagementComponent implements OnInit {
             error
           );
 
-
           this.formError =
             error?.error?.message ||
             'Unable to create budget.';
-
 
           this.saving = false;
         }
@@ -822,7 +746,6 @@ export class BudgetManagementComponent implements OnInit {
     }).then((result) => {
 
       if (!result.isConfirmed) {
-
         return;
       }
 
@@ -833,16 +756,12 @@ export class BudgetManagementComponent implements OnInit {
 
           next: () => {
 
-            /*
-             * Close details if the deleted
-             * budget was currently selected.
-             */
-
+            // Close details if this budget was open
             if (
               this.selectedBudget?.id === id
             ) {
 
-              this.selectedBudget = null;
+              this.closeBudgetDetails();
             }
 
 
@@ -864,9 +783,7 @@ export class BudgetManagementComponent implements OnInit {
               timer: 1800,
 
               showConfirmButton: false
-
             });
-
           },
 
 
@@ -889,9 +806,7 @@ export class BudgetManagementComponent implements OnInit {
 
               confirmButtonColor:
                 '#dc3545'
-
             });
-
           }
 
         });

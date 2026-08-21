@@ -17,46 +17,48 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 25px;
 
-  margin-bottom: 28px;
+  gap: 20px;
+  margin-bottom: 24px;
 }
 
 .details-title {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 14px;
+
+  min-width: 0;
 }
 
 .details-icon {
-  width: 58px;
-  height: 58px;
+  width: 52px;
+  height: 52px;
 
-  border-radius: 16px;
-
-  background: var(--app-primary-soft);
-  color: var(--app-primary);
+  flex-shrink: 0;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  font-size: 24px;
+  border-radius: 12px;
 
-  flex-shrink: 0;
+  background: var(--app-primary-soft);
+  color: var(--app-primary);
+
+  font-size: 21px;
 }
 
 .details-eyebrow {
   display: block;
 
-  margin-bottom: 5px;
+  margin-bottom: 4px;
 
   color: var(--app-primary);
 
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 800;
 
-  letter-spacing: 1.8px;
+  letter-spacing: 1.6px;
 }
 
 .details-title h2 {
@@ -64,16 +66,18 @@
 
   color: var(--app-text);
 
-  font-size: 28px;
+  font-size: 25px;
   font-weight: 800;
+
+  line-height: 1.2;
 }
 
 .details-title p {
-  margin: 5px 0 0;
+  margin: 4px 0 0;
 
   color: var(--app-text-secondary);
 
-  font-size: 13px;
+  font-size: 12px;
 }
 
 
@@ -84,13 +88,14 @@
 .budget-status {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
 
-  padding: 9px 14px;
+  gap: 6px;
 
-  border-radius: 20px;
+  padding: 8px 12px;
 
-  font-size: 13px;
+  border-radius: 10px;
+
+  font-size: 12px;
   font-weight: 700;
 
   white-space: nowrap;
@@ -119,23 +124,22 @@
 .budget-overview {
   display: grid;
 
-  grid-template-columns:
-    repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr);
 
-  gap: 18px;
+  gap: 14px;
 
-  margin-bottom: 22px;
+  margin-bottom: 18px;
 }
 
 .overview-card {
   display: flex;
   align-items: center;
 
-  gap: 15px;
+  gap: 13px;
 
-  min-height: 125px;
+  min-height: 105px;
 
-  padding: 22px;
+  padding: 17px;
 
   box-sizing: border-box;
 
@@ -143,32 +147,32 @@
 
   border: 1px solid var(--app-border);
 
-  border-radius: 18px;
+  border-radius: 12px;
 
-  box-shadow: var(--app-shadow);
+  box-shadow: none;
 }
 
 .overview-icon {
-  width: 48px;
-  height: 48px;
-
-  border-radius: 14px;
+  width: 44px;
+  height: 44px;
 
   flex-shrink: 0;
-
-  background: var(--app-primary-soft);
-  color: var(--app-primary);
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  font-size: 20px;
+  border-radius: 11px;
+
+  background: var(--app-primary-soft);
+  color: var(--app-primary);
+
+  font-size: 18px;
 }
 
 .spent-icon {
-  background: rgba(71, 121, 232, 0.12);
-  color: var(--app-primary);
+  background: rgba(71, 121, 232, 0.10);
+  color: #4779e8;
 }
 
 .remaining-icon {
@@ -183,14 +187,14 @@
 .overview-label {
   display: block;
 
-  margin-bottom: 6px;
+  margin-bottom: 5px;
 
   color: var(--app-text-secondary);
 
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 800;
 
-  letter-spacing: 1.2px;
+  letter-spacing: 1.1px;
 }
 
 .overview-content strong {
@@ -198,29 +202,31 @@
 
   color: var(--app-text);
 
-  font-size: 25px;
+  font-size: 22px;
   font-weight: 800;
 
   line-height: 1.15;
+
+  white-space: nowrap;
 }
 
 .overview-content strong small {
   color: var(--app-primary);
 
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 800;
 }
 
 .overview-content p {
-  margin: 6px 0 0;
+  margin: 5px 0 0;
 
   color: var(--app-text-muted);
 
-  font-size: 12px;
+  font-size: 11px;
 }
 
-.overview-card.negative
-.overview-content strong {
+.overview-card.negative .overview-content strong,
+.overview-card.negative .overview-content strong small {
   color: var(--app-danger);
 }
 
@@ -234,13 +240,13 @@
 
   border: 1px solid var(--app-border);
 
-  border-radius: 18px;
+  border-radius: 12px;
 
-  padding: 24px;
+  padding: 20px;
 
-  margin-bottom: 22px;
+  margin-bottom: 18px;
 
-  box-shadow: var(--app-shadow);
+  box-shadow: none;
 }
 
 .progress-header {
@@ -248,9 +254,9 @@
   align-items: center;
   justify-content: space-between;
 
-  gap: 20px;
+  gap: 15px;
 
-  margin-bottom: 17px;
+  margin-bottom: 14px;
 }
 
 .progress-header h3 {
@@ -258,32 +264,34 @@
 
   color: var(--app-text);
 
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 800;
 }
 
 .progress-header p {
-  margin: 5px 0 0;
+  margin: 4px 0 0;
 
   color: var(--app-text-secondary);
 
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .progress-header > strong {
   color: var(--app-primary);
 
-  font-size: 22px;
+  font-size: 21px;
   font-weight: 800;
+
+  white-space: nowrap;
 }
 
 .progress-bar {
   width: 100%;
-  height: 11px;
+  height: 10px;
 
   background: var(--app-border);
 
-  border-radius: 20px;
+  border-radius: 6px;
 
   overflow: hidden;
 }
@@ -294,7 +302,7 @@
   min-width: 0;
   max-width: 100%;
 
-  border-radius: inherit;
+  border-radius: 6px;
 
   transition:
     width 0.5s ease,
@@ -318,17 +326,18 @@
   align-items: center;
   justify-content: space-between;
 
-  gap: 20px;
+  gap: 15px;
 
-  margin-top: 9px;
+  margin-top: 8px;
 
   color: var(--app-text-secondary);
 
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .progress-footer span:last-child {
   color: var(--app-primary);
+
   font-weight: 700;
 }
 
@@ -346,9 +355,9 @@
   align-items: center;
   justify-content: space-between;
 
-  gap: 20px;
+  gap: 15px;
 
-  margin-bottom: 18px;
+  margin-bottom: 15px;
 }
 
 .section-title h3 {
@@ -356,16 +365,16 @@
 
   color: var(--app-text);
 
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 800;
 }
 
 .section-title p {
-  margin: 5px 0 0;
+  margin: 4px 0 0;
 
   color: var(--app-text-secondary);
 
-  font-size: 13px;
+  font-size: 12px;
 }
 
 
@@ -374,7 +383,7 @@
    ========================================================= */
 
 .details-loading {
-  min-height: 180px;
+  min-height: 160px;
 
   display: flex;
   flex-direction: column;
@@ -382,7 +391,7 @@
   align-items: center;
   justify-content: center;
 
-  gap: 12px;
+  gap: 10px;
 
   color: var(--app-text-secondary);
 }
@@ -390,14 +399,14 @@
 .details-loading p {
   margin: 0;
 
-  font-size: 13px;
+  font-size: 12px;
 }
 
-.spinner {
-  width: 32px;
-  height: 32px;
+.details-spinner {
+  width: 28px;
+  height: 28px;
 
-  border: 4px solid var(--app-border);
+  border: 3px solid var(--app-border);
 
   border-top-color: var(--app-primary);
 
@@ -421,13 +430,13 @@
   display: flex;
   align-items: center;
 
-  gap: 10px;
+  gap: 9px;
 
-  padding: 14px 16px;
+  padding: 12px 14px;
 
-  margin-bottom: 22px;
+  margin-bottom: 18px;
 
-  border-radius: 12px;
+  border-radius: 10px;
 
   background: var(--app-danger-soft);
 
@@ -435,12 +444,13 @@
 
   color: var(--app-danger);
 
-  font-size: 13px;
+  font-size: 12px;
+
   font-weight: 600;
 }
 
 .details-error i {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 
@@ -453,58 +463,57 @@
 
   border: 1px solid var(--app-border);
 
-  border-radius: 18px;
+  border-radius: 12px;
 
-  padding: 24px;
+  padding: 20px;
 
-  margin-bottom: 22px;
+  margin-bottom: 18px;
 
-  box-shadow: var(--app-shadow);
+  box-shadow: none;
 }
 
 .statistics-grid {
   display: grid;
 
-  grid-template-columns:
-    repeat(4, 1fr);
+  grid-template-columns: repeat(4, 1fr);
 
-  gap: 14px;
+  gap: 10px;
 }
 
 .stat-card {
   display: flex;
   align-items: center;
 
-  gap: 13px;
-
-  padding: 17px;
+  gap: 10px;
 
   min-width: 0;
+
+  padding: 14px;
 
   background: var(--app-card-hover);
 
   border: 1px solid var(--app-border);
 
-  border-radius: 14px;
+  border-radius: 10px;
 }
 
 .stat-icon {
-  width: 42px;
-  height: 42px;
-
-  border-radius: 12px;
+  width: 38px;
+  height: 38px;
 
   flex-shrink: 0;
-
-  background: var(--app-primary-soft);
-
-  color: var(--app-primary);
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  font-size: 18px;
+  border-radius: 9px;
+
+  background: var(--app-primary-soft);
+
+  color: var(--app-primary);
+
+  font-size: 16px;
 }
 
 .stat-icon.success {
@@ -529,14 +538,14 @@
 .stat-card span {
   display: block;
 
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 
   color: var(--app-text-secondary);
 
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 800;
 
-  letter-spacing: 1px;
+  letter-spacing: 0.9px;
 }
 
 .stat-card strong {
@@ -544,7 +553,7 @@
 
   color: var(--app-text);
 
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 800;
 
   white-space: nowrap;
@@ -557,15 +566,15 @@
 .stat-card strong small {
   color: var(--app-primary);
 
-  font-size: 10px;
+  font-size: 9px;
 }
 
 .stat-card p {
-  margin: 4px 0 0;
+  margin: 3px 0 0;
 
   color: var(--app-text-muted);
 
-  font-size: 11px;
+  font-size: 10px;
 
   white-space: nowrap;
 
@@ -584,29 +593,31 @@
 
   border: 1px solid var(--app-border);
 
-  border-radius: 18px;
+  border-radius: 12px;
 
-  padding: 24px;
+  padding: 20px;
 
-  margin-bottom: 22px;
+  margin-bottom: 18px;
 
-  box-shadow: var(--app-shadow);
+  box-shadow: none;
 }
 
 .expense-count {
   display: inline-flex;
   align-items: center;
+
   gap: 5px;
 
-  padding: 7px 12px;
+  padding: 6px 10px;
 
-  border-radius: 20px;
+  border-radius: 10px;
 
   background: var(--app-primary-soft);
 
   color: var(--app-primary);
 
-  font-size: 12px;
+  font-size: 11px;
+
   font-weight: 800;
 }
 
@@ -623,7 +634,7 @@
   display: flex;
   flex-direction: column;
 
-  gap: 9px;
+  gap: 7px;
 }
 
 .expense-item {
@@ -631,54 +642,51 @@
   align-items: center;
   justify-content: space-between;
 
-  gap: 20px;
+  gap: 15px;
 
-  padding: 13px 15px;
+  padding: 11px 13px;
 
   border: 1px solid var(--app-border);
 
-  border-radius: 12px;
+  border-radius: 9px;
 
   background: var(--app-card-hover);
 
   transition:
     background-color 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease;
+    border-color 0.2s ease;
 }
 
 .expense-item:hover {
   border-color: var(--app-primary);
-
-  transform: translateY(-1px);
 }
 
 .expense-left {
   display: flex;
   align-items: center;
 
-  gap: 12px;
+  gap: 10px;
 
   min-width: 0;
 }
 
 .expense-icon {
-  width: 40px;
-  height: 40px;
-
-  border-radius: 11px;
+  width: 36px;
+  height: 36px;
 
   flex-shrink: 0;
-
-  background: var(--app-primary-soft);
-
-  color: var(--app-primary);
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  font-size: 16px;
+  border-radius: 9px;
+
+  background: var(--app-primary-soft);
+
+  color: var(--app-primary);
+
+  font-size: 15px;
 }
 
 .expense-info {
@@ -686,11 +694,11 @@
 }
 
 .expense-info h4 {
-  margin: 0 0 4px;
+  margin: 0 0 3px;
 
   color: var(--app-text);
 
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
 
   white-space: nowrap;
@@ -703,7 +711,7 @@
 .expense-info span {
   color: var(--app-text-muted);
 
-  font-size: 11px;
+  font-size: 10px;
 }
 
 .expense-right {
@@ -713,12 +721,12 @@
 .expense-right strong {
   color: var(--app-danger);
 
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 800;
 }
 
 .expense-right small {
-  font-size: 10px;
+  font-size: 9px;
 }
 
 
@@ -727,24 +735,24 @@
    ========================================================= */
 
 .empty-expenses {
-  padding: 45px 20px;
+  padding: 35px 18px;
 
   text-align: center;
 
   border: 1px dashed var(--app-border);
 
-  border-radius: 14px;
+  border-radius: 10px;
 
   background: var(--app-card-hover);
 }
 
 .empty-icon {
-  width: 55px;
-  height: 55px;
+  width: 48px;
+  height: 48px;
 
-  margin: 0 auto 14px;
+  margin: 0 auto 12px;
 
-  border-radius: 15px;
+  border-radius: 11px;
 
   background: var(--app-primary-soft);
 
@@ -754,7 +762,7 @@
   align-items: center;
   justify-content: center;
 
-  font-size: 22px;
+  font-size: 20px;
 }
 
 .empty-expenses h4 {
@@ -762,18 +770,19 @@
 
   color: var(--app-text);
 
-  font-size: 17px;
+  font-size: 16px;
+
   font-weight: 800;
 }
 
 .empty-expenses p {
-  max-width: 430px;
+  max-width: 400px;
 
-  margin: 7px auto 0;
+  margin: 6px auto 0;
 
   color: var(--app-text-secondary);
 
-  font-size: 13px;
+  font-size: 12px;
 
   line-height: 1.5;
 }
@@ -787,9 +796,9 @@
   display: flex;
   align-items: flex-start;
 
-  gap: 14px;
+  gap: 12px;
 
-  padding: 18px 20px;
+  padding: 15px 17px;
 
   margin-bottom: 10px;
 
@@ -797,16 +806,16 @@
 
   border: 1px solid var(--app-border);
 
-  border-radius: 15px;
+  border-radius: 10px;
 }
 
 .summary-icon {
-  width: 40px;
-  height: 40px;
-
-  border-radius: 11px;
+  width: 36px;
+  height: 36px;
 
   flex-shrink: 0;
+
+  border-radius: 9px;
 
   background: var(--app-card);
 
@@ -816,7 +825,7 @@
   align-items: center;
   justify-content: center;
 
-  font-size: 17px;
+  font-size: 15px;
 }
 
 .summary-content strong {
@@ -824,41 +833,111 @@
 
   color: var(--app-text);
 
-  font-size: 14px;
+  font-size: 13px;
+
   font-weight: 800;
 }
 
 .summary-content p {
-  margin: 5px 0 0;
+  margin: 4px 0 0;
 
   color: var(--app-text-secondary);
 
-  font-size: 12px;
+  font-size: 11px;
 
   line-height: 1.5;
 }
 
 
 /* =========================================================
-   DARK MODE — EXTRA REFINEMENT
+   DARK MODE
    ========================================================= */
 
-body.dark-theme .budget-status.warning {
-  background: rgba(217, 154, 25, 0.15);
+/*
+   IMPORTANT:
+   No hard-coded navy backgrounds here.
+   Everything uses the application's theme variables.
+*/
+
+:host-context(.dark-theme) .budget-details {
+  color: var(--app-text);
+}
+
+:host-context(.dark-theme) .overview-card,
+:host-context(.dark-theme) .progress-section,
+:host-context(.dark-theme) .statistics-section,
+:host-context(.dark-theme) .expenses-section {
+  background: var(--app-card);
+
+  border-color: var(--app-border);
+
+  color: var(--app-text);
+}
+
+:host-context(.dark-theme) .stat-card,
+:host-context(.dark-theme) .expense-item {
+  background: var(--app-card-hover);
+
+  border-color: var(--app-border);
+}
+
+:host-context(.dark-theme) .empty-expenses {
+  background: var(--app-card-hover);
+
+  border-color: var(--app-border);
+}
+
+:host-context(.dark-theme) .overview-icon,
+:host-context(.dark-theme) .stat-icon,
+:host-context(.dark-theme) .expense-icon {
+  background: var(--app-primary-soft);
+
+  color: var(--app-primary);
+}
+
+:host-context(.dark-theme) .spent-icon {
+  background: rgba(71, 121, 232, 0.12);
+
+  color: #60a5fa;
+}
+
+:host-context(.dark-theme) .budget-status.warning,
+:host-context(.dark-theme) .stat-icon.warning {
+  background: rgba(217, 154, 25, 0.12);
+
   color: #e7b94d;
 }
 
-body.dark-theme .stat-icon.warning {
-  background: rgba(217, 154, 25, 0.15);
-  color: #e7b94d;
-}
+:host-context(.dark-theme) .budget-status.danger,
+:host-context(.dark-theme) .stat-icon.danger {
+  background: var(--app-danger-soft);
 
-body.dark-theme .spent-icon {
-  background: rgba(71, 121, 232, 0.15);
-}
-
-body.dark-theme .expense-right strong {
   color: var(--app-danger);
+}
+
+:host-context(.dark-theme)
+.overview-card.negative
+.overview-content strong,
+:host-context(.dark-theme)
+.overview-card.negative
+.overview-content strong small {
+  color: var(--app-danger);
+}
+
+:host-context(.dark-theme) .expense-right strong {
+  color: var(--app-danger);
+}
+
+:host-context(.dark-theme) .budget-summary {
+  background: var(--app-primary-soft);
+
+  border-color: var(--app-border);
+}
+
+:host-context(.dark-theme) .summary-icon {
+  background: var(--app-card);
+
+  color: var(--app-primary);
 }
 
 
@@ -873,10 +952,8 @@ body.dark-theme .expense-right strong {
   }
 
   .statistics-grid {
-    grid-template-columns:
-      repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
-
 }
 
 
@@ -899,7 +976,7 @@ body.dark-theme .expense-right strong {
   }
 
   .progress-header > strong {
-    font-size: 20px;
+    font-size: 19px;
   }
 
   .statistics-grid {
@@ -913,7 +990,6 @@ body.dark-theme .expense-right strong {
 
     gap: 4px;
   }
-
 }
 
 
@@ -924,28 +1000,28 @@ body.dark-theme .expense-right strong {
   }
 
   .details-icon {
-    width: 48px;
-    height: 48px;
+    width: 46px;
+    height: 46px;
 
-    font-size: 19px;
+    font-size: 18px;
   }
 
   .details-title h2 {
-    font-size: 23px;
+    font-size: 22px;
   }
 
   .progress-section,
   .statistics-section,
   .expenses-section {
-    padding: 18px;
+    padding: 16px;
   }
 
   .overview-card {
-    padding: 18px;
+    padding: 15px;
   }
 
   .overview-content strong {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   .section-title {
@@ -955,11 +1031,10 @@ body.dark-theme .expense-right strong {
   }
 
   .expense-item {
-    padding: 11px;
+    padding: 10px;
   }
 
   .expense-right strong {
     font-size: 13px;
   }
-
 }
