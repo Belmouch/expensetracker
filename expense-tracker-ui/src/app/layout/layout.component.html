@@ -134,6 +134,17 @@
 
             </a>
 
+            <!-- RECURRING EXPENSES -->
+            <a routerLink="/recurring-expenses" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+                class="menu-item">
+
+                <i class="bi bi-arrow-repeat"></i>
+
+                <span *ngIf="sidebarOpen">
+                    Recurring Expenses
+                </span>
+
+            </a>
 
 
             <!-- ADD EXPENSE -->

@@ -12,6 +12,12 @@ import { MonthlyDetailsComponent } from './expenses/monthly-details/monthly-deta
 
 import { LayoutComponent } from './layout/layout.component';
 import { BudgetManagementComponent } from './budget/budget-management.component';
+import { RecurringExpensesComponent }
+    from './recurring-expenses/recurring-expenses.component';
+import { AddRecurringExpenseComponent }
+  from './recurring-expenses/add-recurring-expense/add-recurring-expense.component';
+
+
 
 export const routes: Routes = [
 
@@ -113,6 +119,21 @@ export const routes: Routes = [
             {
                 path: 'budget',
                 component: BudgetManagementComponent
+            },
+ 
+            // =========================
+            // reccurring expenses
+            // =========================
+
+
+            {
+                path: 'recurring-expenses',
+                component: RecurringExpensesComponent
+            },
+
+            {
+                path: 'recurring-expenses/add',
+                component: AddRecurringExpenseComponent
             }
 
         ]

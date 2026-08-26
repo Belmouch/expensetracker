@@ -1,0 +1,347 @@
+<div class="recurring-page">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+    <div class="page-header">
+
+        <div>
+            <h1>Recurring Expenses</h1>
+            <p>Manage your recurring transactions</p>
+        </div>
+
+        <a routerLink="/recurring-expenses/add" class="add-button">
+
+            <i class="bi bi-plus-lg"></i>
+
+            Add Recurring
+
+        </a>
+
+    </div>
+    <div class="page-header">
+
+        <div class="header-info">
+
+            <div class="header-icon">
+                <i class="bi bi-arrow-repeat"></i>
+            </div>
+
+            <div>
+
+                <h1>
+                    Recurring Expenses
+                </h1>
+
+                <p>
+                    Manage your automatic recurring expenses
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+
+    </div>
+    <!-- =========================
+     RECURRING SUMMARY
+========================= -->
+
+    <div class="recurring-summary">
+
+        <!-- TOTAL -->
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                <i class="bi bi-arrow-repeat"></i>
+            </div>
+
+            <div class="summary-content">
+                <span class="summary-label">
+                    Total Recurring
+                </span>
+
+                <strong>
+                    {{ totalRecurringAmount | number:'1.2-2' }} DH
+                </strong>
+
+                <small>
+                    All recurring expenses
+                </small>
+            </div>
+
+        </div>
+
+
+        <!-- ACTIVE -->
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                <i class="bi bi-check-circle"></i>
+            </div>
+
+            <div class="summary-content">
+                <span class="summary-label">
+                    Active
+                </span>
+
+                <strong>
+                    {{ activeRecurringCount }}
+                </strong>
+
+                <small>
+                    Active recurring expenses
+                </small>
+            </div>
+
+        </div>
+
+
+        <!-- MONTHLY -->
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                <i class="bi bi-calendar-month"></i>
+            </div>
+
+            <div class="summary-content">
+                <span class="summary-label">
+                    Monthly Commitment
+                </span>
+
+                <strong>
+                    {{ monthlyCommitment | number:'1.2-2' }} DH
+                </strong>
+
+                <small>
+                    Estimated monthly cost
+                </small>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         LOADING
+    ========================== -->
+
+    <div class="loading-container" *ngIf="loading">
+
+        <div class="spinner"></div>
+
+        <p>
+            Loading recurring expenses...
+        </p>
+
+    </div>
+
+
+    <!-- =========================
+         EMPTY
+    ========================== -->
+
+    <div class="empty-state" *ngIf="
+            !loading &&
+            recurringExpenses.length === 0
+        ">
+
+        <div class="empty-icon">
+
+            <i class="bi bi-arrow-repeat"></i>
+
+        </div>
+
+        <h2>
+            No recurring expenses
+        </h2>
+
+        <p>
+            You don't have any recurring expenses yet.
+        </p>
+
+        <a routerLink="/recurring-expenses/add" class="add-button">
+
+            <i class="bi bi-plus-lg"></i>
+
+            Add Recurring Expense
+
+        </a>
+
+    </div>
+
+
+    <!-- =========================
+         LIST
+    ========================== -->
+
+    <div class="recurring-list" *ngIf="
+            !loading &&
+            recurringExpenses.length > 0
+        ">
+
+        <div class="recurring-card" *ngFor="
+                let expense of recurringExpenses
+            ">
+
+
+            <!-- TOP -->
+
+            <div class="card-top">
+
+                <div class="expense-main">
+
+                    <div class="expense-icon">
+
+                        <i class="bi bi-arrow-repeat"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            {{ expense.title }}
+                        </h3>
+
+                        <span class="category">
+                            {{ expense.category }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="status" [class.active]="expense.active" [class.paused]="!expense.active">
+
+                    <span></span>
+
+                    {{
+                    expense.active
+                    ? 'Active'
+                    : 'Paused'
+                    }}
+
+                </div>
+
+            </div>
+
+
+            <!-- DETAILS -->
+
+            <div class="card-details">
+
+
+                <div class="detail">
+
+                    <small>
+                        Amount
+                    </small>
+
+                    <strong>
+                        {{ expense.amount | number:'1.2-2' }}
+                        DH
+                    </strong>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <small>
+                        Frequency
+                    </small>
+
+                    <strong>
+                        {{
+                        formatFrequency(
+                        expense.frequency
+                        )
+                        }}
+                    </strong>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <small>
+                        Start Date
+                    </small>
+
+                    <strong>
+                        {{ expense.startDate }}
+                    </strong>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <small>
+                        Next Run
+                    </small>
+
+                    <strong>
+                        {{ expense.nextRunDate }}
+                    </strong>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <small>
+                        End Date
+                    </small>
+
+                    <strong>
+                        {{ expense.endDate }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="card-actions">
+
+                <button type="button" class="toggle-button" [class.pause]="expense.active"
+                    [class.resume]="!expense.active" (click)="toggleExpense(expense)">
+
+                    <i class="bi" [ngClass]="
+                            expense.active
+                                ? 'bi-pause-fill'
+                                : 'bi-play-fill'
+                        ">
+                    </i>
+
+                    {{
+                    expense.active
+                    ? 'Pause'
+                    : 'Resume'
+                    }}
+
+                </button>
+
+
+                <button type="button" class="delete-button" (click)="deleteExpense(expense)">
+
+                    <i class="bi bi-trash3"></i>
+
+                    Delete
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

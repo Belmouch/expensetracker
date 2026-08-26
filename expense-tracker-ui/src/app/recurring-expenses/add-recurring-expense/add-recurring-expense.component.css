@@ -1,0 +1,1002 @@
+/* =========================================================
+   ADD RECURRING EXPENSE
+   ========================================================= */
+
+.add-recurring-page {
+  width: 100%;
+  min-height: 100%;
+  box-sizing: border-box;
+
+  padding: 32px 40px 50px;
+
+  background: var(--app-bg);
+  color: var(--app-text);
+}
+
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 25px;
+  margin-bottom: 28px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+
+  gap: 15px;
+
+  min-width: 0;
+}
+
+.header-icon {
+  width: 58px;
+  height: 58px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 16px;
+
+  background: var(--app-primary-soft);
+  color: var(--app-primary);
+
+  font-size: 24px;
+}
+
+.eyebrow {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: var(--app-primary);
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 1.7px;
+}
+
+.page-header h1 {
+  margin: 0;
+
+  color: var(--app-text);
+
+  font-size: 30px;
+  font-weight: 800;
+
+  line-height: 1.2;
+}
+
+.page-header p {
+  margin: 6px 0 0;
+
+  color: var(--app-text-secondary);
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   BACK BUTTON
+   ========================================================= */
+
+.back-button {
+  flex-shrink: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  min-height: 42px;
+
+  padding: 0 16px;
+
+  border: 1px solid var(--app-border);
+  border-radius: 10px;
+
+  background: var(--app-card);
+
+  color: var(--app-text-secondary);
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.back-button i {
+  font-size: 14px;
+}
+
+.back-button:hover {
+  background: var(--app-card-hover);
+
+  border-color: var(--app-primary);
+
+  color: var(--app-primary);
+
+  transform: translateX(-1px);
+}
+
+
+/* =========================================================
+   FORM CARD
+   ========================================================= */
+
+.form-card {
+  width: 100%;
+  max-width: 850px;
+
+  box-sizing: border-box;
+
+  margin: 0 auto;
+
+  padding: 30px;
+
+  background: var(--app-card);
+
+  border: 1px solid var(--app-border);
+
+  border-radius: 18px;
+
+  box-shadow: var(--app-shadow);
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.form-group {
+  margin-bottom: 22px;
+}
+
+.form-group label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  margin-bottom: 8px;
+
+  color: var(--app-text);
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.optional {
+  color: var(--app-text-muted);
+
+  font-size: 10px;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   INPUT WRAPPER
+   ========================================================= */
+
+.input-wrapper {
+  position: relative;
+
+  width: 100%;
+}
+
+.input-wrapper > i:first-child {
+  position: absolute;
+
+  left: 15px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  color: var(--app-text-muted);
+
+  font-size: 16px;
+
+  pointer-events: none;
+
+  z-index: 2;
+}
+
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+.input-wrapper input,
+.input-wrapper select {
+  width: 100%;
+  height: 52px;
+
+  box-sizing: border-box;
+
+  padding: 0 15px 0 45px;
+
+  border: 1px solid var(--app-border);
+
+  border-radius: 10px;
+
+  background: var(--app-input);
+
+  color: var(--app-text);
+
+  font-family: inherit;
+  font-size: 14px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.input-wrapper input::placeholder {
+  color: var(--app-text-muted);
+}
+
+.input-wrapper input:hover,
+.input-wrapper select:hover {
+  border-color: var(--app-primary);
+}
+
+.input-wrapper input:focus,
+.input-wrapper select:focus {
+  border-color: var(--app-primary);
+
+  box-shadow:
+    0 0 0 3px rgba(22, 139, 89, 0.10);
+}
+
+
+/* =========================================================
+   NUMBER INPUT
+   ========================================================= */
+
+.amount-wrapper input {
+  padding-right: 65px;
+}
+
+.currency {
+  position: absolute;
+
+  right: 15px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  color: var(--app-primary);
+
+  font-size: 11px;
+  font-weight: 800;
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   SELECT
+   ========================================================= */
+
+.select-wrapper select {
+  appearance: none;
+  -webkit-appearance: none;
+
+  cursor: pointer;
+
+  padding-right: 45px;
+}
+
+.select-arrow {
+  position: absolute;
+
+  right: 16px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  color: var(--app-primary);
+
+  font-size: 12px;
+
+  pointer-events: none;
+}
+
+.select-wrapper select option {
+  background: var(--app-card);
+
+  color: var(--app-text);
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   DATE INPUT
+   ========================================================= */
+
+.input-wrapper input[type="date"] {
+  padding-right: 14px;
+}
+
+.input-wrapper input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+
+  opacity: 0.65;
+}
+
+
+/* =========================================================
+   FIELD ERROR
+   ========================================================= */
+
+.field-error {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  margin-top: 7px;
+
+  color: var(--app-danger);
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.field-error i {
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   HELPER TEXT
+   ========================================================= */
+
+.helper-text {
+  display: block;
+
+  margin-top: 7px;
+
+  color: var(--app-text-muted);
+
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   FREQUENCY
+   ========================================================= */
+
+.frequency-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 10px;
+}
+
+.frequency-option {
+  position: relative;
+
+  min-height: 82px;
+
+  padding: 12px;
+
+  border: 1px solid var(--app-border);
+
+  border-radius: 11px;
+
+  background: var(--app-input);
+
+  color: var(--app-text);
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  font-family: inherit;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.frequency-option:hover {
+  border-color: var(--app-primary);
+
+  background: var(--app-primary-soft);
+
+  transform: translateY(-1px);
+}
+
+.frequency-option.selected {
+  border-color: var(--app-primary);
+
+  background: var(--app-primary-soft);
+
+  color: var(--app-primary);
+
+  box-shadow:
+    0 0 0 1px var(--app-primary);
+}
+
+
+/* =========================================================
+   FREQUENCY ICON
+   ========================================================= */
+
+.frequency-icon {
+  width: 38px;
+  height: 38px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: var(--app-card);
+
+  color: var(--app-primary);
+
+  font-size: 16px;
+}
+
+.frequency-option.selected .frequency-icon {
+  background: var(--app-primary);
+
+  color: #ffffff;
+}
+
+
+/* =========================================================
+   FREQUENCY CONTENT
+   ========================================================= */
+
+.frequency-content {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.frequency-content strong {
+  color: var(--app-text);
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.frequency-option.selected
+.frequency-content strong {
+  color: var(--app-primary);
+}
+
+.frequency-content small {
+  color: var(--app-text-muted);
+
+  font-size: 9px;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   SELECTED CHECK
+   ========================================================= */
+
+.selected-check {
+  position: absolute;
+
+  top: 7px;
+  right: 7px;
+
+  color: var(--app-primary);
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   DATE GRID
+   ========================================================= */
+
+.date-grid {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 15px;
+}
+
+
+/* =========================================================
+   INFO BOX
+   ========================================================= */
+
+.info-box {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 12px;
+
+  padding: 15px 16px;
+
+  margin-top: 4px;
+
+  border: 1px solid var(--app-border);
+
+  border-radius: 11px;
+
+  background: var(--app-primary-soft);
+}
+
+.info-icon {
+  width: 34px;
+  height: 34px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: var(--app-card);
+
+  color: var(--app-primary);
+
+  font-size: 15px;
+}
+
+.info-content {
+  min-width: 0;
+}
+
+.info-content strong {
+  display: block;
+
+  color: var(--app-text);
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.info-content p {
+  margin: 4px 0 0;
+
+  color: var(--app-text-secondary);
+
+  font-size: 11px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   FORM ACTIONS
+   ========================================================= */
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  margin-top: 28px;
+  padding-top: 20px;
+
+  border-top: 1px solid var(--app-border);
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.cancel-button,
+.save-button {
+  min-height: 44px;
+
+  padding: 0 18px;
+
+  border-radius: 9px;
+
+  font-family: inherit;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+
+/* =========================================================
+   CANCEL
+   ========================================================= */
+
+.cancel-button {
+  border: 1px solid var(--app-border);
+
+  background: transparent;
+
+  color: var(--app-text-secondary);
+}
+
+.cancel-button:hover {
+  background: var(--app-card-hover);
+
+  border-color: var(--app-text-secondary);
+
+  color: var(--app-text);
+}
+
+
+/* =========================================================
+   SAVE
+   ========================================================= */
+
+.save-button {
+  min-width: 190px;
+
+  border: none;
+
+  background: var(--app-primary);
+
+  color: #ffffff;
+}
+
+.save-button:hover:not(:disabled) {
+  background: var(--app-primary-dark);
+
+  transform: translateY(-1px);
+}
+
+.save-button:disabled {
+  opacity: 0.55;
+
+  cursor: not-allowed;
+
+  transform: none;
+}
+
+
+/* =========================================================
+   BUTTON SPINNER
+   ========================================================= */
+
+.button-spinner {
+  width: 14px;
+  height: 14px;
+
+  border: 2px solid rgba(255, 255, 255, 0.4);
+
+  border-top-color: #ffffff;
+
+  border-radius: 50%;
+
+  animation: recurringSpinner 0.7s linear infinite;
+}
+
+@keyframes recurringSpinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =========================================================
+   DARK MODE
+   ========================================================= */
+
+body.dark-theme .add-recurring-page {
+  background: #081638;
+
+  color: #ffffff;
+}
+
+
+/* Main form */
+
+body.dark-theme .form-card {
+  background: #0f172a;
+
+  border-color: #334155;
+
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+
+/* Back button */
+
+body.dark-theme .back-button {
+  background: #0f172a;
+
+  border-color: #334155;
+
+  color: #94a3b8;
+}
+
+body.dark-theme .back-button:hover {
+  background: #172033;
+
+  border-color: #4779e8;
+
+  color: #6f9aff;
+}
+
+
+/* Inputs */
+
+body.dark-theme .input-wrapper input,
+body.dark-theme .input-wrapper select {
+  background: #111c32;
+
+  border-color: #334155;
+
+  color: #e5e7eb;
+}
+
+body.dark-theme .input-wrapper input::placeholder {
+  color: #64748b;
+}
+
+body.dark-theme .input-wrapper input:hover,
+body.dark-theme .input-wrapper select:hover {
+  border-color: #4779e8;
+}
+
+body.dark-theme .input-wrapper input:focus,
+body.dark-theme .input-wrapper select:focus {
+  border-color: #4779e8;
+
+  box-shadow:
+    0 0 0 3px rgba(71, 121, 232, 0.12);
+}
+
+
+/* Select options */
+
+body.dark-theme .input-wrapper select option {
+  background: #0f172a;
+
+  color: #e5e7eb;
+}
+
+
+/* Frequency */
+
+body.dark-theme .frequency-option {
+  background: #111c32;
+
+  border-color: #334155;
+}
+
+body.dark-theme .frequency-option:hover {
+  background: #172f62;
+
+  border-color: #4779e8;
+}
+
+body.dark-theme .frequency-option.selected {
+  background: rgba(71, 121, 232, 0.12);
+
+  border-color: #4779e8;
+
+  color: #6f9aff;
+
+  box-shadow:
+    0 0 0 1px #4779e8;
+}
+
+body.dark-theme .frequency-option.selected
+.frequency-content strong {
+  color: #6f9aff;
+}
+
+body.dark-theme .frequency-icon {
+  background: #172033;
+
+  color: #6f9aff;
+}
+
+body.dark-theme .frequency-option.selected
+.frequency-icon {
+  background: #4779e8;
+
+  color: #ffffff;
+}
+
+body.dark-theme .selected-check {
+  color: #6f9aff;
+}
+
+
+/* Info */
+
+body.dark-theme .info-box {
+  background: rgba(71, 121, 232, 0.09);
+
+  border-color: #334155;
+}
+
+body.dark-theme .info-icon {
+  background: #172033;
+
+  color: #6f9aff;
+}
+
+
+/* Cancel */
+
+body.dark-theme .cancel-button {
+  background: transparent;
+
+  border-color: #334155;
+
+  color: #94a3b8;
+}
+
+body.dark-theme .cancel-button:hover {
+  background: #172033;
+
+  border-color: #475569;
+
+  color: #e5e7eb;
+}
+
+
+/* Calendar */
+
+:host-context(.dark-theme) input[type="date"] {
+  color-scheme: dark;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+  .add-recurring-page {
+    padding: 25px;
+  }
+
+  .frequency-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+}
+
+
+@media (max-width: 700px) {
+
+  .add-recurring-page {
+    padding: 20px 15px 35px;
+  }
+
+  .page-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .back-button {
+    width: 100%;
+  }
+
+  .form-card {
+    padding: 22px 18px;
+
+    border-radius: 14px;
+  }
+
+  .date-grid {
+    grid-template-columns: 1fr;
+
+    gap: 0;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+
+    align-items: stretch;
+  }
+
+  .cancel-button,
+  .save-button {
+    width: 100%;
+  }
+
+}
+
+
+@media (max-width: 500px) {
+
+  .header-left {
+    align-items: flex-start;
+  }
+
+  .header-icon {
+    width: 48px;
+    height: 48px;
+
+    border-radius: 12px;
+
+    font-size: 20px;
+  }
+
+  .page-header h1 {
+    font-size: 24px;
+  }
+
+  .page-header p {
+    font-size: 11px;
+  }
+
+  .frequency-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .frequency-option {
+    min-height: 68px;
+  }
+
+  .info-box {
+    padding: 13px;
+  }
+
+}

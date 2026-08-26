@@ -6,6 +6,9 @@ import { Expense } from '../models/expense';
 import { PageResponse } from '../models/page-response';
 import { CreateExpenseRequest } from '../models/create-expense-request';
 import { ExpenseStatisticsResponse } from '../models/expense-statistics-response';
+import { RecurringExpense } from '../models/recurring-expense';
+import { CreateRecurringExpenseRequest } from '../models/create-recurring-expense-request';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -166,6 +169,60 @@ getExpensesByMonth(
     `${this.api}/monthly/${year}/${month}`
   );
 
+}
+// =========================
+// RECURRING EXPENSES
+// =========================
+
+getRecurringExpenses(): Observable<RecurringExpense[]> {
+
+  return this.http.get<RecurringExpense[]>(
+    `${this.api}/recurring-expenses`
+  );
+}
+
+
+// =========================
+// CREATE RECURRING EXPENSE
+// =========================
+
+createRecurringExpense(
+  request: CreateRecurringExpenseRequest
+): Observable<RecurringExpense> {
+
+  return this.http.post<RecurringExpense>(
+    `${this.api}/recurring-expenses`,
+    request
+  );
+}
+
+
+// =========================
+// TOGGLE RECURRING EXPENSE
+// =========================
+
+toggleRecurringExpense(
+  id: number
+): Observable<RecurringExpense> {
+
+  return this.http.put<RecurringExpense>(
+    `${this.api}/recurring-expenses/${id}/toggle`,
+    {}
+  );
+}
+
+
+// =========================
+// DELETE RECURRING EXPENSE
+// =========================
+
+deleteRecurringExpense(
+  id: number
+): Observable<void> {
+
+  return this.http.delete<void>(
+    `${this.api}/recurring-expenses/${id}`
+  );
 }
 
 
