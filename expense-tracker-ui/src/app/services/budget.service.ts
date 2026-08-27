@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { Budget } from '../models/budget.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BudgetService {
 
-  private api = 'http://localhost:8080/budgets';
+  private api = `${environment.apiUrl}/budgets`;
 
   constructor(private http: HttpClient) {}
 
@@ -18,7 +19,6 @@ export class BudgetService {
   // =========================
 
   getMyBudgets(): Observable<Budget[]> {
-
     return this.http.get<Budget[]>(
       `${this.api}/me`
     );
@@ -29,7 +29,6 @@ export class BudgetService {
   // =========================
 
   getBudgetById(id: number): Observable<Budget> {
-
     return this.http.get<Budget>(
       `${this.api}/${id}`
     );
@@ -39,10 +38,7 @@ export class BudgetService {
   // CREATE MY BUDGET
   // =========================
 
-  createBudget(
-    budget: any
-  ): Observable<Budget> {
-
+  createBudget(budget: any): Observable<Budget> {
     return this.http.post<Budget>(
       `${this.api}/me`,
       budget
@@ -68,10 +64,7 @@ export class BudgetService {
   // DELETE
   // =========================
 
-  deleteBudget(
-    id: number
-  ): Observable<void> {
-
+  deleteBudget(id: number): Observable<void> {
     return this.http.delete<void>(
       `${this.api}/${id}`
     );
