@@ -1,17 +1,22 @@
 package com.ayoub.expensetracker.security;
 
+import java.io.IOException;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
-import java.io.IOException;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import io.jsonwebtoken.JwtException;
 
 @Component
 @RequiredArgsConstructor
@@ -26,45 +31,69 @@ public class JwtFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain)
             throws ServletException, IOException {
-                String path = request.getServletPath();
 
-if (path.equals("/auth/login") || path.equals("/auth/register")) {
-    filterChain.doFilter(request, response);
-    return;
-}
+        String path = request.getServletPath();
+
+        // Public endpoints
+        if (path.equals("/auth/login")
+                || path.equals("/auth/register")) {
+
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         String authHeader = request.getHeader("Authorization");
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        // No JWT → continue
+        if (authHeader == null
+                || !authHeader.startsWith("Bearer ")) {
+
             filterChain.doFilter(request, response);
             return;
         }
 
         String jwt = authHeader.substring(7);
-        String username = jwtService.extractUsername(jwt);
 
-        if (username != null) {
+        try {
 
-          UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            if (jwtService.isTokenValid(jwt, userDetails.getUsername())) {
+            String username = jwtService.extractUsername(jwt);
 
-                var authentication
-                        = new UsernamePasswordAuthenticationToken(
-                                userDetails,
-                                null,
-                                userDetails.getAuthorities()
-                        );
+            if (username != null
+                    && SecurityContextHolder.getContext()
+                            .getAuthentication() == null) {
 
-                authentication.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
+                UserDetails userDetails =
+                        userDetailsService
+                                .loadUserByUsername(username);
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                if (jwtService.isTokenValid(
+                        jwt,
+                        userDetails.getUsername())) {
+
+                    var authentication =
+                            new UsernamePasswordAuthenticationToken(
+                                    userDetails,
+                                    null,
+                                    userDetails.getAuthorities()
+                            );
+
+                    authentication.setDetails(
+                            new WebAuthenticationDetailsSource()
+                                    .buildDetails(request)
+                    );
+
+                    SecurityContextHolder
+                            .getContext()
+                            .setAuthentication(authentication);
+                }
             }
+
+        } catch (JwtException | IllegalArgumentException e) {
+
+            // Invalid or expired JWT
+            SecurityContextHolder.clearContext();
         }
 
         filterChain.doFilter(request, response);
-
     }
-
 }
