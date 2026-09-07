@@ -103,7 +103,10 @@ public AuthenticationManager authenticationManager(
                 new CorsConfiguration();
 
         configuration.setAllowedOrigins(
-                List.of("http://localhost:4200")
+                List.of(
+                    "http://localhost:4200",
+                    "https://expensetracker-dun-seven.vercel.app"
+                )
         );
 
         configuration.setAllowedMethods(
@@ -117,7 +120,10 @@ public AuthenticationManager authenticationManager(
         );
 
         configuration.setAllowedHeaders(
-                List.of("*")
+                List.of(
+                    "Authorization",
+                    "Content-Type"
+                )
         );
 
         configuration.setAllowCredentials(true);
