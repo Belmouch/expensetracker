@@ -63,8 +63,11 @@ public class SecurityConfig {
 
                 // Public endpoints
                 .requestMatchers(
+                    HttpMethod.POST,
                     "/auth/register",
-                    "/auth/login",
+                    "/auth/login"
+                ).permitAll()
+                .requestMatchers(
                     "/swagger-ui/**",
                     "/swagger-ui.html",
                     "/v3/api-docs/**"
