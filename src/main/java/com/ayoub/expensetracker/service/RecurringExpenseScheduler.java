@@ -1,18 +1,19 @@
 package com.ayoub.expensetracker.service;
 
-import com.ayoub.expensetracker.entity.Expense;
-import com.ayoub.expensetracker.entity.RecurringExpense;
-import com.ayoub.expensetracker.repository.ExpenseRepository;
-import com.ayoub.expensetracker.repository.RecurringExpenseRepository;
-
-import lombok.RequiredArgsConstructor;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.temporal.TemporalAdjusters;
+import com.ayoub.expensetracker.entity.Expense;
+import com.ayoub.expensetracker.entity.RecurrenceFrequency;
+import com.ayoub.expensetracker.entity.RecurringExpense;
+import com.ayoub.expensetracker.repository.ExpenseRepository;
+import com.ayoub.expensetracker.repository.RecurringExpenseRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -21,11 +22,23 @@ public class RecurringExpenseScheduler {
     private final RecurringExpenseRepository recurringExpenseRepository;
     private final ExpenseRepository expenseRepository;
 
-    @Scheduled(cron = "0 0 0 * * *")
+    /**
+     * Check recurring expenses every minute.
+     *
+     * This makes recurring expenses dynamic even when
+     * the user creates one during the day.
+     */
+    @Scheduled(
+            cron = "0 * * * * *",
+            zone = "Africa/Casablanca"
+    )
     @Transactional
     public void processRecurringExpenses() {
 
-        LocalDate today = LocalDate.now();
+        LocalDate today =
+                LocalDate.now(
+                        ZoneId.of("Africa/Casablanca")
+                );
 
         var recurringExpenses =
                 recurringExpenseRepository
@@ -35,40 +48,77 @@ public class RecurringExpenseScheduler {
 
             while (
                     recurring.isActive()
+                    && recurring.getNextRunDate() != null
                     && !recurring.getNextRunDate().isAfter(today)
             ) {
 
+                LocalDate currentRunDate =
+                        recurring.getNextRunDate();
+
+                // --------------------------------------
+                // END DATE CHECK
+                // --------------------------------------
+
                 if (
                         recurring.getEndDate() != null
-                        && recurring.getNextRunDate()
-                            .isAfter(recurring.getEndDate())
+                        && currentRunDate.isAfter(
+                                recurring.getEndDate()
+                        )
                 ) {
 
                     recurring.setActive(false);
                     break;
                 }
 
+                // --------------------------------------
+                // CREATE NORMAL EXPENSE
+                // --------------------------------------
+
                 Expense expense = new Expense();
 
-                expense.setTitle(recurring.getTitle());
-                expense.setAmount(recurring.getAmount());
-                expense.setCategory(recurring.getCategory());
-                expense.setDate(recurring.getNextRunDate());
-                expense.setUser(recurring.getUser());
+                expense.setTitle(
+                        recurring.getTitle()
+                );
+
+                expense.setAmount(
+                        recurring.getAmount()
+                );
+
+                expense.setCategory(
+                        recurring.getCategory()
+                );
+
+                expense.setDate(
+                        currentRunDate
+                );
+
+                expense.setUser(
+                        recurring.getUser()
+                );
 
                 expenseRepository.save(expense);
 
-                recurring.setNextRunDate(
+                // --------------------------------------
+                // CALCULATE NEXT RUN DATE
+                // --------------------------------------
+
+                LocalDate nextRunDate =
                         calculateNextDate(
-                                recurring.getNextRunDate(),
+                                currentRunDate,
                                 recurring.getFrequency()
-                        )
-                );
+                        );
+
+                recurring.setNextRunDate(nextRunDate);
+
+                // --------------------------------------
+                // END DATE CHECK AFTER GENERATION
+                // --------------------------------------
 
                 if (
                         recurring.getEndDate() != null
-                        && recurring.getNextRunDate()
-                            .isAfter(recurring.getEndDate())
+                        && nextRunDate.isAfter(
+                                recurring.getEndDate()
+                        )
                 ) {
 
                     recurring.setActive(false);
@@ -79,9 +129,13 @@ public class RecurringExpenseScheduler {
         }
     }
 
+    // ==========================================
+    // CALCULATE NEXT DATE
+    // ==========================================
+
     private LocalDate calculateNextDate(
             LocalDate currentDate,
-            com.ayoub.expensetracker.entity.RecurrenceFrequency frequency
+            RecurrenceFrequency frequency
     ) {
 
         return switch (frequency) {

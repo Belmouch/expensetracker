@@ -23,7 +23,6 @@ public class RecurringExpenseService {
     private final RecurringExpenseRepository recurringExpenseRepository;
     private final UserRepository userRepository;
 
-
     // ==========================================
     // GET ALL
     // ==========================================
@@ -39,7 +38,6 @@ public class RecurringExpenseService {
                 .toList();
     }
 
-
     // ==========================================
     // CREATE
     // ==========================================
@@ -50,52 +48,36 @@ public class RecurringExpenseService {
 
         User user = getCurrentUser();
 
-        RecurringExpense recurring =
-                new RecurringExpense();
+        RecurringExpense recurring = new RecurringExpense();
 
-        recurring.setTitle(
-                request.getTitle()
-        );
+        recurring.setTitle(request.getTitle());
 
-        recurring.setAmount(
-                request.getAmount()
-        );
+        recurring.setAmount(request.getAmount());
 
-        recurring.setCategory(
-                request.getCategory()
-        );
+        recurring.setCategory(request.getCategory());
 
-        recurring.setFrequency(
-                request.getFrequency()
-        );
+        recurring.setFrequency(request.getFrequency());
 
         // --------------------------------------
         // START DATE
         // --------------------------------------
 
-        LocalDate startDate =
-                request.getStartDate();
+        LocalDate startDate = request.getStartDate();
 
         recurring.setStartDate(startDate);
-
 
         // --------------------------------------
         // NEXT RUN DATE
         // --------------------------------------
 
-        recurring.setNextRunDate(
-                startDate
-        );
-
+        // The first occurrence must use the start date.
+        recurring.setNextRunDate(startDate);
 
         // --------------------------------------
         // END DATE
         // --------------------------------------
 
-        recurring.setEndDate(
-                request.getEndDate()
-        );
-
+        recurring.setEndDate(request.getEndDate());
 
         // --------------------------------------
         // OTHER DATA
@@ -105,18 +87,14 @@ public class RecurringExpenseService {
 
         recurring.setUser(user);
 
-
         // --------------------------------------
         // SAVE
         // --------------------------------------
 
         return mapToResponse(
-                recurringExpenseRepository.save(
-                        recurring
-                )
+                recurringExpenseRepository.save(recurring)
         );
     }
-
 
     // ==========================================
     // TOGGLE
@@ -135,25 +113,17 @@ public class RecurringExpenseService {
 
         User user = getCurrentUser();
 
-        if (!recurring.getUser().getId()
-                .equals(user.getId())) {
+        if (!recurring.getUser().getId().equals(user.getId())) {
 
-            throw new RuntimeException(
-                    "Access denied"
-            );
+            throw new RuntimeException("Access denied");
         }
 
-        recurring.setActive(
-                !recurring.isActive()
-        );
+        recurring.setActive(!recurring.isActive());
 
         return mapToResponse(
-                recurringExpenseRepository.save(
-                        recurring
-                )
+                recurringExpenseRepository.save(recurring)
         );
     }
-
 
     // ==========================================
     // DELETE
@@ -172,19 +142,13 @@ public class RecurringExpenseService {
 
         User user = getCurrentUser();
 
-        if (!recurring.getUser().getId()
-                .equals(user.getId())) {
+        if (!recurring.getUser().getId().equals(user.getId())) {
 
-            throw new RuntimeException(
-                    "Access denied"
-            );
+            throw new RuntimeException("Access denied");
         }
 
-        recurringExpenseRepository.delete(
-                recurring
-        );
+        recurringExpenseRepository.delete(recurring);
     }
-
 
     // ==========================================
     // MAP TO RESPONSE
@@ -197,45 +161,26 @@ public class RecurringExpenseService {
         RecurringExpenseResponse response =
                 new RecurringExpenseResponse();
 
-        response.setId(
-                recurring.getId()
-        );
+        response.setId(recurring.getId());
 
-        response.setTitle(
-                recurring.getTitle()
-        );
+        response.setTitle(recurring.getTitle());
 
-        response.setAmount(
-                recurring.getAmount()
-        );
+        response.setAmount(recurring.getAmount());
 
-        response.setCategory(
-                recurring.getCategory()
-        );
+        response.setCategory(recurring.getCategory());
 
-        response.setFrequency(
-                recurring.getFrequency()
-        );
+        response.setFrequency(recurring.getFrequency());
 
-        response.setStartDate(
-                recurring.getStartDate()
-        );
+        response.setStartDate(recurring.getStartDate());
 
-        response.setNextRunDate(
-                recurring.getNextRunDate()
-        );
+        response.setNextRunDate(recurring.getNextRunDate());
 
-        response.setEndDate(
-                recurring.getEndDate()
-        );
+        response.setEndDate(recurring.getEndDate());
 
-        response.setActive(
-                recurring.isActive()
-        );
+        response.setActive(recurring.isActive());
 
         return response;
     }
-
 
     // ==========================================
     // GET CURRENT USER
@@ -249,9 +194,7 @@ public class RecurringExpenseService {
                         .getAuthentication();
 
         return userRepository
-                .findByUsername(
-                        authentication.getName()
-                )
+                .findByUsername(authentication.getName())
                 .orElseThrow(
                         () -> new RuntimeException(
                                 "User not found"
