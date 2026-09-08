@@ -1,21 +1,20 @@
 package com.ayoub.expensetracker.service;
 
-import com.ayoub.expensetracker.dto.RecurringExpenseRequest;
-import com.ayoub.expensetracker.dto.RecurringExpenseResponse;
-import com.ayoub.expensetracker.entity.RecurringExpense;
-import com.ayoub.expensetracker.entity.RecurrenceFrequency;
-import com.ayoub.expensetracker.entity.User;
-import com.ayoub.expensetracker.repository.RecurringExpenseRepository;
-import com.ayoub.expensetracker.repository.UserRepository;
-
-import lombok.RequiredArgsConstructor;
+import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.List;
+import com.ayoub.expensetracker.dto.RecurringExpenseRequest;
+import com.ayoub.expensetracker.dto.RecurringExpenseResponse;
+import com.ayoub.expensetracker.entity.RecurringExpense;
+import com.ayoub.expensetracker.entity.User;
+import com.ayoub.expensetracker.repository.RecurringExpenseRepository;
+import com.ayoub.expensetracker.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -84,14 +83,8 @@ public class RecurringExpenseService {
         // NEXT RUN DATE
         // --------------------------------------
 
-        LocalDate nextRunDate =
-                calculateNextRunDate(
-                        startDate,
-                        request.getFrequency()
-                );
-
         recurring.setNextRunDate(
-                nextRunDate
+                startDate
         );
 
 
@@ -122,32 +115,6 @@ public class RecurringExpenseService {
                         recurring
                 )
         );
-    }
-
-
-    // ==========================================
-    // CALCULATE NEXT RUN DATE
-    // ==========================================
-
-    private LocalDate calculateNextRunDate(
-            LocalDate startDate,
-            RecurrenceFrequency frequency
-    ) {
-
-        return switch (frequency) {
-
-            case DAILY ->
-                    startDate.plusDays(1);
-
-            case WEEKLY ->
-                    startDate.plusWeeks(1);
-
-            case MONTHLY ->
-                    startDate.plusMonths(1);
-
-            case YEARLY ->
-                    startDate.plusYears(1);
-        };
     }
 
 
