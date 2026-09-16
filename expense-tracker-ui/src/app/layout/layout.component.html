@@ -46,7 +46,8 @@
         <!-- CONNECTED ACCOUNT -->
         <!-- ========================= -->
 
-        <div class="account-card">
+        <a routerLink="/account" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+            class="account-card" [attr.aria-label]="'Open account settings for ' + username">
 
             <div class="account-icon">
 
@@ -67,7 +68,7 @@
 
             </div>
 
-        </div>
+        </a>
 
 
         <!-- ========================= -->
@@ -145,18 +146,6 @@
                 </span>
 
             </a>
-
-            <a routerLink="/account" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
-                class="menu-item">
-
-                <i class="bi bi-person-gear"></i>
-
-                <span *ngIf="sidebarOpen">
-                    Account
-                </span>
-
-            </a>
-
 
             <!-- ADD EXPENSE -->
 
