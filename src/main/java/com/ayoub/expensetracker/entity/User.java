@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.Email;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,10 @@ public class User {
 
     @Column(nullable = false, unique = true)
     private String username;
+
+    @Email
+    @Column(unique = true)
+    private String email;
 
     @Column(nullable = false)
     private String password;

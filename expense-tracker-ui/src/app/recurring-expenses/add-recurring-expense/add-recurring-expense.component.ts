@@ -72,6 +72,9 @@ export class AddRecurringExpenseComponent {
     'Entertainment',
     'Study',
     'Outils',
+    'Dar',
+    'Cat',
+    'recurring',
     'Transport',
     'Other'
   ];

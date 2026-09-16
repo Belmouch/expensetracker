@@ -47,6 +47,27 @@ export const routes: Routes = [
                 .then(m => m.RegisterComponent)
     },
 
+    {
+        path: 'forgot-password',
+        loadComponent: () =>
+            import('./auth/forgot-password/forgot-password.component')
+                .then(m => m.ForgotPasswordComponent)
+    },
+
+    {
+        path: 'verify-code',
+        loadComponent: () =>
+            import('./auth/verify-code/verify-code.component')
+                .then(m => m.VerifyCodeComponent)
+    },
+
+    {
+        path: 'reset-password',
+        loadComponent: () =>
+            import('./auth/reset-password/reset-password.component')
+                .then(m => m.ResetPasswordComponent)
+    },
+
     // =========================
     // PROTECTED APP
     // =========================

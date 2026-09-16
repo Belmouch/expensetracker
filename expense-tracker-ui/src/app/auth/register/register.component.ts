@@ -16,6 +16,7 @@ import { RegisterRequest } from '../../models/register-request';
 export class RegisterComponent {
 
   username = '';
+  email = '';
  
   password = '';
   showPassword = false;
@@ -27,11 +28,11 @@ export class RegisterComponent {
 
   register(): void {
 
-    if (!this.username || !this.password) {
+    if (!this.username.trim() || !this.email.trim() || !this.password) {
       Swal.fire({
         icon: 'warning',
         title: 'Missing information',
-        text: 'Please enter a username and password.',
+        text: 'Please enter a username, email and password.',
         confirmButtonText: 'OK'
       });
 
@@ -40,6 +41,7 @@ export class RegisterComponent {
 
     const request: RegisterRequest = {
       username: this.username,
+      email: this.email,
       password: this.password
     };
 

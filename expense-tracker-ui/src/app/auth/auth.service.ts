@@ -6,6 +6,10 @@ import { timeout } from 'rxjs/operators';
 import { LoginRequest } from '../models/login-request';
 import { ChangePasswordRequest } from '../models/change-password-request';
 import { RegisterRequest } from '../models/register-request';
+import { ForgotPasswordRequest } from '../models/forgot-password-request';
+import { VerifyResetCodeRequest } from '../models/verify-reset-code-request';
+import { ResetCodeResponse } from '../models/reset-code-response';
+import { ResetPasswordRequest } from '../models/reset-password-request';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -48,6 +52,30 @@ export class AuthService {
 
     return this.http.post<void>(
       `${this.apiUrl}/register`,
+      request
+    );
+  }
+
+  forgotPassword(request: ForgotPasswordRequest): Observable<{ message: string }> {
+
+    return this.http.post<{ message: string }>(
+      `${this.apiUrl}/forgot-password`,
+      request
+    );
+  }
+
+  verifyResetCode(request: VerifyResetCodeRequest): Observable<ResetCodeResponse> {
+
+    return this.http.post<ResetCodeResponse>(
+      `${this.apiUrl}/verify-reset-code`,
+      request
+    );
+  }
+
+  resetPassword(request: ResetPasswordRequest): Observable<void> {
+
+    return this.http.post<void>(
+      `${this.apiUrl}/reset-password`,
       request
     );
   }

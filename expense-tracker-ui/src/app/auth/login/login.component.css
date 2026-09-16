@@ -529,3 +529,19 @@
     opacity: 0.7;
     transform: none;
 }
+
+.forgot-password-link {
+    margin-top: 18px;
+    text-align: center;
+}
+
+.forgot-password-link a {
+    color: #148e5c;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.forgot-password-link a:hover {
+    text-decoration: underline;
+}

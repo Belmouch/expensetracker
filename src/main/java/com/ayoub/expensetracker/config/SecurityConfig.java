@@ -67,7 +67,10 @@ public class SecurityConfig {
                 .requestMatchers(
                     HttpMethod.POST,
                     "/auth/register",
-                    "/auth/login"
+                    "/auth/login",
+                    "/auth/forgot-password",
+                    "/auth/verify-reset-code",
+                    "/auth/reset-password"
                 ).permitAll()
                 .requestMatchers(
                     "/swagger-ui/**",
