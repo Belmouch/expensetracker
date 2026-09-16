@@ -1,36 +1,42 @@
 package com.ayoub.expensetracker.service;
 
-import com.ayoub.expensetracker.dto.LoginRequest;
-import com.ayoub.expensetracker.dto.ChangePasswordRequest;
-import com.ayoub.expensetracker.dto.RegisterRequest;
-import com.ayoub.expensetracker.dto.ForgotPasswordRequest;
-import com.ayoub.expensetracker.dto.ResetPasswordRequest;
-import com.ayoub.expensetracker.dto.VerifyResetCodeRequest;
-import com.ayoub.expensetracker.entity.PasswordResetRequest;
-import com.ayoub.expensetracker.repository.PasswordResetRequestRepository;
-import com.ayoub.expensetracker.service.EmailService;
-import com.ayoub.expensetracker.entity.Role;
-import com.ayoub.expensetracker.entity.User;
-import com.ayoub.expensetracker.repository.RoleRepository;
-import com.ayoub.expensetracker.repository.UserRepository;
-import com.ayoub.expensetracker.security.JwtService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+
+import com.ayoub.expensetracker.dto.ChangePasswordRequest;
+import com.ayoub.expensetracker.dto.ForgotPasswordRequest;
+import com.ayoub.expensetracker.dto.LoginRequest;
+import com.ayoub.expensetracker.dto.RegisterRequest;
+import com.ayoub.expensetracker.dto.ResetPasswordRequest;
+import com.ayoub.expensetracker.dto.VerifyResetCodeRequest;
+import com.ayoub.expensetracker.entity.PasswordResetRequest;
+import com.ayoub.expensetracker.entity.Role;
+import com.ayoub.expensetracker.entity.User;
+import com.ayoub.expensetracker.repository.PasswordResetRequestRepository;
+import com.ayoub.expensetracker.repository.RoleRepository;
+import com.ayoub.expensetracker.repository.UserRepository;
+import com.ayoub.expensetracker.security.JwtService;
+
+import lombok.RequiredArgsConstructor;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(AuthService.class);
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -91,8 +97,15 @@ public class AuthService {
 
             try {
                 emailService.sendPasswordResetCode(user.getEmail(), code);
-            } catch (RuntimeException ignored) {
-                // Keep the response generic so mail configuration cannot reveal account existence.
+            } catch (RuntimeException exception) {
+                passwordResetRequestRepository.delete(resetRequest);
+
+                logger.error(
+                        "Password reset email delivery failed for userId={}. "
+                                + "The reset request was invalidated.",
+                        user.getId(),
+                        exception
+                );
             }
         });
     }
