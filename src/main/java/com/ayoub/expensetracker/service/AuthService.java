@@ -1,6 +1,7 @@
 package com.ayoub.expensetracker.service;
 
 import com.ayoub.expensetracker.dto.LoginRequest;
+import com.ayoub.expensetracker.dto.ChangePasswordRequest;
 import com.ayoub.expensetracker.dto.RegisterRequest;
 import com.ayoub.expensetracker.entity.Role;
 import com.ayoub.expensetracker.entity.User;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -51,5 +54,25 @@ public class AuthService {
         );
 
         return jwtService.generateToken(request.getUsername());
+    }
+
+    public void changePassword(String username, ChangePasswordRequest request) {
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "User not found"));
+
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Current password is incorrect");
+        }
+
+        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "New password and confirmation do not match");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
     }
 }

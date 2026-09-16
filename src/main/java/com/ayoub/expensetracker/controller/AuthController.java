@@ -1,12 +1,14 @@
 package com.ayoub.expensetracker.controller;
 
 import com.ayoub.expensetracker.dto.LoginRequest;
+import com.ayoub.expensetracker.dto.ChangePasswordRequest;
 import com.ayoub.expensetracker.dto.RegisterRequest;
 import com.ayoub.expensetracker.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
 
 @RestController
 @RequestMapping("/auth")
@@ -28,4 +30,13 @@ public String login(@Valid @RequestBody LoginRequest request) {
 
     return authService.login(request);
 }
+
+    @PutMapping("/change-password")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void changePassword(
+            @Valid @RequestBody ChangePasswordRequest request,
+            Authentication authentication) {
+
+        authService.changePassword(authentication.getName(), request);
+    }
 }

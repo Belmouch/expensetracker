@@ -134,6 +134,13 @@ export const routes: Routes = [
             {
                 path: 'recurring-expenses/add',
                 component: AddRecurringExpenseComponent
+            },
+
+            {
+                path: 'account',
+                loadComponent: () =>
+                    import('./auth/change-password/change-password.component')
+                        .then(m => m.ChangePasswordComponent)
             }
 
         ]

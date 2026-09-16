@@ -147,13 +147,14 @@
                 <button
                     type="submit"
                     class="login-button"
+                    [disabled]="loading"
                 >
 
                     <span>
-                        Sign in
+                        {{ loading ? 'Signing in...' : 'Sign in' }}
                     </span>
 
-                    <i class="bi bi-arrow-right"></i>
+                    <i [class]="loading ? 'bi bi-hourglass-split' : 'bi bi-arrow-right'"></i>
 
                 </button>
 

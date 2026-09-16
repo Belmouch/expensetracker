@@ -146,6 +146,17 @@
 
             </a>
 
+            <a routerLink="/account" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+                class="menu-item">
+
+                <i class="bi bi-person-gear"></i>
+
+                <span *ngIf="sidebarOpen">
+                    Account
+                </span>
+
+            </a>
+
 
             <!-- ADD EXPENSE -->
 
