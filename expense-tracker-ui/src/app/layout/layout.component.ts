@@ -41,6 +41,7 @@ export class LayoutComponent {
   // ==========================================
 
   sidebarOpen = true;
+  isMobile = false;
 
 
   // ==========================================
@@ -58,6 +59,13 @@ export class LayoutComponent {
     this.username =
       this.expenseService.getUsername();
 
+    this.isMobile =
+      typeof window !== 'undefined' && window.innerWidth < 768;
+
+    if (this.isMobile) {
+      this.sidebarOpen = false;
+    }
+
   }
 
 
@@ -69,6 +77,14 @@ export class LayoutComponent {
 
     this.sidebarOpen =
       !this.sidebarOpen;
+
+  }
+
+  closeSidebar(): void {
+
+    if (this.isMobile) {
+      this.sidebarOpen = false;
+    }
 
   }
 

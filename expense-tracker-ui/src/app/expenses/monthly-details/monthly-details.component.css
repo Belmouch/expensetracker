@@ -1806,6 +1806,39 @@
         align-items: flex-start;
     }
 }
+
+
+@media (max-width: 767px) {
+
+    .monthly-dashboard,
+    .monthly-dashboard > * {
+        min-width: 0;
+    }
+
+    .page-header {
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .header-left {
+        min-width: 0;
+    }
+
+    .all-months-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .stats-grid,
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .daily-list,
+    .category-list {
+        min-width: 0;
+    }
+}
 /* =========================================================
    LIGHT MODE ONLY
    GREEN THEME - SAME AS HOME

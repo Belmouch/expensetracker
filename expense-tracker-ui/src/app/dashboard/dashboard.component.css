@@ -925,6 +925,26 @@
 }
 
 
+@media (max-width: 767px) {
+
+    .dashboard-page,
+    .dashboard-page > * {
+        min-width: 0;
+    }
+
+    .main-grid,
+    .stats-grid,
+    .category-content {
+        width: 100%;
+    }
+
+    .chart-wrapper,
+    .recent-table-wrapper {
+        max-width: 100%;
+    }
+}
+
+
 /* =========================================================
    DARK MODE - DASHBOARD
    ========================================================= */

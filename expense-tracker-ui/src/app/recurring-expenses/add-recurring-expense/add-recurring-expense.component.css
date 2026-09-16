@@ -1000,3 +1000,35 @@ body.dark-theme .cancel-button:hover {
   }
 
 }
+
+
+@media (max-width: 767px) {
+
+  .add-recurring-page,
+  .add-recurring-page > * {
+    min-width: 0;
+  }
+
+  .page-header {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .form-card {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .frequency-grid,
+  .date-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+}

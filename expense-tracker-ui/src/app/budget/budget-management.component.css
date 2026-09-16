@@ -1932,3 +1932,31 @@ body.dark-theme .budget-details-modal .modal-close:hover {
     padding: 14px 16px 18px;
   }
 }
+
+
+@media (max-width: 767px) {
+
+  .budget-page,
+  .budget-page > * {
+    min-width: 0;
+  }
+
+  .page-header,
+  .section-header {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .add-budget-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .budget-card {
+    min-width: 0;
+  }
+}

@@ -1059,3 +1059,32 @@ body.dark-theme .add-button:hover {
   }
 
 }
+
+
+@media (max-width: 767px) {
+
+  .recurring-page,
+  .recurring-page > * {
+    min-width: 0;
+  }
+
+  .page-header {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .add-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .recurring-list,
+  .recurring-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .recurring-card,
+  .summary-card {
+    min-width: 0;
+  }
+}

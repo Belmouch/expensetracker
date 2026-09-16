@@ -1605,3 +1605,21 @@ tbody tr:last-child td {
         margin-right: 6px;
     }
 }
+
+
+@media (max-width: 767px) {
+
+    .expense-page,
+    .expense-page > * {
+        min-width: 0;
+    }
+
+    .topbar,
+    .section-header {
+        width: 100%;
+    }
+
+    .table-wrapper {
+        max-width: 100%;
+    }
+}

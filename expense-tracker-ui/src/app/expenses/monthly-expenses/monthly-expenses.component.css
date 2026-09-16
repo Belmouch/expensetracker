@@ -487,3 +487,24 @@
 :host-context(body:not(.dark-theme)) {
     background: #f5f9f7 !important;
 }
+
+
+@media (max-width: 767px) {
+
+    .container {
+        width: 100%;
+        max-width: none;
+        padding-right: 18px;
+        padding-left: 18px;
+        box-sizing: border-box;
+    }
+
+    .container > .d-flex {
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .container > .d-flex > button {
+        width: 100%;
+    }
+}

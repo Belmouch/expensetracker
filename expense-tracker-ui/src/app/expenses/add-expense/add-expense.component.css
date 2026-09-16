@@ -1346,3 +1346,22 @@ form {
         max-height: 280px;
     }
 }
+
+
+@media (max-width: 767px) {
+
+    .expense-page,
+    .expense-page > * {
+        min-width: 0;
+    }
+
+    .expense-card,
+    .form-card {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .form-row {
+        width: 100%;
+    }
+}
