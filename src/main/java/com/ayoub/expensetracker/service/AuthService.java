@@ -97,6 +97,10 @@ public class AuthService {
 
             try {
                 emailService.sendPasswordResetCode(user.getEmail(), code);
+                logger.info(
+                    "Password reset email delivery succeeded for userId={}",
+                    user.getId()
+                );
             } catch (RuntimeException exception) {
                 passwordResetRequestRepository.delete(resetRequest);
 
@@ -105,6 +109,11 @@ public class AuthService {
                                 + "The reset request was invalidated.",
                         user.getId(),
                         exception
+                );
+
+                throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Unable to send password reset email"
                 );
             }
         });
