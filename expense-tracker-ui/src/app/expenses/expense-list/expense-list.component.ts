@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { forkJoin, Observable } from 'rxjs';
+import { shareReplay } from 'rxjs/operators';
 
 import { MonthlyStatistics } from '../../models/monthly-statistics';
 import { ExpenseStatisticsResponse } from '../../models/expense-statistics-response';
@@ -65,6 +67,14 @@ export class ExpenseListComponent implements OnInit {
   // =========================
 
   dailyExpenses: DailyExpenses[] = [];
+
+  dailyTotals: { [date: string]: number } = {};
+
+  monthlyExpensesCache: { [month: string]: Expense[] } = {};
+
+  private monthlyExpenseRequests: {
+    [month: string]: Observable<Expense[]>
+  } = {};
 
 
   // =========================
@@ -159,6 +169,8 @@ export class ExpenseListComponent implements OnInit {
           this.buildDailyExpenses();
 
           this.loading = false;
+
+          this.loadDailyTotalsForCurrentPage();
 
         },
 
@@ -270,6 +282,81 @@ export class ExpenseListComponent implements OnInit {
   // GROUP EXPENSES BY DATE
   // =========================
 
+  private loadDailyTotalsForCurrentPage(): void {
+
+    const months = Array.from(
+      new Set(
+        this.filteredExpenses.map(expense => expense.date.slice(0, 7))
+      )
+    );
+
+    const missingMonths = months.filter(
+      month => !this.monthlyExpensesCache[month]
+    );
+
+    if (missingMonths.length === 0) {
+      this.calculateDailyTotals();
+      return;
+    }
+
+    const requests = missingMonths.map(month => {
+      if (!this.monthlyExpenseRequests[month]) {
+        const [year, monthNumber] = month.split('-').map(Number);
+
+        this.monthlyExpenseRequests[month] = this.expenseService
+          .getExpensesByMonth(year, monthNumber)
+          .pipe(shareReplay(1));
+      }
+
+      return this.monthlyExpenseRequests[month];
+    });
+
+    forkJoin(requests).subscribe({
+      next: (monthlyExpenses) => {
+        monthlyExpenses.forEach((expenses, index) => {
+          this.monthlyExpensesCache[missingMonths[index]] = expenses;
+        });
+
+        this.calculateDailyTotals();
+      },
+      error: (error) => {
+        console.error(
+          'Error loading monthly expenses for daily totals:',
+          error
+        );
+
+        missingMonths.forEach(month => {
+          delete this.monthlyExpenseRequests[month];
+        });
+      }
+    });
+  }
+
+  private calculateDailyTotals(): void {
+
+    const totals: { [date: string]: number } = {};
+
+    Object.values(this.monthlyExpensesCache)
+      .flat()
+      .filter(expense => this.matchesActiveFilters(expense))
+      .forEach(expense => {
+        totals[expense.date] =
+          (totals[expense.date] || 0) + Number(expense.amount);
+      });
+
+    this.dailyTotals = totals;
+    this.buildDailyExpenses();
+  }
+
+  private matchesActiveFilters(expense: Expense): boolean {
+
+    const search = this.searchText.trim().toLowerCase();
+
+    return (!search || expense.title.toLowerCase().includes(search))
+      && (!this.fromDate || expense.date >= this.fromDate)
+      && (!this.toDate || expense.date <= this.toDate);
+  }
+
   buildDailyExpenses(): void {
 
     const groups: {
@@ -308,12 +395,7 @@ export class ExpenseListComponent implements OnInit {
 
           const expenses = groups[date];
 
-          const total =
-            expenses.reduce(
-              (sum, expense) =>
-                sum + Number(expense.amount),
-              0
-            );
+          const total = this.dailyTotals[date] ?? 0;
 
           return {
             date: date,
@@ -500,6 +582,9 @@ export class ExpenseListComponent implements OnInit {
           .subscribe({
 
             next: () => {
+
+              this.monthlyExpensesCache = {};
+              this.monthlyExpenseRequests = {};
 
               // Reload expenses
               this.loadExpenses();
