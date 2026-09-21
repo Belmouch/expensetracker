@@ -21,6 +21,21 @@ import { CreateExpenseRequest } from '../../models/create-expense-request';
 })
 export class AddExpenseComponent implements OnInit {
 
+  private readonly customCategoriesStorageKey =
+    'expense_tracker_custom_categories';
+
+  private readonly predefinedCategories: string[] = [
+    'Food',
+    'Shopping',
+    'Coffee',
+    'Bills',
+    'Water',
+    'Entertainment',
+    'Study',
+    'Outils',
+    'Transport'
+  ];
+
   // =====================================================
   // EDIT MODE
   // =====================================================
@@ -50,15 +65,7 @@ export class AddExpenseComponent implements OnInit {
   categoryDropdownOpen = false;
 
   categories: string[] = [
-    'Food',
-    'Shopping',
-    'Coffee',
-    'Bills',
-    'Water',
-    'Entertainment',
-    'Study',
-    'Outils',
-    'Transport',
+    ...this.predefinedCategories,
     'Other'
   ];
 
@@ -86,6 +93,8 @@ export class AddExpenseComponent implements OnInit {
   // =====================================================
 
   ngOnInit(): void {
+
+    this.loadCustomCategories();
 
     const id = this.route.snapshot.paramMap.get('id');
 
@@ -134,33 +143,19 @@ export class AddExpenseComponent implements OnInit {
           // Categories
           // -------------------------
 
-          const standardCategories = [
-            'Food',
-            'Shopping',
-            'Coffee',
-            'Bills',
-            'Water',
-            'Entertainment',
-            'Study',
-            'Outils',
-            'Transport'
-          ];
+          const knownCategory = this.findKnownCategory(expense.category);
 
+          if (knownCategory) {
 
-          if (standardCategories.includes(expense.category)) {
-
-            this.category = expense.category;
+            this.category = knownCategory;
 
             this.otherCategory = '';
 
           } else {
 
-            // Any unknown category
-            // is considered as Other
+            this.category = this.addCustomCategory(expense.category);
 
-            this.category = 'Other';
-
-            this.otherCategory = expense.category;
+            this.otherCategory = '';
 
           }
 
@@ -305,6 +300,148 @@ export class AddExpenseComponent implements OnInit {
 
 
   // =====================================================
+  // CUSTOM CATEGORIES
+  // =====================================================
+
+  loadCustomCategories(): void {
+
+    if (typeof localStorage === 'undefined') {
+      return;
+    }
+
+    try {
+
+      const storedCategories = localStorage.getItem(
+        this.customCategoriesStorageKey
+      );
+
+      if (!storedCategories) {
+        return;
+      }
+
+      const customCategories: unknown = JSON.parse(storedCategories);
+
+      if (Array.isArray(customCategories)) {
+
+        customCategories.forEach((category) => {
+
+          if (typeof category === 'string') {
+            this.addCategoryToList(category.trim());
+          }
+
+        });
+
+      }
+
+      this.saveCustomCategories();
+
+    } catch (error) {
+
+      console.error(
+        'Error loading custom categories:',
+        error
+      );
+
+    }
+
+  }
+
+
+  saveCustomCategories(): void {
+
+    if (typeof localStorage === 'undefined') {
+      return;
+    }
+
+    try {
+
+      localStorage.setItem(
+        this.customCategoriesStorageKey,
+        JSON.stringify(
+          this.categories.filter(
+            (category) =>
+              category !== 'Other' && !this.isPredefinedCategory(category)
+          )
+        )
+      );
+
+    } catch (error) {
+
+      console.error(
+        'Error saving custom categories:',
+        error
+      );
+
+    }
+
+  }
+
+
+  addCustomCategory(category: string): string {
+
+    const trimmedCategory = category.trim();
+    const knownCategory = this.findKnownCategory(trimmedCategory);
+
+    if (knownCategory) {
+      return knownCategory;
+    }
+
+    if (trimmedCategory && trimmedCategory.toLowerCase() !== 'other') {
+      this.addCategoryToList(trimmedCategory);
+      this.saveCustomCategories();
+    }
+
+    return trimmedCategory;
+
+  }
+
+
+  private addCategoryToList(category: string): void {
+
+    const trimmedCategory = category.trim();
+
+    if (
+      !trimmedCategory ||
+      trimmedCategory.toLowerCase() === 'other' ||
+      this.findKnownCategory(trimmedCategory)
+    ) {
+      return;
+    }
+
+    const otherIndex = this.categories.indexOf('Other');
+
+    this.categories.splice(
+      otherIndex === -1 ? this.categories.length : otherIndex,
+      0,
+      trimmedCategory
+    );
+
+  }
+
+
+  private findKnownCategory(category: string): string | undefined {
+
+    const normalizedCategory = category.trim().toLowerCase();
+
+    return this.categories.find(
+      (knownCategory) =>
+        knownCategory.toLowerCase() === normalizedCategory
+    );
+
+  }
+
+
+  private isPredefinedCategory(category: string): boolean {
+
+    return this.predefinedCategories.some(
+      (predefinedCategory) =>
+        predefinedCategory.toLowerCase() === category.trim().toLowerCase()
+    );
+
+  }
+
+
+  // =====================================================
   // SAVE EXPENSE
   // =====================================================
 
@@ -403,8 +540,7 @@ export class AddExpenseComponent implements OnInit {
 
       }
 
-      finalCategory =
-        this.otherCategory.trim();
+      finalCategory = this.otherCategory.trim();
 
     }
 
@@ -468,6 +604,8 @@ export class AddExpenseComponent implements OnInit {
           next: () => {
 
             this.loading = false;
+
+            this.addCustomCategory(finalCategory);
 
 
             Swal.fire({
@@ -535,6 +673,8 @@ export class AddExpenseComponent implements OnInit {
         next: () => {
 
           this.loading = false;
+
+          this.addCustomCategory(finalCategory);
 
 
           Swal.fire({
