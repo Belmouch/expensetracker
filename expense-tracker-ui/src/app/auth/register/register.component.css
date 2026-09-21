@@ -541,3 +541,32 @@
     }
 
 }
+
+
+/* =========================
+   PASSWORD VALIDATION
+========================= */
+
+.password-validation {
+    margin-top: 8px;
+}
+
+
+.password-validation p {
+    margin: 4px 0 0;
+
+    color: #c0392b;
+
+    font-size: 12px;
+}
+
+
+.register-button:disabled {
+    background: #9bb8aa;
+
+    cursor: not-allowed;
+
+    box-shadow: none;
+
+    transform: none;
+}

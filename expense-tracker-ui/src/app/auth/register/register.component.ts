@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -9,7 +10,7 @@ import { RegisterRequest } from '../../models/register-request';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
@@ -20,6 +21,8 @@ export class RegisterComponent {
  
   password = '';
   showPassword = false;
+  confirmPassword = '';
+  showConfirmPassword = false;
 
   constructor(
     private authService: AuthService,
@@ -28,7 +31,11 @@ export class RegisterComponent {
 
   register(): void {
 
-    if (!this.username.trim() || !this.email.trim() || !this.password) {
+    if (
+      !this.username.trim() ||
+      !this.email.trim() ||
+      !this.password
+    ) {
       Swal.fire({
         icon: 'warning',
         title: 'Missing information',
@@ -36,6 +43,10 @@ export class RegisterComponent {
         confirmButtonText: 'OK'
       });
 
+      return;
+    }
+
+    if (!this.isPasswordValid() || !this.passwordsMatch()) {
       return;
     }
 
@@ -76,5 +87,39 @@ export class RegisterComponent {
       }
 
     });
+  }
+
+  getPasswordValidationMessages(): string[] {
+    const messages: string[] = [];
+
+    if (this.password.length < 8) {
+      messages.push('Password must be at least 8 characters.');
+    }
+
+    if (!/[A-Z]/.test(this.password)) {
+      messages.push('Password must contain at least one uppercase letter.');
+    }
+
+    if (!/[a-z]/.test(this.password)) {
+      messages.push('Password must contain at least one lowercase letter.');
+    }
+
+    if (!/[0-9]/.test(this.password)) {
+      messages.push('Password must contain at least one number.');
+    }
+
+    if (!/[^A-Za-z0-9]/.test(this.password)) {
+      messages.push('Password must contain at least one special character.');
+    }
+
+    return messages;
+  }
+
+  isPasswordValid(): boolean {
+    return this.getPasswordValidationMessages().length === 0;
+  }
+
+  passwordsMatch(): boolean {
+    return this.password === this.confirmPassword;
   }
 }
