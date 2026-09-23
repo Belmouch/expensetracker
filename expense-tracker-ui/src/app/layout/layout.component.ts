@@ -11,6 +11,7 @@ import {
 } from '@angular/router';
 
 import { ExpenseService } from '../expenses/expense.service';
+import { CategoryService } from '../services/category.service';
 import { ThemeService } from '../services/theme.service';
 
 @Component({
@@ -50,6 +51,7 @@ export class LayoutComponent {
 
   constructor(
     private expenseService: ExpenseService,
+    private categoryService: CategoryService,
     private router: Router,
 
     // Theme service
@@ -131,6 +133,7 @@ export class LayoutComponent {
       if (result.isConfirmed) {
 
         this.expenseService.logout();
+        this.categoryService.clearCache();
 
         this.router.navigate([
           '/login'
