@@ -8,6 +8,10 @@ import { ConnectionStatusService } from '../services/connection-status.service';
 const MAX_RETRIES = 4;
 const RETRY_DELAYS_MS = [2000, 4000, 6000, 8000];
 
+function isRetryableRequest(req: HttpRequest<unknown>): boolean {
+  return ['GET', 'HEAD', 'OPTIONS'].includes(req.method.toUpperCase());
+}
+
 function isTemporaryBackendError(error: unknown): boolean {
   return (
     error instanceof TimeoutError ||
@@ -44,7 +48,7 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
     retry({
       count: MAX_RETRIES,
       delay: (error, retryCount) => {
-        if (!(error instanceof HttpErrorResponse) || !isTemporaryBackendError(error)) {
+        if (!isTemporaryBackendError(error)) {
           return throwError(() => error);
         }
 
