@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
+import { NgChartsModule } from 'ng2-charts';
 import { forkJoin, Observable } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
 
@@ -31,7 +33,8 @@ interface DailyExpenses {
   imports: [
     CommonModule,
     RouterLink,
-    FormsModule
+      FormsModule,
+      NgChartsModule
   ],
   templateUrl: './expense-list.component.html',
   styleUrl: './expense-list.component.css'
@@ -60,6 +63,59 @@ export class ExpenseListComponent implements OnInit {
   monthlyStatistics: MonthlyStatistics[] = [];
 
   currentMonthStatistics: MonthlyStatistics | null = null;
+
+  selectedMonth = this.toMonthInputValue(new Date());
+
+  overviewExpenses: Expense[] = [];
+
+  overviewLoading = false;
+
+  readonly overviewChartType: ChartType = 'line';
+
+  overviewChartData: ChartData<'line', number[], string> = {
+    labels: [],
+    datasets: [{
+      data: [],
+      label: 'Daily spending',
+      borderColor: '#4779e8',
+      backgroundColor: 'rgba(71, 121, 232, 0.14)',
+      pointBackgroundColor: '#4779e8',
+      pointBorderColor: '#ffffff',
+      pointBorderWidth: 2,
+      pointRadius: 4,
+      pointHoverRadius: 6,
+      fill: true,
+      tension: 0.35
+    }]
+  };
+
+  readonly overviewChartOptions: ChartConfiguration<'line'>['options'] = {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { intersect: false, mode: 'index' },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          title: items => items[0]?.label || '',
+          label: context => `${this.formatAmount(Number(context.parsed.y))} DH`
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { maxTicksLimit: 7 }
+      },
+      y: {
+        beginAtZero: true,
+        grid: { color: 'rgba(127, 149, 190, 0.18)' },
+        ticks: {
+          callback: value => `${value} DH`
+        }
+      }
+    }
+  };
 
 
   // =========================
@@ -130,6 +186,135 @@ export class ExpenseListComponent implements OnInit {
 
     this.loadMonthlyStatistics();
 
+    this.loadOverviewExpenses();
+
+  }
+
+  loadOverviewExpenses(): void {
+    const { year, month } = this.parseMonth(this.selectedMonth);
+    this.overviewLoading = true;
+
+    const monthKey = this.selectedMonth;
+    const request = this.monthlyExpensesCache[monthKey]
+      ? new Observable<Expense[]>(subscriber => {
+        subscriber.next(this.monthlyExpensesCache[monthKey]);
+        subscriber.complete();
+      })
+      : (this.monthlyExpenseRequests[monthKey] || (this.monthlyExpenseRequests[monthKey] =
+        this.expenseService.getExpensesByMonth(year, month).pipe(shareReplay(1))));
+
+    request
+      .subscribe({
+        next: expenses => {
+          this.overviewExpenses = Array.isArray(expenses) ? expenses : [];
+          this.monthlyExpensesCache[this.selectedMonth] = this.overviewExpenses;
+          this.buildOverviewChart();
+          this.overviewLoading = false;
+        },
+        error: error => {
+          console.error('Error loading overview expenses:', error);
+          this.overviewExpenses = [];
+          this.buildOverviewChart();
+          this.overviewLoading = false;
+        }
+      });
+  }
+
+  onOverviewMonthChange(): void {
+    if (/^\d{4}-\d{2}$/.test(this.selectedMonth)) {
+      this.loadOverviewExpenses();
+    }
+  }
+
+  get overviewTotal(): number {
+    return this.overviewExpenses.reduce(
+      (total, expense) => total + Number(expense.amount),
+      0
+    );
+  }
+
+  get overviewTransactionCount(): number {
+    return this.overviewExpenses.length;
+  }
+
+  get todayAmount(): number {
+    const today = this.toDateInputValue(new Date());
+    return this.overviewExpenses
+      .filter(expense => expense.date === today)
+      .reduce((total, expense) => total + Number(expense.amount), 0);
+  }
+
+  get todayTransactionCount(): number {
+    const today = this.toDateInputValue(new Date());
+    return this.overviewExpenses.filter(expense => expense.date === today).length;
+  }
+
+  get overviewDailyAverage(): number {
+    const activeDays = new Set(this.overviewExpenses.map(expense => expense.date)).size;
+    return activeDays > 0 ? this.overviewTotal / activeDays : 0;
+  }
+
+  get overviewMonthLabel(): string {
+    const { year, month } = this.parseMonth(this.selectedMonth);
+    return new Date(year, month - 1, 1).toLocaleDateString('en-US', {
+      month: 'long',
+      year: 'numeric'
+    });
+  }
+
+  formatAmount(amount: number): string {
+    return (Number.isFinite(amount) ? amount : 0).toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  }
+
+  private buildOverviewChart(): void {
+    const endDate = new Date();
+    const selected = this.parseMonth(this.selectedMonth);
+
+    if (selected.year !== endDate.getFullYear() || selected.month !== endDate.getMonth() + 1) {
+      endDate.setFullYear(selected.year, selected.month, 0);
+    }
+
+    const totals = new Map<string, number>();
+    this.overviewExpenses.forEach(expense => {
+      totals.set(expense.date, (totals.get(expense.date) || 0) + Number(expense.amount));
+    });
+
+    const points = Array.from({ length: 7 }, (_, index) => {
+      const date = new Date(endDate);
+      date.setDate(endDate.getDate() - (6 - index));
+      const dateValue = this.toDateInputValue(date);
+      return {
+        label: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        total: totals.get(dateValue) || 0
+      };
+    });
+
+    this.overviewChartData = {
+      labels: points.map(point => point.label),
+      datasets: [{
+        ...this.overviewChartData.datasets[0],
+        data: points.map(point => point.total)
+      }]
+    };
+  }
+
+  private parseMonth(value: string): { year: number; month: number } {
+    const [year, month] = value.split('-').map(Number);
+    return {
+      year: year || new Date().getFullYear(),
+      month: month || new Date().getMonth() + 1
+    };
+  }
+
+  private toMonthInputValue(date: Date): string {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+  }
+
+  private toDateInputValue(date: Date): string {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
   }
 
 

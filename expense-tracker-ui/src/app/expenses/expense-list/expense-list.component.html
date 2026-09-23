@@ -2,148 +2,108 @@
 
     <!-- ================= HEADER ================= -->
 
-    <header class="topbar">
-
-        <div class="brand">
-            <div class="brand-icon">
-                <i class="bi bi-wallet2"></i>
-            </div>
-
-            <div>
-                <h1>Expense Tracker</h1>
-                <p>Manage your finances with ease</p>
-            </div>
-        </div>
-        <div class="header-right">
-            <div class="header-actions">
-
-                <button class="btn-primary" routerLink="/expenses/add">
-
-                    <i class="bi bi-plus-lg"></i>
-                    Add Expense
-
-                </button>
-
-
-
-
-
-
-            </div>
-
-           
-
-
-
+    <header class="home-header">
+        <div>
+            <div class="home-eyebrow">PERSONAL FINANCE</div>
+            <h1>Good evening, {{ username }} <span aria-hidden="true">👋</span></h1>
+            <p>Here's a quick overview of your expenses.</p>
         </div>
 
+        <div class="home-header-actions">
+            <label for="home-month">Overview month</label>
+            <div class="month-selector">
+                <i class="bi bi-calendar3"></i>
+                <input id="home-month" type="month" [(ngModel)]="selectedMonth" (change)="onOverviewMonthChange()">
+            </div>
+            <button class="btn-primary" routerLink="/expenses/add">
+                <i class="bi bi-plus-lg"></i>
+                Add Expense
+            </button>
+        </div>
     </header>
 
 
 
     <!-- ================= STATISTICS ================= -->
 
-    <section class="stats-grid">
+    <section class="home-summary-grid">
 
 
-        <!-- TOTAL EXPENSES -->
+        <article class="home-summary-card primary-summary">
+            <div class="summary-card-top"><span class="summary-icon"><i class="bi bi-wallet2"></i></span><span>{{ overviewMonthLabel }}</span></div>
+            <strong>{{ formatAmount(overviewTotal) }} <small>DH</small></strong>
+            <p>This Month</p>
+        </article>
 
-        <div class="stat-card">
+        <article class="home-summary-card">
+            <div class="summary-card-top"><span class="summary-icon blue-summary"><i class="bi bi-calendar2-check"></i></span><span> TODAY</span></div>
+            <strong>{{ formatAmount(todayAmount) }} <small>DH</small></strong>
+            <p>{{ todayTransactionCount }} transactions</p>
+        </article>
 
-            <div class="stat-top">
+        <article class="home-summary-card">
+            <div class="summary-card-top"><span class="summary-icon orange-summary"><i class="bi bi-bar-chart-line"></i></span><span>{{ overviewMonthLabel }}</span></div>
+            <strong>{{ formatAmount(overviewDailyAverage) }} <small>DH/day</small></strong>
+            <p>Daily Average</p>
+        </article>
 
-                <div class="stat-icon blue">
-                    <i class="bi bi-receipt"></i>
-                </div>
-
-                <span>ALL TIME</span>
-
-            </div>
-
-            <h2>
-                {{ totalExpenses }}
-            </h2>
-
-            <p>Total Expenses</p>
-
-        </div>
-
-
-        <!-- MONTH EXPENSES -->
-
-        <div class="stat-card">
-
-            <div class="stat-top">
-
-                <div class="stat-icon green">
-                    <i class="bi bi-calendar-check"></i>
-                </div>
-
-                <span>THIS MONTH</span>
-
-            </div>
-
-            <h2>
-                {{ currentMonthExpenses }}
-            </h2>
-
-            <p>Monthly Expenses</p>
-
-        </div>
-
-
-        <!-- TOTAL AMOUNT -->
-
-        <div class="stat-card">
-
-            <div class="stat-top">
-
-                <div class="stat-icon emerald">
-                    <i class="bi bi-cash-stack"></i>
-                </div>
-
-                <span>ALL TIME</span>
-
-            </div>
-
-            <h2>
-                {{ totalAmount | number:'1.2-2' }}
-                <small>DH</small>
-            </h2>
-
-            <p>Total Amount</p>
-
-        </div>
-
-
-        <!-- MONTH AMOUNT -->
-
-        <div class="stat-card highlight">
-
-            <div class="stat-top">
-
-                <div class="stat-icon light-green">
-                    <i class="bi bi-graph-up-arrow"></i>
-                </div>
-
-                <span>THIS MONTH</span>
-
-            </div>
-
-            <h2>
-                {{ currentMonthAmount | number:'1.2-2' }}
-                <small>DH</small>
-            </h2>
-
-            <p>This Month Amount</p>
-
-        </div>
+        <article class="home-summary-card">
+            <div class="summary-card-top"><span class="summary-icon purple-summary"><i class="bi bi-receipt"></i></span><span>{{ overviewMonthLabel }}</span></div>
+            <strong>{{ overviewTransactionCount }}</strong>
+            <p>Transactions</p>
+        </article>
 
     </section>
 
+    <section class="overview-grid">
+        <article class="overview-card chart-card">
+            <div class="overview-card-header">
+                <div>
+                    <h2>Last 7 Days</h2>
+                    <p>Daily spending (DH)</p>
+                </div>
+                <span class="overview-card-icon"><i class="bi bi-activity"></i></span>
+            </div>
+            <div *ngIf="overviewLoading" class="overview-loading"><span class="spinner"></span><span>Loading overview...</span></div>
+            <div *ngIf="!overviewLoading" class="overview-chart-wrapper">
+                <canvas baseChart [type]="overviewChartType" [data]="overviewChartData" [options]="overviewChartOptions"></canvas>
+            </div>
+        </article>
 
-    <!-- ================= MONTHLY LINK ================= -->
+        <article class="overview-card search-card">
+            <div class="overview-card-header">
+                <div>
+                    <h2>Search expenses</h2>
+                    <p>Find by title or date</p>
+                </div>
+                <span class="overview-card-icon"><i class="bi bi-search"></i></span>
+            </div>
 
+            <div class="compact-filter-form">
+                <div class="filter-field search-field">
+                    <label>Search</label>
+                    <div class="input-wrapper">
+                        <i class="bi bi-search"></i>
+                        <input type="text" placeholder="Search by title..." [(ngModel)]="searchText" (input)="searchExpenses()">
+                    </div>
+                </div>
+                <div class="compact-date-fields">
+                    <div class="filter-field">
+                        <label>From date</label>
+                        <div class="input-wrapper"><i class="bi bi-calendar3"></i><input type="date" [(ngModel)]="fromDate"></div>
+                    </div>
+                    <div class="filter-field">
+                        <label>To date</label>
+                        <div class="input-wrapper"><i class="bi bi-calendar3"></i><input type="date" [(ngModel)]="toDate"></div>
+                    </div>
+                </div>
+                <div class="compact-filter-actions">
+                    <button type="button" class="filter-btn" (click)="applyDateFilter()"><i class="bi bi-funnel"></i> Filter</button>
+                    <button type="button" class="clear-btn" (click)="clearFilters()" title="Clear filters"><i class="bi bi-x-lg"></i></button>
+                </div>
+            </div>
+        </article>
+    </section>
 
 
     <!-- ================= LOADING ================= -->
@@ -155,113 +115,6 @@
         <p>Loading your expenses...</p>
 
     </div>
-    <!-- ========================= -->
-    <!-- FILTER EXPENSES -->
-    <!-- ========================= -->
-
-    <div class="filter-card">
-
-        <!-- HEADER -->
-
-        <div class="filter-header">
-
-            <div class="filter-icon">
-                <i class="bi bi-funnel"></i>
-            </div>
-
-            <div>
-                <h5>Filter expenses</h5>
-                <p>Search and filter your transactions</p>
-            </div>
-
-        </div>
-
-
-        <!-- FILTER FORM -->
-
-        <div class="filter-form">
-
-            <!-- SEARCH -->
-
-            <div class="filter-field search-field">
-
-                <label>
-                    Search
-                </label>
-
-                <div class="input-wrapper">
-
-                    <i class="bi bi-search"></i>
-
-                    <input type="text" placeholder="Search by title..." [(ngModel)]="searchText"
-                        (input)="searchExpenses()">
-
-                </div>
-
-            </div>
-
-
-            <!-- FROM DATE -->
-
-            <div class="filter-field">
-
-                <label>
-                    From date
-                </label>
-
-                <div class="input-wrapper">
-
-                    <i class="bi bi-calendar3"></i>
-
-                    <input type="date" [(ngModel)]="fromDate">
-
-                </div>
-
-            </div>
-
-
-            <!-- TO DATE -->
-
-            <div class="filter-field">
-
-                <label>
-                    To date
-                </label>
-
-                <div class="input-wrapper">
-
-                    <i class="bi bi-calendar3"></i>
-
-                    <input type="date" [(ngModel)]="toDate">
-
-                </div>
-
-            </div>
-
-
-            <!-- FILTER BUTTON -->
-
-            <button type="button" class="filter-btn" (click)="applyDateFilter()">
-
-                <i class="bi bi-funnel"></i>
-
-                <span>Filter</span>
-
-            </button>
-
-
-            <!-- CLEAR -->
-
-            <button type="button" class="clear-btn" (click)="clearFilters()" title="Clear filters">
-
-                <i class="bi bi-x-lg"></i>
-
-            </button>
-
-        </div>
-
-    </div>
-
     <!-- ================= EXPENSES ================= -->
 
     <section *ngIf="!loading && dailyExpenses.length > 0" class="expenses-section">
