@@ -122,64 +122,10 @@
 
                     </div>
 
-                    <div
-                        class="password-validation"
-                        *ngIf="password"
-                    >
-
-                        <p *ngFor="let message of getPasswordValidationMessages()">
-                            {{ message }}
-                        </p>
-
-                    </div>
-
                 </div>
 
 
-                <!-- CONFIRM PASSWORD -->
-
-                <div class="form-group">
-
-                    <label>
-                        Confirm Password
-                    </label>
-
-                    <div class="input-wrapper">
-
-                        <i class="bi bi-lock-fill"></i>
-
-                        <input
-                            [type]="showConfirmPassword ? 'text' : 'password'"
-                            name="confirmPassword"
-                            [(ngModel)]="confirmPassword"
-                            placeholder="Confirm your password"
-                            required
-                        >
-
-                        <button
-                            type="button"
-                            class="password-toggle"
-                            (click)="showConfirmPassword = !showConfirmPassword"
-                        >
-
-                            <i
-                                [class]="showConfirmPassword
-                                    ? 'bi bi-eye-slash'
-                                    : 'bi bi-eye'"
-                            ></i>
-
-                        </button>
-
-                    </div>
-
-                    <div
-                        class="password-validation"
-                        *ngIf="confirmPassword && !passwordsMatch()"
-                    >
-                        <p>Passwords do not match.</p>
-                    </div>
-
-                </div>
+                <!-- EMAIL -->
 
                 <div class="form-group">
 
@@ -238,6 +184,63 @@
 
                         </button>
 
+                    </div>
+
+                    <div
+                        class="password-validation"
+                        *ngIf="password"
+                    >
+
+                        <p *ngFor="let message of getPasswordValidationMessages()">
+                            {{ message }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CONFIRM PASSWORD -->
+
+                <div class="form-group">
+
+                    <label>
+                        Confirm Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-lock-fill"></i>
+
+                        <input
+                            [type]="showConfirmPassword ? 'text' : 'password'"
+                            name="confirmPassword"
+                            [(ngModel)]="confirmPassword"
+                            placeholder="Confirm your password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            (click)="showConfirmPassword = !showConfirmPassword"
+                        >
+
+                            <i
+                                [class]="showConfirmPassword
+                                    ? 'bi bi-eye-slash'
+                                    : 'bi bi-eye'"
+                            ></i>
+
+                        </button>
+
+                    </div>
+
+                    <div
+                        class="password-validation"
+                        *ngIf="confirmPassword && !passwordsMatch()"
+                    >
+                        <p>Passwords do not match.</p>
                     </div>
 
                 </div>
