@@ -83,14 +83,14 @@
 
           <div class="category-layout">
             <div class="chart-container doughnut-container">
-              <canvas baseChart [type]="doughnutChartType" [data]="doughnutChartData" [options]="doughnutChartOptions"></canvas>
+              <canvas baseChart [type]="doughnutChartType" [data]="doughnutChartData" [options]="doughnutChartOptions" (chartClick)="onCategoryChartClick($event)"></canvas>
               <div class="chart-center"><strong>{{ formatAmount(totalSpending) }}</strong><span>DH total</span></div>
             </div>
             <div class="category-list">
-              <div *ngFor="let summary of categorySummaries; let index = index" class="category-row">
+              <button *ngFor="let summary of categorySummaries; let index = index" type="button" class="category-row" (click)="openCategoryExpenses(summary.name)" [attr.aria-label]="'View ' + summary.name + ' expenses'">
                 <span class="category-name"><i [style.backgroundColor]="chartPalette[index % chartPalette.length]"></i>{{ summary.name }}</span>
                 <span><strong>{{ formatAmount(summary.total) }} DH</strong><small>{{ summary.percentage | number:'1.0-1' }}%</small></span>
-              </div>
+              </button>
             </div>
           </div>
         </article>
@@ -124,7 +124,7 @@
           </div>
           <i class="bi bi-activity"></i>
         </div>
-        <div class="trend-chart-container"><canvas baseChart [type]="lineChartType" [data]="lineChartData" [options]="lineChartOptions"></canvas></div>
+        <div class="trend-chart-container"><canvas baseChart [type]="lineChartType" [data]="lineChartData" [options]="lineChartOptions" (chartClick)="onDayChartClick($event)"></canvas></div>
       </article>
 
       <article class="insight-card facts-card">
@@ -145,4 +145,62 @@
       </article>
     </ng-container>
   </ng-container>
+
+  <div *ngIf="modalFilter" class="expense-modal-overlay" (click)="closeExpenseModal()">
+    <section class="expense-modal" role="dialog" aria-modal="true" [attr.aria-label]="modalTitle" (click)="$event.stopPropagation()">
+      <header class="modal-header">
+        <div>
+          <div class="eyebrow">EXPENSE DETAILS</div>
+          <h2>{{ modalTitle }}</h2>
+          <p>{{ modalSubtitle }}</p>
+        </div>
+        <button type="button" class="modal-close" (click)="closeExpenseModal()" aria-label="Close expense details">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </header>
+
+      <div class="modal-content">
+        <div *ngIf="modalExpenses.length === 0" class="modal-empty">
+          <i class="bi bi-receipt"></i>
+          <strong>No expenses found</strong>
+          <span>There are no expenses for this selection.</span>
+        </div>
+
+        <div *ngIf="modalExpenses.length > 0" class="expense-table-wrapper">
+          <table class="expense-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Expense Title</th>
+                <th>Amount</th>
+                <th>Category</th>
+                <th class="actions-heading">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let expense of modalExpenses">
+                <td data-label="Date">{{ formatExpenseDate(expense.date) }}</td>
+                <td data-label="Expense Title" class="expense-title">{{ expense.title }}</td>
+                <td data-label="Amount" class="expense-amount">{{ formatAmount(expense.amount) }} DH</td>
+                <td data-label="Category"><span class="category-badge">{{ expense.category }}</span></td>
+                <td data-label="Actions" class="expense-actions">
+                  <button type="button" class="table-action edit-action" (click)="editExpense(expense)" title="Edit expense" aria-label="Edit expense">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button type="button" class="table-action delete-action" (click)="deleteExpense(expense)" title="Delete expense" aria-label="Delete expense">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <footer class="modal-footer">
+        <span>Total expenses: <strong>{{ modalExpenses.length }}</strong></span>
+        <span>Total amount: <strong>{{ formatAmount(modalTotal) }} DH</strong></span>
+      </footer>
+    </section>
+  </div>
 </section>

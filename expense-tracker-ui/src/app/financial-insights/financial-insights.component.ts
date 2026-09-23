@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
+import { Router, RouterModule } from '@angular/router';
+import { ActiveElement, ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { NgChartsModule } from 'ng2-charts';
 import { Observable, forkJoin, of } from 'rxjs';
+import Swal from 'sweetalert2';
 
 import { ExpenseService } from '../expenses/expense.service';
 import { Expense } from '../models/expense';
@@ -22,7 +24,7 @@ interface DailySummary {
 @Component({
   selector: 'app-financial-insights',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgChartsModule],
+  imports: [CommonModule, FormsModule, NgChartsModule, RouterModule],
   templateUrl: './financial-insights.component.html',
   styleUrl: './financial-insights.component.css'
 })
@@ -43,6 +45,10 @@ export class FinancialInsightsComponent implements OnInit {
   previousTotal = 0;
   spendingDifference = 0;
   spendingChangePercentage: number | null = null;
+
+  modalFilter: 'category' | 'date' | null = null;
+  selectedCategory = '';
+  selectedDate = '';
 
   readonly doughnutChartType: ChartType = 'doughnut';
   readonly lineChartType: ChartType = 'line';
@@ -101,6 +107,10 @@ export class FinancialInsightsComponent implements OnInit {
       legend: { display: false },
       tooltip: {
         callbacks: {
+          title: (items) => {
+            const day = Number(items[0]?.label);
+            return Number.isFinite(day) ? this.formatDate(day) : '';
+          },
           label: (context) => `${this.formatAmount(Number(context.parsed.y))} DH`
         }
       }
@@ -121,7 +131,10 @@ export class FinancialInsightsComponent implements OnInit {
 
   private readonly monthCache = new Map<string, Expense[]>();
 
-  constructor(private readonly expenseService: ExpenseService) {}
+  constructor(
+    private readonly expenseService: ExpenseService,
+    private readonly router: Router
+  ) {}
 
   ngOnInit(): void {
     this.loadInsights();
@@ -172,6 +185,129 @@ export class FinancialInsightsComponent implements OnInit {
 
   refresh(): void {
     this.loadInsights(true);
+  }
+
+  onCategoryChartClick(event: { active?: ActiveElement[] }): void {
+    const index = event.active?.[0]?.index;
+    const category = typeof index === 'number'
+      ? this.categorySummaries[index]?.name
+      : undefined;
+
+    if (category) {
+      this.openCategoryExpenses(category);
+    }
+  }
+
+  onDayChartClick(event: { active?: ActiveElement[] }): void {
+    const index = event.active?.[0]?.index;
+    const day = typeof index === 'number' ? this.dailySummaries[index]?.day : undefined;
+
+    if (day) {
+      this.openDayExpenses(day);
+    }
+  }
+
+  openCategoryExpenses(category: string): void {
+    this.modalFilter = 'category';
+    this.selectedCategory = category;
+    this.selectedDate = '';
+  }
+
+  openDayExpenses(day: number): void {
+    const { year, month } = this.parseMonth(this.selectedMonth);
+    this.modalFilter = 'date';
+    this.selectedDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    this.selectedCategory = '';
+  }
+
+  closeExpenseModal(): void {
+    this.modalFilter = null;
+    this.selectedCategory = '';
+    this.selectedDate = '';
+  }
+
+  get modalExpenses(): Expense[] {
+    if (this.modalFilter === 'category') {
+      const category = this.normalize(this.selectedCategory);
+      return this.expenses.filter(expense =>
+        this.validExpense(expense) && this.normalize(expense.category) === category
+      );
+    }
+
+    if (this.modalFilter === 'date') {
+      return this.expenses.filter(expense =>
+        this.validExpense(expense) && expense.date === this.selectedDate
+      );
+    }
+
+    return [];
+  }
+
+  get modalTotal(): number {
+    return this.sumExpenses(this.modalExpenses);
+  }
+
+  get modalTitle(): string {
+    return this.modalFilter === 'category'
+      ? `Expenses - ${this.selectedCategory}`
+      : `Expenses - ${this.formatFullDate(this.selectedDate)}`;
+  }
+
+  get modalSubtitle(): string {
+    return this.modalFilter === 'category'
+      ? `All expenses in the ${this.selectedCategory} category for ${this.formatMonth()}.`
+      : `All expenses on ${this.formatFullDate(this.selectedDate)}.`;
+  }
+
+  formatExpenseDate(date: string): string {
+    return this.formatFullDate(date);
+  }
+
+  editExpense(expense: Expense): void {
+    this.closeExpenseModal();
+    this.router.navigate(['/expenses/edit', expense.id]);
+  }
+
+  deleteExpense(expense: Expense): void {
+    Swal.fire({
+      title: 'Delete Expense?',
+      text: 'You will not be able to recover this expense!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#198754',
+      cancelButtonColor: '#dc3545',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel'
+    }).then(result => {
+      if (!result.isConfirmed) {
+        return;
+      }
+
+      this.expenseService.deleteExpense(expense.id).subscribe({
+        next: () => {
+          this.expenses = this.expenses.filter(item => item.id !== expense.id);
+          const selected = this.parseMonth(this.selectedMonth);
+          this.monthCache.set(this.monthKey(selected.year, selected.month), this.expenses);
+          this.calculateInsights(selected.year, selected.month);
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Deleted!',
+            text: 'Expense deleted successfully.',
+            timer: 1500,
+            showConfirmButton: false
+          });
+        },
+        error: error => {
+          console.error('Error deleting expense:', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Delete failed',
+            text: 'Unable to delete the expense.'
+          });
+        }
+      });
+    });
   }
 
   formatAmount(amount: number): string {
@@ -327,6 +463,17 @@ export class FinancialInsightsComponent implements OnInit {
   private displayCategory(category: string): string {
     const normalized = String(category ?? '').trim();
     return normalized ? normalized.charAt(0).toUpperCase() + normalized.slice(1) : 'Uncategorized';
+  }
+
+  private formatFullDate(value: string): string {
+    const date = new Date(`${value}T00:00:00`);
+    return Number.isNaN(date.getTime())
+      ? 'Unknown date'
+      : date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  }
+
+  private normalize(value: string): string {
+    return String(value ?? '').trim().toLowerCase();
   }
 
   private parseMonth(value: string): { year: number; month: number } {
