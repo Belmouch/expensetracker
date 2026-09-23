@@ -209,6 +209,11 @@
 
     <main class="main-content">
 
+        <div class="connection-banner" *ngIf="connectionStatus.reconnecting$ | async" role="status" aria-live="polite">
+            <span class="connection-spinner" aria-hidden="true"></span>
+            <span>Reconnecting to the server…</span>
+        </div>
+
         <header class="mobile-header">
             <button type="button" class="mobile-menu-button" (click)="toggleSidebar()"
                 aria-label="Open navigation menu" [attr.aria-expanded]="sidebarOpen">

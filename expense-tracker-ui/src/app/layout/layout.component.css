@@ -607,6 +607,48 @@ body.dark-theme .theme-button:hover {
 
 
 /* =========================================================
+   CONNECTION BANNER
+========================================================= */
+
+.connection-banner {
+    position: sticky;
+    top: 0;
+    z-index: 850;
+    min-height: 42px;
+    box-sizing: border-box;
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: var(--app-primary-soft);
+    border-bottom: 1px solid var(--app-border);
+    color: var(--app-text);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.connection-spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: connection-spin 0.8s linear infinite;
+}
+
+@keyframes connection-spin {
+    to { transform: rotate(360deg); }
+}
+
+body.dark-theme .connection-banner {
+    background: #102653;
+    border-color: #263d70;
+    color: #dbe6ff;
+}
+
+
+/* =========================================================
    MAIN CONTENT
 ========================================================= */
 
