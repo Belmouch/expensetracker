@@ -89,6 +89,8 @@ export class ExpenseListComponent implements OnInit {
     }]
   };
 
+  overviewChartDates: string[] = [];
+
   readonly overviewChartOptions: ChartConfiguration<'line'>['options'] = {
     responsive: true,
     maintainAspectRatio: false,
@@ -97,7 +99,11 @@ export class ExpenseListComponent implements OnInit {
       legend: { display: false },
       tooltip: {
         callbacks: {
-          title: items => items[0]?.label || '',
+          title: items => {
+            const index = items[0]?.dataIndex ?? 0;
+            const date = this.overviewChartDates[index];
+            return date ? this.formatOverviewDate(date) : '';
+          },
           label: context => `${this.formatAmount(Number(context.parsed.y))} DH`
         }
       }
@@ -105,7 +111,7 @@ export class ExpenseListComponent implements OnInit {
     scales: {
       x: {
         grid: { display: false },
-        ticks: { maxTicksLimit: 7 }
+        ticks: { maxTicksLimit: 10 }
       },
       y: {
         beginAtZero: true,
@@ -270,28 +276,25 @@ export class ExpenseListComponent implements OnInit {
   }
 
   private buildOverviewChart(): void {
-    const endDate = new Date();
     const selected = this.parseMonth(this.selectedMonth);
-
-    if (selected.year !== endDate.getFullYear() || selected.month !== endDate.getMonth() + 1) {
-      endDate.setFullYear(selected.year, selected.month, 0);
-    }
+    const daysInMonth = new Date(selected.year, selected.month, 0).getDate();
 
     const totals = new Map<string, number>();
     this.overviewExpenses.forEach(expense => {
       totals.set(expense.date, (totals.get(expense.date) || 0) + Number(expense.amount));
     });
 
-    const points = Array.from({ length: 7 }, (_, index) => {
-      const date = new Date(endDate);
-      date.setDate(endDate.getDate() - (6 - index));
+    const points = Array.from({ length: daysInMonth }, (_, index) => {
+      const date = new Date(selected.year, selected.month - 1, index + 1);
       const dateValue = this.toDateInputValue(date);
       return {
         label: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        date: dateValue,
         total: totals.get(dateValue) || 0
       };
     });
 
+    this.overviewChartDates = points.map(point => point.date);
     this.overviewChartData = {
       labels: points.map(point => point.label),
       datasets: [{
@@ -299,6 +302,14 @@ export class ExpenseListComponent implements OnInit {
         data: points.map(point => point.total)
       }]
     };
+  }
+
+  private formatOverviewDate(dateValue: string): string {
+    return new Date(`${dateValue}T00:00:00`).toLocaleDateString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric'
+    });
   }
 
   private parseMonth(value: string): { year: number; month: number } {

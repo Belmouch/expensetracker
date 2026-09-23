@@ -1697,7 +1697,25 @@ tbody tr:last-child td {
     font-weight: 700;
 }
 
-.home-header-actions .btn-primary { min-height: 42px; background: var(--app-primary); }
+.home-header-actions .btn-primary {
+    min-height: 42px;
+    padding: 0 17px;
+    border: 1px solid var(--app-primary);
+    border-radius: 11px;
+    background: var(--app-primary);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: 0 6px 15px rgba(22, 139, 89, 0.18);
+}
+
+.home-header-actions .btn-primary:hover {
+    background: var(--app-primary-dark);
+    box-shadow: 0 9px 20px rgba(22, 139, 89, 0.24);
+    transform: translateY(-1px);
+}
+
+.home-header-actions .btn-primary:active { transform: translateY(0); }
 
 .home-summary-grid {
     display: grid;
@@ -1836,4 +1854,108 @@ tbody tr:last-child td {
     .overview-chart-wrapper { height: 215px; }
     .overview-loading { min-height: 215px; }
     .compact-date-fields { grid-template-columns: 1fr; }
+}
+
+.track-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 108px;
+    margin-top: 28px;
+    overflow: hidden;
+    padding: 20px 28px;
+    border: 1px solid var(--app-border);
+    border-radius: 18px;
+    background: linear-gradient(110deg, var(--app-card), var(--app-primary-soft));
+    box-shadow: var(--shadow);
+}
+
+.track-message {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.track-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 auto;
+    border-radius: 13px;
+    background: var(--app-primary-soft);
+    color: var(--app-primary);
+    font-size: 22px;
+}
+
+.track-message h2 {
+    margin: 0 0 5px;
+    color: var(--app-text);
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.track-message p {
+    margin: 0;
+    color: var(--app-text-secondary);
+    font-size: 13px;
+}
+
+.track-landscape {
+    position: absolute;
+    inset: 0 190px 0 auto;
+    width: 38%;
+    min-width: 220px;
+    overflow: hidden;
+    opacity: 0.8;
+}
+
+.track-moon {
+    position: absolute;
+    top: 20px;
+    right: 26%;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: var(--app-primary);
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--app-primary) 12%, transparent);
+}
+
+.track-mountain {
+    position: absolute;
+    bottom: -40px;
+    width: 120%;
+    height: 110px;
+    clip-path: polygon(0 100%, 17% 55%, 29% 74%, 44% 30%, 58% 67%, 72% 42%, 86% 72%, 100% 48%, 100% 100%);
+}
+
+.track-mountain-back { right: -8%; background: color-mix(in srgb, var(--app-primary) 25%, var(--app-card)); }
+.track-mountain-front { right: -22%; bottom: -53px; background: color-mix(in srgb, var(--app-primary-dark) 34%, var(--app-card)); }
+
+.track-quote {
+    position: relative;
+    z-index: 2;
+    max-width: 155px;
+    margin: 0;
+    color: var(--app-text-secondary);
+    font-size: 12px;
+    font-style: italic;
+    line-height: 1.55;
+    text-align: right;
+}
+
+@media (max-width: 700px) {
+    .track-card {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 15px;
+        padding: 18px;
+    }
+
+    .track-landscape { inset: auto 0 0 auto; width: 62%; min-width: 0; height: 95px; }
+    .track-quote { align-self: flex-end; max-width: 190px; text-align: right; }
 }
