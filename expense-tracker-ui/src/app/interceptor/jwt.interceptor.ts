@@ -1,15 +1,19 @@
 import { HttpErrorResponse, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { timer, throwError } from 'rxjs';
-import { finalize, retry } from 'rxjs/operators';
+import { TimeoutError, timer, throwError } from 'rxjs';
+import { finalize, retry, timeout } from 'rxjs/operators';
 
 import { ConnectionStatusService } from '../services/connection-status.service';
 
 const MAX_RETRIES = 4;
 const RETRY_DELAYS_MS = [2000, 4000, 6000, 8000];
 
-function isTemporaryBackendError(error: HttpErrorResponse): boolean {
-  return error.status === 0 || [502, 503, 504].includes(error.status);
+function isTemporaryBackendError(error: unknown): boolean {
+  return (
+    error instanceof TimeoutError ||
+    (error instanceof HttpErrorResponse &&
+      (error.status === 0 || [502, 503, 504].includes(error.status)))
+  );
 }
 
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
@@ -33,6 +37,7 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   let retrying = false;
 
   return next(req).pipe(
+    ...(isRetryableRequest(req) ? [timeout({ each: 15000 })] : []),
     retry({
       count: MAX_RETRIES,
       delay: (error, retryCount) => {
