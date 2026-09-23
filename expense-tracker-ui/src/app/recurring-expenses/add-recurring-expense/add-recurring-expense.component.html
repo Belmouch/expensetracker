@@ -198,6 +198,19 @@
 
         </small>
 
+        <div
+          *ngIf="category?.value === 'Other'"
+          class="custom-category-input"
+        >
+          <i class="bi bi-pencil"></i>
+          <input
+            type="text"
+            formControlName="customCategory"
+            placeholder="Enter your category..."
+            maxlength="100"
+          >
+        </div>
+
       </div>
 
 

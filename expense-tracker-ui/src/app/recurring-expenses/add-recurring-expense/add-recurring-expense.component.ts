@@ -6,10 +6,11 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
 import { RecurringExpenseService } from '../recurring-expense.service';
+import { CategoryService } from '../../services/category.service';
 
 @Component({
   selector: 'app-add-recurring-expense',
@@ -17,8 +18,7 @@ import { RecurringExpenseService } from '../recurring-expense.service';
 
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    RouterLink
+    ReactiveFormsModule
   ],
 
   templateUrl: './add-recurring-expense.component.html',
@@ -63,21 +63,7 @@ export class AddRecurringExpenseComponent {
   // CATEGORIES
   // ==========================================
 
-  categories = [
-    'Food',
-    'Shopping',
-    'Coffee',
-    'Bills',
-    'Water',
-    'Entertainment',
-    'Study',
-    'Outils',
-    'Dar',
-    'Cat',
-    'recurring',
-    'Transport',
-    'Other'
-  ];
+  categories: string[] = [];
 
 
   // ==========================================
@@ -87,6 +73,7 @@ export class AddRecurringExpenseComponent {
   constructor(
     private fb: FormBuilder,
     private recurringExpenseService: RecurringExpenseService,
+    private categoryService: CategoryService,
     private router: Router
   ) {
 
@@ -113,6 +100,8 @@ export class AddRecurringExpenseComponent {
         Validators.required
       ],
 
+      customCategory: [''],
+
       frequency: [
         'MONTHLY',
         Validators.required
@@ -133,6 +122,18 @@ export class AddRecurringExpenseComponent {
 
 
   // ==========================================
+  // INIT
+  // ==========================================
+
+  ngOnInit(): void {
+    this.categoryService.getCategories().subscribe({
+      next: categories => {
+        this.categories = categories.map(category => category.name);
+      }
+    });
+  }
+
+  // ==========================================
   // GETTERS
   // ==========================================
 
@@ -146,6 +147,10 @@ export class AddRecurringExpenseComponent {
 
   get category() {
     return this.recurringForm.get('category');
+  }
+
+  get customCategory() {
+    return this.recurringForm.get('customCategory');
   }
 
   get frequency() {
@@ -213,6 +218,23 @@ export class AddRecurringExpenseComponent {
     // REQUEST
     // ==========================================
 
+    let finalCategory = this.recurringForm.value.category;
+
+    if (finalCategory === 'Other') {
+      finalCategory = this.recurringForm.value.customCategory?.trim();
+
+      if (!finalCategory) {
+        this.customCategory?.markAsTouched();
+        Swal.fire({
+          icon: 'warning',
+          title: 'Missing category',
+          text: 'Please enter your category.'
+        });
+        this.loading = false;
+        return;
+      }
+    }
+
     const request = {
 
       title:
@@ -221,8 +243,7 @@ export class AddRecurringExpenseComponent {
       amount:
         Number(this.recurringForm.value.amount),
 
-      category:
-        this.recurringForm.value.category,
+      category: finalCategory,
 
       frequency:
         this.recurringForm.value.frequency,
@@ -247,6 +268,8 @@ export class AddRecurringExpenseComponent {
         next: () => {
 
           this.loading = false;
+
+          this.categoryService.createCategory(finalCategory).subscribe();
 
           Swal.fire({
 

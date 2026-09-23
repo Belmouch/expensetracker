@@ -9,6 +9,7 @@ import {
 } from '../models/budget.model';
 
 import { BudgetService } from '../services/budget.service';
+import { CategoryService } from '../services/category.service';
 import { BudgetDetailsComponent } from './budget-details/budget-details.component';
 
 @Component({
@@ -78,48 +79,7 @@ export class BudgetManagementComponent implements OnInit {
   // CATEGORIES
   // =========================================================
 
-  categories = [
-    {
-      name: 'Food',
-      icon: 'bi-egg-fried'
-    },
-    {
-      name: 'Shopping',
-      icon: 'bi-bag'
-    },
-    {
-      name: 'Coffee',
-      icon: 'bi-cup-hot'
-    },
-    {
-      name: 'Bills',
-      icon: 'bi-receipt'
-    },
-    {
-      name: 'Water',
-      icon: 'bi-droplet'
-    },
-    {
-      name: 'Entertainment',
-      icon: 'bi-controller'
-    },
-    {
-      name: 'Study',
-      icon: 'bi-book'
-    },
-    {
-      name: 'Transport',
-      icon: 'bi-car-front'
-    },
-    {
-      name: 'Health',
-      icon: 'bi-heart-pulse'
-    },
-    {
-      name: 'Other',
-      icon: 'bi-three-dots'
-    }
-  ];
+  categories: { name: string; icon: string }[] = [];
 
   categoryDropdownOpen = false;
 
@@ -152,7 +112,8 @@ export class BudgetManagementComponent implements OnInit {
   // =========================================================
 
   constructor(
-    private budgetService: BudgetService
+    private budgetService: BudgetService,
+    private categoryService: CategoryService
   ) {}
 
 
@@ -161,8 +122,25 @@ export class BudgetManagementComponent implements OnInit {
   // =========================================================
 
   ngOnInit(): void {
-
+    this.categoryService.getCategories().subscribe({
+      next: categories => {
+        this.categories = categories.map(category => ({
+          name: category.name,
+          icon: this.getCategoryIcon(category.name)
+        }));
+      }
+    });
     this.loadBudgets();
+  }
+
+  private getCategoryIcon(category: string): string {
+    const icons: Record<string, string> = {
+      Food: 'bi-egg-fried', Shopping: 'bi-bag', Coffee: 'bi-cup-hot',
+      Bills: 'bi-receipt', Water: 'bi-droplet', Entertainment: 'bi-controller',
+      Study: 'bi-book', Outils: 'bi-tools', Dar: 'bi-house', Transport: 'bi-car-front',
+      Health: 'bi-heart-pulse', Other: 'bi-three-dots'
+    };
+    return icons[category] ?? 'bi-grid';
   }
 
 
@@ -554,6 +532,8 @@ export class BudgetManagementComponent implements OnInit {
 
           next: (updatedBudget) => {
 
+            this.categoryService.createCategory(finalCategory).subscribe();
+
             console.log(
               'Budget updated:',
               updatedBudget
@@ -614,6 +594,8 @@ export class BudgetManagementComponent implements OnInit {
       .subscribe({
 
         next: (createdBudget) => {
+
+          this.categoryService.createCategory(finalCategory).subscribe();
 
           console.log(
             'Budget created:',
