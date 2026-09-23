@@ -1,0 +1,57 @@
+<div class="expense-modal-overlay" (click)="closed.emit()">
+  <section class="expense-modal" role="dialog" aria-modal="true" [attr.aria-label]="title" (click)="$event.stopPropagation()">
+    <header class="modal-header">
+      <div>
+        <div class="eyebrow">EXPENSE DETAILS</div>
+        <h2>{{ title }}</h2>
+        <p>{{ subtitle }}</p>
+      </div>
+      <button type="button" class="modal-close" (click)="closed.emit()" aria-label="Close expense details">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </header>
+
+    <div class="modal-content">
+      <div *ngIf="expenses.length === 0" class="modal-empty">
+        <i class="bi bi-receipt"></i>
+        <strong>{{ emptyMessage }}</strong>
+        <span>There are no expenses for this selection.</span>
+      </div>
+
+      <div *ngIf="expenses.length > 0" class="expense-table-wrapper">
+        <table class="expense-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Expense Title</th>
+              <th>Amount</th>
+              <th>Category</th>
+              <th class="actions-heading">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let expense of expenses">
+              <td data-label="Date">{{ formatExpenseDate(expense.date) }}</td>
+              <td data-label="Expense Title" class="expense-title">{{ expense.title }}</td>
+              <td data-label="Amount" class="expense-amount">{{ formatAmount(expense.amount) }} DH</td>
+              <td data-label="Category"><span class="category-badge">{{ expense.category }}</span></td>
+              <td data-label="Actions" class="expense-actions">
+                <button type="button" class="table-action edit-action" (click)="editRequested.emit(expense)" title="Edit expense" aria-label="Edit expense">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button type="button" class="table-action delete-action" (click)="deleteRequested.emit(expense)" title="Delete expense" aria-label="Delete expense">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <footer class="modal-footer">
+      <span>Total expenses: <strong>{{ expenses.length }}</strong></span>
+      <span>Total amount: <strong>{{ formatAmount(total) }} DH</strong></span>
+    </footer>
+  </section>
+</div>

@@ -66,7 +66,7 @@
             </div>
             <div *ngIf="overviewLoading" class="overview-loading"><span class="spinner"></span><span>Loading overview...</span></div>
             <div *ngIf="!overviewLoading" class="overview-chart-wrapper">
-                <canvas baseChart [type]="overviewChartType" [data]="overviewChartData" [options]="overviewChartOptions"></canvas>
+                <canvas baseChart [type]="overviewChartType" [data]="overviewChartData" [options]="overviewChartOptions" (chartClick)="onOverviewChartClick($event)"></canvas>
             </div>
         </article>
 
@@ -364,5 +364,16 @@
         </div>
         <p class="track-quote">Discipline today<br>for a freer tomorrow.</p>
     </section>
+
+    <app-expense-details-modal
+        *ngIf="selectedOverviewDate"
+        [expenses]="overviewModalExpenses"
+        mode="date"
+        [selectedDate]="selectedOverviewDate"
+        [monthLabel]="overviewMonthLabel"
+        (closed)="closeOverviewModal()"
+        (editRequested)="editOverviewExpense($event)"
+        (deleteRequested)="deleteExpense($event.id)">
+    </app-expense-details-modal>
 
 </div>

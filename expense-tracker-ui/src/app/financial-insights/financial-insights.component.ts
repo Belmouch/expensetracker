@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 
 import { ExpenseService } from '../expenses/expense.service';
 import { Expense } from '../models/expense';
+import { ExpenseDetailsModalComponent } from '../shared/expense-details-modal/expense-details-modal.component';
 
 interface CategorySummary {
   name: string;
@@ -24,7 +25,7 @@ interface DailySummary {
 @Component({
   selector: 'app-financial-insights',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgChartsModule, RouterModule],
+  imports: [CommonModule, FormsModule, NgChartsModule, RouterModule, ExpenseDetailsModalComponent],
   templateUrl: './financial-insights.component.html',
   styleUrl: './financial-insights.component.css'
 })

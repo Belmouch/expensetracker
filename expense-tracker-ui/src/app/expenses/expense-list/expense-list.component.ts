@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
+import { ActiveElement } from 'chart.js';
 import { NgChartsModule } from 'ng2-charts';
 import { forkJoin, Observable } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
@@ -14,6 +15,7 @@ import { ExpenseService } from '../expense.service';
 import { Expense } from '../../models/expense';
 
 import Swal from 'sweetalert2';
+import { ExpenseDetailsModalComponent } from '../../shared/expense-details-modal/expense-details-modal.component';
 
 
 // =========================
@@ -34,7 +36,8 @@ interface DailyExpenses {
     CommonModule,
     RouterLink,
       FormsModule,
-      NgChartsModule
+      NgChartsModule,
+      ExpenseDetailsModalComponent
   ],
   templateUrl: './expense-list.component.html',
   styleUrl: './expense-list.component.css'
@@ -91,6 +94,8 @@ export class ExpenseListComponent implements OnInit {
 
   overviewChartDates: string[] = [];
 
+  selectedOverviewDate = '';
+
   readonly overviewChartOptions: ChartConfiguration<'line'>['options'] = {
     responsive: true,
     maintainAspectRatio: false,
@@ -122,6 +127,13 @@ export class ExpenseListComponent implements OnInit {
       }
     }
   };
+
+  get overviewModalExpenses(): Expense[] {
+    return this.overviewExpenses.filter(expense =>
+      expense.date === this.selectedOverviewDate &&
+      Number.isFinite(Number(expense.amount)) && Number(expense.amount) > 0
+    );
+  }
 
 
   // =========================
@@ -228,8 +240,25 @@ export class ExpenseListComponent implements OnInit {
 
   onOverviewMonthChange(): void {
     if (/^\d{4}-\d{2}$/.test(this.selectedMonth)) {
+      this.closeOverviewModal();
       this.loadOverviewExpenses();
     }
+  }
+
+  onOverviewChartClick(event: { active?: ActiveElement[] }): void {
+    const index = event.active?.[0]?.index;
+    if (typeof index === 'number' && this.overviewChartDates[index]) {
+      this.selectedOverviewDate = this.overviewChartDates[index];
+    }
+  }
+
+  closeOverviewModal(): void {
+    this.selectedOverviewDate = '';
+  }
+
+  editOverviewExpense(expense: Expense): void {
+    this.closeOverviewModal();
+    this.router.navigate(['/expenses/edit', expense.id]);
   }
 
   get overviewTotal(): number {
@@ -790,6 +819,7 @@ export class ExpenseListComponent implements OnInit {
 
               // Reload monthly statistics
               this.loadMonthlyStatistics();
+              this.loadOverviewExpenses();
 
 
               Swal.fire({

@@ -1,0 +1,31 @@
+.expense-modal-overlay { position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 24px; background: rgba(16, 42, 36, 0.48); backdrop-filter: blur(5px); animation: modalOverlayAppear 0.2s ease; }
+@keyframes modalOverlayAppear { from { opacity: 0; } to { opacity: 1; } }
+.expense-modal { width: 100%; max-width: 1050px; max-height: 90vh; overflow: hidden; border: 1px solid var(--app-border); border-radius: 20px; background: var(--app-card); color: var(--app-text); box-shadow: var(--app-shadow); animation: modalAppear 0.25s ease; }
+@keyframes modalAppear { from { opacity: 0; transform: translateY(20px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.modal-header, .modal-footer { background: var(--app-card); }
+.modal-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; padding: 30px 34px 25px; border-bottom: 1px solid var(--app-border); }
+.eyebrow { color: var(--app-primary); font-size: 11px; font-weight: 800; letter-spacing: 1.2px; }
+.modal-header h2 { margin: 7px 0 0; color: var(--app-text); font-size: 28px; font-weight: 800; }
+.modal-header p { margin: 7px 0 0; color: var(--app-text-secondary); font-size: 14px; }
+.modal-close { display: flex; align-items: center; justify-content: center; width: 42px; height: 42px; flex-shrink: 0; border: 1px solid var(--app-border); border-radius: 11px; background: var(--app-card); color: var(--app-text-secondary); cursor: pointer; transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease; }
+.modal-close:hover { background: var(--app-card-hover); border-color: var(--app-primary); color: var(--app-text); }
+.modal-content { max-height: 55vh; overflow: auto; padding: 28px 34px; background: var(--app-card); }
+.expense-table-wrapper { overflow-x: auto; }
+.expense-table { width: 100%; min-width: 700px; border-collapse: collapse; color: var(--app-text); font-size: 13px; }
+.expense-table th { padding: 0 12px 12px; color: var(--app-text-muted); font-size: 11px; font-weight: 800; letter-spacing: 0.6px; text-align: left; text-transform: uppercase; }
+.expense-table td { padding: 15px 12px; border-top: 1px solid var(--app-border); color: var(--app-text-secondary); white-space: nowrap; }
+.expense-table .expense-title, .expense-table .expense-amount { color: var(--app-text); font-weight: 700; }
+.category-badge { display: inline-block; padding: 5px 9px; border-radius: 7px; background: var(--app-primary-soft); color: var(--app-primary); font-size: 12px; font-weight: 700; }
+.actions-heading, .expense-actions { text-align: right; }
+.expense-actions { display: flex; justify-content: flex-end; gap: 7px; }
+.table-action { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1px solid var(--app-border); border-radius: 8px; background: var(--app-card); cursor: pointer; transition: background-color 0.2s ease, color 0.2s ease; }
+.edit-action { color: var(--app-primary); }
+.delete-action { color: var(--app-danger); }
+.table-action:hover { background: var(--app-primary-soft); }
+.modal-empty { display: flex; min-height: 150px; align-items: center; justify-content: center; flex-direction: column; gap: 6px; color: var(--app-text-secondary); text-align: center; }
+.modal-empty i { color: var(--app-primary); font-size: 28px; }
+.modal-empty strong { color: var(--app-text); }
+.modal-footer { display: flex; justify-content: flex-end; gap: 24px; padding: 20px 34px 25px; border-top: 1px solid var(--app-border); color: var(--app-text-secondary); font-size: 13px; }
+.modal-footer strong { color: var(--app-text); }
+:host-context(body.dark-theme) .expense-modal-overlay { background: rgba(0, 0, 0, 0.68); }
+@media (max-width: 700px) { .expense-modal-overlay { padding: 12px; } .expense-modal { max-height: 94vh; border-radius: 16px; } .modal-header { padding: 22px 18px 18px; } .modal-header h2 { font-size: 22px; } .modal-content { max-height: 58vh; padding: 20px 18px; } .modal-footer { justify-content: space-between; gap: 10px; padding: 16px 18px 20px; } }
