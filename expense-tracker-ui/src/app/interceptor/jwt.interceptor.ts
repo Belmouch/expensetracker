@@ -36,8 +36,11 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
 
   let retrying = false;
 
-  return next(req).pipe(
-    ...(isRetryableRequest(req) ? [timeout({ each: 15000 })] : []),
+  const request$ = isRetryableRequest(req)
+    ? next(req).pipe(timeout({ each: 15000 }))
+    : next(req);
+
+  return request$.pipe(
     retry({
       count: MAX_RETRIES,
       delay: (error, retryCount) => {
