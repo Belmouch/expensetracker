@@ -1,0 +1,148 @@
+<section class="insights-page">
+  <header class="insights-header">
+    <div>
+      <div class="eyebrow">FINANCIAL ANALYSIS</div>
+      <h1><i class="bi bi-bar-chart-line-fill"></i> Financial Insights</h1>
+      <p>Understand your spending habits and track how your expenses evolve.</p>
+    </div>
+
+    <div class="period-controls">
+      <label for="insights-month">Month</label>
+      <div class="period-input">
+        <i class="bi bi-calendar3"></i>
+        <input id="insights-month" type="month" [(ngModel)]="selectedMonth" (change)="onMonthChange()">
+      </div>
+      <button type="button" class="refresh-button" (click)="refresh()" [disabled]="loading" aria-label="Refresh financial insights" title="Refresh financial insights">
+        <i class="bi bi-arrow-clockwise" [class.spin]="loading"></i>
+      </button>
+    </div>
+  </header>
+
+  <div *ngIf="errorMessage" class="state-card error-state">
+    <i class="bi bi-exclamation-triangle"></i>
+    <div>
+      <strong>{{ errorMessage }}</strong>
+      <button type="button" (click)="refresh()">Try again</button>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="state-card loading-state">
+    <div class="spinner-border text-success" role="status"></div>
+    <span>Loading financial insights...</span>
+  </div>
+
+  <ng-container *ngIf="!loading && !errorMessage">
+    <div *ngIf="!hasExpenses" class="state-card empty-state">
+      <i class="bi bi-bar-chart-line"></i>
+      <div>
+        <strong>No financial data yet</strong>
+        <span>Add some expenses to see your financial insights.</span>
+      </div>
+    </div>
+
+    <ng-container *ngIf="hasExpenses">
+      <div class="summary-grid">
+        <article class="summary-card accent-card">
+          <div class="summary-icon"><i class="bi bi-wallet2"></i></div>
+          <span class="summary-label">TOTAL SPENDING</span>
+          <strong>{{ formatAmount(totalSpending) }} <small>DH</small></strong>
+          <span class="summary-note">{{ formatMonth() }}</span>
+        </article>
+
+        <article class="summary-card">
+          <div class="summary-icon blue-icon"><i class="bi bi-calendar2-week"></i></div>
+          <span class="summary-label">AVERAGE DAILY</span>
+          <strong>{{ formatAmount(averageDailySpending) }} <small>DH/day</small></strong>
+          <span class="summary-note">Based on calendar days</span>
+        </article>
+
+        <article class="summary-card">
+          <div class="summary-icon orange-icon"><i class="bi bi-lightning-charge"></i></div>
+          <span class="summary-label">HIGHEST SPENDING DAY</span>
+          <strong>{{ highestSpendingDay ? formatDate(highestSpendingDay.day) : 'No data' }}</strong>
+          <span class="summary-note">{{ highestSpendingDay ? formatAmount(highestSpendingDay.total) + ' DH' : '' }}</span>
+        </article>
+
+        <article class="summary-card">
+          <div class="summary-icon purple-icon"><i class="bi bi-pie-chart"></i></div>
+          <span class="summary-label">TOP CATEGORY</span>
+          <strong>{{ topCategory?.name || 'No data' }}</strong>
+          <span class="summary-note">{{ topCategory ? (topCategory.percentage | number:'1.0-1') + '%' : '' }} of spending</span>
+        </article>
+      </div>
+
+      <div class="content-grid">
+        <article class="insight-card category-card">
+          <div class="card-heading">
+            <div>
+              <h2>Spending Overview</h2>
+              <p>Where your money went in {{ formatMonth() }}.</p>
+            </div>
+            <i class="bi bi-pie-chart-fill"></i>
+          </div>
+
+          <div class="category-layout">
+            <div class="chart-container doughnut-container">
+              <canvas baseChart [type]="doughnutChartType" [data]="doughnutChartData" [options]="doughnutChartOptions"></canvas>
+              <div class="chart-center"><strong>{{ formatAmount(totalSpending) }}</strong><span>DH total</span></div>
+            </div>
+            <div class="category-list">
+              <div *ngFor="let summary of categorySummaries; let index = index" class="category-row">
+                <span class="category-name"><i [style.backgroundColor]="chartPalette[index % chartPalette.length]"></i>{{ summary.name }}</span>
+                <span><strong>{{ formatAmount(summary.total) }} DH</strong><small>{{ summary.percentage | number:'1.0-1' }}%</small></span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="insight-card comparison-card">
+          <div class="card-heading">
+            <div>
+              <h2>Monthly Comparison</h2>
+              <p>Selected month versus the previous month.</p>
+            </div>
+            <i class="bi bi-arrow-left-right"></i>
+          </div>
+          <div class="comparison-values">
+            <div><span>{{ formatMonth() }}</span><strong>{{ formatAmount(totalSpending) }} <small>DH</small></strong></div>
+            <div><span>Previous month</span><strong>{{ formatAmount(previousTotal) }} <small>DH</small></strong></div>
+          </div>
+          <div class="comparison-difference" [class.positive]="spendingDifference < 0" [class.negative]="spendingDifference > 0">
+            <i class="bi" [class.bi-arrow-up-right]="spendingDifference > 0" [class.bi-arrow-down-right]="spendingDifference < 0" [class.bi-dash]="spendingDifference === 0"></i>
+            <strong>{{ spendingDifference > 0 ? '+' : '' }}{{ formatAmount(spendingDifference) }} DH</strong>
+            <span *ngIf="spendingChangePercentage !== null">{{ spendingChangePercentage > 0 ? '+' : '' }}{{ formatAmount(spendingChangePercentage) }}%</span>
+          </div>
+          <p class="comparison-message">{{ comparisonMessage }}</p>
+        </article>
+      </div>
+
+      <article class="insight-card trend-card">
+        <div class="card-heading">
+          <div>
+            <h2>Spending by Day</h2>
+            <p>Daily spending trend for {{ formatMonth() }}.</p>
+          </div>
+          <i class="bi bi-activity"></i>
+        </div>
+        <div class="trend-chart-container"><canvas baseChart [type]="lineChartType" [data]="lineChartData" [options]="lineChartOptions"></canvas></div>
+      </article>
+
+      <article class="insight-card facts-card">
+        <div class="card-heading">
+          <div>
+            <h2>Spending Insights</h2>
+            <p>Facts calculated from your expense activity.</p>
+          </div>
+          <i class="bi bi-stars"></i>
+        </div>
+        <div class="facts-grid">
+          <div><i class="bi bi-bookmark-star"></i><span>{{ topCategory?.name }} is your highest spending category this month.</span></div>
+          <div><i class="bi bi-calendar-event"></i><span>Your highest spending day was {{ highestSpendingDay ? formatDate(highestSpendingDay.day) : 'not recorded' }} with {{ highestSpendingDay ? formatAmount(highestSpendingDay.total) : '0.00' }} DH.</span></div>
+          <div><i class="bi bi-wallet2"></i><span>You spent {{ formatAmount(totalSpending) }} DH this month.</span></div>
+          <div><i class="bi bi-percent"></i><span>{{ topCategory?.name }} represents {{ topCategory?.percentage | number:'1.0-1' }}% of your total spending.</span></div>
+          <div><i class="bi bi-graph-up-arrow"></i><span>{{ comparisonMessage }}</span></div>
+        </div>
+      </article>
+    </ng-container>
+  </ng-container>
+</section>

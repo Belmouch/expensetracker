@@ -16,6 +16,8 @@ import { RecurringExpensesComponent }
     from './recurring-expenses/recurring-expenses.component';
 import { AddRecurringExpenseComponent }
   from './recurring-expenses/add-recurring-expense/add-recurring-expense.component';
+import { FinancialInsightsComponent }
+    from './financial-insights/financial-insights.component';
 
 
 
@@ -86,6 +88,11 @@ export const routes: Routes = [
             {
                 path: 'dashboard',
                 component: DashboardComponent
+            },
+
+            {
+                path: 'financial-insights',
+                component: FinancialInsightsComponent
             },
 
             // =========================

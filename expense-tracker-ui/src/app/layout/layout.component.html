@@ -124,6 +124,19 @@
                 </span>
 
             </a>
+
+            <!-- FINANCIAL INSIGHTS -->
+
+            <a routerLink="/financial-insights" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+                (click)="closeSidebar()" class="menu-item">
+
+                <i class="bi bi-bar-chart-line-fill"></i>
+
+                <span *ngIf="sidebarOpen">
+                    Financial Insights
+                </span>
+
+            </a>
             <!-- BUDGET -->
 
             <a routerLink="/budget" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
