@@ -13,6 +13,7 @@ import {
 import { ExpenseService } from '../expenses/expense.service';
 import { CategoryService } from '../services/category.service';
 import { ThemeService } from '../services/theme.service';
+import { ConnectionStatusService } from '../services/connection-status.service';
 
 @Component({
   selector: 'app-layout',
@@ -55,7 +56,8 @@ export class LayoutComponent {
     private router: Router,
 
     // Theme service
-    public themeService: ThemeService
+    public themeService: ThemeService,
+    public connectionStatus: ConnectionStatusService
   ) {
 
     this.username =
